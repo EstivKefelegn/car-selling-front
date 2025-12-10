@@ -284,31 +284,7 @@ const Header: React.FC<HeaderProps> = ({ isDarkMode, handleToggle }) => {
 
           {/* Mobile Menu Button */}
           <div className="lg:hidden flex items-center space-x-2">
-            {/* Mobile Find a Car Button - Fancy Version */}
-            <button 
-              type="button" 
-              className={`group relative px-4 py-2 rounded-xl transition-all duration-500 ease-in-out overflow-hidden ${
-                isDarkMode 
-                  ? 'bg-gradient-to-br from-[#121221] via-[#1a1a2e] to-[#2a2a3e] text-white border border-[#4a4aff]/30' 
-                  : 'bg-gradient-to-br from-white via-[#121221]/5 to-[#121221]/10 text-[#121221] border border-[#121221]/30'
-              } hover:scale-105 hover:shadow-lg shadow-md`} 
-              aria-label="Search cars" 
-              title="Search Cars"
-            >
-              <div className="flex items-center space-x-2">
-                <svg className="w-4 h-4 group-hover:scale-110 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                </svg>
-                <span className="font-semibold text-sm">Find Cars</span>
-              </div>
-              <div className={`absolute inset-0 bg-gradient-to-r from-transparent ${
-                isDarkMode 
-                  ? 'via-white/10 to-transparent' 
-                  : 'via-[#121221]/10 to-transparent'
-              } -translate-x-full group-hover:translate-x-full transition-transform duration-700`}></div>
-            </button>
 
-            {/* Mobile Dark Mode Toggle */}
             <button 
               type="button" 
               onClick={handleToggle} 
