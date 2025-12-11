@@ -341,10 +341,10 @@ const Header: React.FC<HeaderProps> = ({ isDarkMode, handleToggle }) => {
 
   return (
     <header className={`sticky top-0 z-50 shadow-lg backdrop-blur-sm transition-all duration-500 ${
-      isDarkMode 
-        ? 'bg-gradient-to-br from-gray-900/95 via-gray-800/95 to-gray-900/95 border-b border-gray-700' 
-        : 'bg-gradient-to-br from-white/95 via-gray-50/95 to-white/95 border-b border-gray-300'
-    }`} onMouseLeave={closeAllDropdowns}>
+        isDarkMode 
+            ? 'bg-gradient-to-br from-gray-900/95 via-gray-800/95 to-gray-900/95 border-b border-gray-700' 
+            : 'bg-gradient-to-br from-white/95 via-gray-50/95 to-white/95 border-b border-gray-300'
+        }`} onMouseLeave={closeAllDropdowns}>
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-20">
           {/* Logo */}

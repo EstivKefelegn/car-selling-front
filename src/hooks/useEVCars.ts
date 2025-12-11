@@ -1,6 +1,5 @@
+// useEVCars.ts - CORRECTED VERSION
 import useData from "./useData";
-import useManufacturer from "./useManufacturers";
-
 
 export interface Car {
     id: number;
@@ -33,33 +32,26 @@ export interface CarQuery {
     search?: string;
 }
 
- const useEVCars = (
-    
-    carQuery: CarQuery
- 
-    ) => useData<Car>(
-        "/electric-cars",
-        {
-            params: {
-                manufacturer: carQuery.manufacturer_name,
-                category: carQuery.category,
-                model_year: carQuery.model_year,
-                search: carQuery.search    
-            }
-        },
-        [
-            carQuery.manufacturer_name,
-            carQuery.category,
-            carQuery.model_year,
-            carQuery.search
-        ]
-    )   
+const useEVCars = (carQuery: CarQuery) => {
+  return useData<Car>(
+    "/electric-cars",  // ✅ Match the working pattern (no trailing slash)
+    {
+      params: {
+        manufacturer_name: carQuery.manufacturer_name,
+        category: carQuery.category,
+        model_year: carQuery.model_year,
+        featured: carQuery.featured,  // ✅ Make sure this is included
+        search: carQuery.search    
+      }
+    },
+    [
+      carQuery.manufacturer_name,
+      carQuery.category,
+      carQuery.model_year,
+      carQuery.featured,  // ✅ Add to dependencies
+      carQuery.search
+    ]
+  );
+};
 
-    export default useEVCars
-
-
-
-
-
-
-// const useEVCars = ()
+export default useEVCars;
