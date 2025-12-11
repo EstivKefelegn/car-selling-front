@@ -1,4 +1,5 @@
 import useData from "./useData";
+import useManufacturer from "./useManufacturers";
 
 
 export interface Car {
@@ -23,6 +24,42 @@ export interface Car {
     total_configurations: number;
     created_at: string; 
 }
+
+export interface CarQuery {
+    manufacturer_name?: string;
+    category?: string;
+    model_year?: number;
+    featured?: boolean;
+    search?: string;
+}
+
+ const useEVCars = (
+    
+    carQuery: CarQuery
+ 
+    ) => useData<Car>(
+        "/electric-cars",
+        {
+            params: {
+                manufacturer: carQuery.manufacturer_name,
+                category: carQuery.category,
+                model_year: carQuery.model_year,
+                search: carQuery.search    
+            }
+        },
+        [
+            carQuery.manufacturer_name,
+            carQuery.category,
+            carQuery.model_year,
+            carQuery.search
+        ]
+    )   
+
+    export default useEVCars
+
+
+
+
 
 
 // const useEVCars = ()
