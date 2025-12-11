@@ -1,14 +1,82 @@
-// FeaturedCarsLanding.tsx
 import React from 'react';
 import useFeaturedCars from '../hooks/useFeaturesCars';
 import { useDarkModeStore } from '../store/useDarkModeStore';
-import Logo from "../assets/logo.png"
+import useCarFilterStore from '../store/useCarFilterStore'; // Add this import
 
 const API_BASE_URL = 'http://localhost:8000';
 
 const FeaturedCarsLanding: React.FC = () => {
+  const { filters } = useCarFilterStore(); // Get filters from store
   const { featuredCars, loading, error } = useFeaturedCars();
   const { isDarkMode } = useDarkModeStore();
+
+  // Filter cars based on store filters
+  const filteredCars = React.useMemo(() => {
+    if (!featuredCars) return [];
+    
+    return featuredCars.filter(car => {
+      // If no filters, show all cars
+      if (Object.keys(filters).length === 0) return true;
+      
+      // Manufacturer filter
+      if (filters.manufacturer && car.manufacturer_name !== filters.manufacturer) {
+        return false;
+      }
+      
+      // Model filter
+      if (filters.model && car.model_name !== filters.model) {
+        return false;
+      }
+      
+      // Year range filter
+      if (filters.minYear && car.model_year < filters.minYear) {
+        return false;
+      }
+      if (filters.maxYear && car.model_year > filters.maxYear) {
+        return false;
+      }
+      
+      // Price range filter
+      if (filters.minPrice && car.base_price_value < filters.minPrice) {
+        return false;
+      }
+      if (filters.maxPrice && car.base_price_value > filters.maxPrice) {
+        return false;
+      }
+      
+      // Category filter
+      if (filters.category && car.category !== filters.category) {
+        return false;
+      }
+      
+      // Featured filter
+      if (filters.featured && !car.featured) {
+        return false;
+      }
+      
+      // Color filter - assuming car has color_ids property
+      if (filters.colors && filters.colors.length > 0) {
+        // You'll need to adapt this based on your car data structure
+        // This is just an example
+        if (car.color_ids) {
+          const carColors = Array.isArray(car.color_ids) ? car.color_ids : [car.color_ids];
+          const hasMatchingColor = carColors.some((colorId: number) => 
+            filters.colors?.includes(colorId)
+          );
+          if (!hasMatchingColor) return false;
+        }
+      }
+      
+      return true;
+    });
+  }, [featuredCars, filters]);
+
+  // Count active filters
+  const activeFilterCount = Object.keys(filters).filter(key => {
+    const value = filters[key as keyof typeof filters];
+    if (Array.isArray(value)) return value.length > 0;
+    return value !== undefined && value !== '';
+  }).length;
 
   if (loading) {
     return (
@@ -37,17 +105,19 @@ const FeaturedCarsLanding: React.FC = () => {
     );
   }
 
-  if (!featuredCars || featuredCars.length === 0) {
+  if (!filteredCars || filteredCars.length === 0) {
     return (
       <div className={`text-center py-12 rounded-xl ${isDarkMode ? 'bg-gray-800/50' : 'bg-gray-50'}`}>
         <svg className="w-20 h-20 mx-auto mb-6 text-gray-500/60" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
         </svg>
         <p className={`text-xl font-semibold mb-2 ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
-          No featured cars available
+          {activeFilterCount > 0 ? 'No matching cars found' : 'No featured cars available'}
         </p>
         <p className={`text-sm ${isDarkMode ? 'text-gray-500' : 'text-gray-600'}`}>
-          Check back soon for new featured vehicles
+          {activeFilterCount > 0 
+            ? 'Try adjusting your filters to see more results' 
+            : 'Check back soon for new featured vehicles'}
         </p>
       </div>
     );
@@ -56,34 +126,30 @@ const FeaturedCarsLanding: React.FC = () => {
   return (
     <div className={`py-12 ${isDarkMode ? 'bg-gray-900' : 'bg-gradient-to-b from-gray-50 to-white'}`}>
       <div className="max-w-7xl mx-auto px-4">
-        {/* Header */}
+        {/* Header with filter count */}
         <div className="mb-12 flex flex-col items-center">
-          {/* Centered Logo */}
-          {/* <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-gray-800 dark:bg-gray-800/80 mb-6">
-            <img src={Logo} alt="Logo" className="w-10 h-10" />
-          </div> */}
-
-          {/* Centered Heading */}
           <h2
             className={`text-3xl md:text-4xl mb-4 ${
               isDarkMode ? "text-white" : "text-gray-900"
             }`}
           >
-            New Araival Electric Vehicles
+            New Arrival Electric Vehicles
           </h2>
-
-          {/* Optional Paragraph */}
-          {/* <p
-            className={`text-lg max-w-2xl mx-auto text-center ${
-              isDarkMode ? "text-gray-400" : "text-gray-600"
-            }`}
-          >
-            Discover our premium selection of electric cars with exceptional performance and design
-          </p> */}
+          
+          {activeFilterCount > 0 && (
+            <div className={`text-sm px-4 py-2 rounded-full mb-4 ${
+              isDarkMode 
+                ? 'bg-gray-800 text-gray-300' 
+                : 'bg-gray-200 text-gray-700'
+            }`}>
+              Showing {filteredCars.length} of {featuredCars?.length || 0} cars 
+              ({activeFilterCount} filter{activeFilterCount !== 1 ? 's' : ''} applied)
+            </div>
+          )}
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {featuredCars.map((car) => (
+          {filteredCars.map((car) => (
             <div 
               key={car.id} 
               className={`group relative overflow-hidden rounded-2xl shadow-xl transition-all duration-500 hover:scale-[1.02] ${
@@ -304,7 +370,7 @@ const FeaturedCarsLanding: React.FC = () => {
         </div>
         
         {/* View All Button */}
-        {featuredCars.length > 0 && (
+        {filteredCars.length > 0 && (
           <div className="text-center mt-12">
             <button className={`inline-flex items-center px-8 py-4 rounded-xl font-bold text-lg transition-all duration-300 group overflow-hidden shadow-xl hover:shadow-2xl hover:scale-105
               bg-gradient-to-r from-gray-800 to-gray-900 text-white relative`}>

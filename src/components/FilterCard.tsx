@@ -1,16 +1,17 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { useDarkModeStore } from '../store/useDarkModeStore';
+import useCarFilterStore from '../store/useCarFilterStore'; // Add this import
 import type { CarFilter } from '../services/filters';
 import useManufacturer from '../hooks/useManufacturers';
 import useColors from '../hooks/useColors';
 import useCarsForFilter from '../hooks/useCarsForFilter';
 
 interface FilterCardProps {
-  onFilterChange: (filters: CarFilter) => void;
+  onFilterChange?: (filters: CarFilter) => void; // Make optional
   initialFilters?: CarFilter;
   showTitle?: boolean;
   compact?: boolean;
-  standalone?: boolean; // Add this prop
+  standalone?: boolean;
 }
 
 const FilterCard: React.FC<FilterCardProps> = ({ 
@@ -18,12 +19,13 @@ const FilterCard: React.FC<FilterCardProps> = ({
   initialFilters = {},
   showTitle = true,
   compact = false,
-  standalone = false // Default to false
+  standalone = false
 }) => {
   const { isDarkMode } = useDarkModeStore();
+  const { filters: storeFilters, updateFilter, clearFilters } = useCarFilterStore();
   
-  // State for filters
-  const [filters, setFilters] = useState<CarFilter>(initialFilters);
+  // Use store filters as primary, fallback to initialFilters
+  const [localFilters, setLocalFilters] = useState<CarFilter>(storeFilters);
   const [searchTerm, setSearchTerm] = useState('');
   const [modelSearch, setModelSearch] = useState('');
   const [priceRange, setPriceRange] = useState<[number, number]>([0, 0]);
@@ -98,41 +100,41 @@ const FilterCard: React.FC<FilterCardProps> = ({
     return price.toLocaleString();
   };
 
-  // Handle filter changes
+  // Handle filter changes - update both store and local state
   const handleFilterChange = (key: keyof CarFilter, value: any) => {
-    const newFilters = { ...filters, [key]: value };
-    setFilters(newFilters);
-    onFilterChange(newFilters);
+    updateFilter(key, value); // Update store
+    setLocalFilters(prev => ({ ...prev, [key]: value })); // Update local state
+    onFilterChange?.({ ...storeFilters, [key]: value }); // Call callback if provided
   };
 
   // Handle multiple color selection with type
   const handleColorToggle = (colorId: number, colorType: string) => {
-    const currentColors = filters.colors || [];
+    const currentColors = localFilters.colors || [];
     const newColors = currentColors.includes(colorId)
       ? currentColors.filter(c => c !== colorId)
       : [...currentColors, colorId];
     
-    // Store color type in separate filter if needed
     handleFilterChange('colors', newColors);
   };
 
   // Handle price range selection
   const handlePriceRangeSelect = (min?: number, max?: number) => {
     const newFilters = {
-      ...filters,
+      ...localFilters,
       minPrice: min,
       maxPrice: max,
     };
-    setFilters(newFilters);
-    onFilterChange(newFilters);
+    setLocalFilters(newFilters);
+    useCarFilterStore.getState().setFilters(newFilters); // Update store
+    onFilterChange?.(newFilters);
     setPriceRange([min || 0, max || filterOptions.maxPrice]);
   };
 
   // Clear all filters
-  const handleClearFilters = () => {
-    const clearedFilters: CarFilter = {};
-    setFilters(clearedFilters);
-    onFilterChange(clearedFilters);
+  const handleClearAllFilters = () => {
+    clearFilters(); // Clear store
+    setLocalFilters({}); // Clear local state
+    onFilterChange?.({}); // Call callback if provided
     setSearchTerm('');
     setModelSearch('');
     setPriceRange([0, filterOptions.maxPrice]);
@@ -140,8 +142,8 @@ const FilterCard: React.FC<FilterCardProps> = ({
   };
 
   // Active filter count
-  const activeFilterCount = Object.keys(filters).filter(key => {
-    const value = filters[key as keyof CarFilter];
+  const activeFilterCount = Object.keys(localFilters).filter(key => {
+    const value = localFilters[key as keyof CarFilter];
     if (Array.isArray(value)) return value.length > 0;
     return value !== undefined && value !== '';
   }).length;
@@ -152,6 +154,11 @@ const FilterCard: React.FC<FilterCardProps> = ({
       setPriceRange([0, filterOptions.maxPrice]);
     }
   }, [filterOptions.maxPrice, priceRange]);
+
+  // Sync local state with store when store changes
+  useEffect(() => {
+    setLocalFilters(storeFilters);
+  }, [storeFilters]);
 
   return (
     <div className={`rounded-2xl shadow-xl ${isDarkMode ? 'bg-gray-800/90' : 'bg-white'} p-${compact ? '4' : '6'}`}>
@@ -169,7 +176,7 @@ const FilterCard: React.FC<FilterCardProps> = ({
           </div>
           {activeFilterCount > 0 && (
             <button
-              onClick={handleClearFilters}
+              onClick={handleClearAllFilters}
               className={`px-4 py-2 rounded-lg font-medium transition-colors flex items-center gap-2 ${
                 isDarkMode
                   ? 'bg-gray-700 hover:bg-gray-600 text-gray-300 hover:text-white'
@@ -191,29 +198,42 @@ const FilterCard: React.FC<FilterCardProps> = ({
           Manufacturer
         </label>
         <div className="relative">
-          <input
-            type="text"
-            placeholder="Search manufacturer..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className={`w-full px-4 py-3 rounded-xl border ${
+          <select
+            value={localFilters.manufacturer || ''}
+            onChange={(e) => handleFilterChange('manufacturer', e.target.value || undefined)}
+            className={`w-full px-4 py-3 rounded-xl border appearance-none ${
               isDarkMode
-                ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400'
-                : 'bg-gray-50 border-gray-300 text-gray-900 placeholder-gray-500'
+                ? 'bg-gray-700 border-gray-600 text-white'
+                : 'bg-gray-50 border-gray-300 text-gray-900'
             } focus:outline-none focus:ring-2 focus:ring-gray-800`}
-          />
-          <svg className="absolute right-3 top-3.5 w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-          </svg>
+          >
+            <option value="">Select Manufacturer</option>
+            {manufacturersLoading ? (
+              <option value="" disabled>Loading manufacturers...</option>
+            ) : manufacturers && manufacturers.length > 0 ? (
+              manufacturers.map((manufacturer) => (
+                <option key={manufacturer.id} value={manufacturer.name}>
+                  {manufacturer.name} {manufacturer.is_ev_only ? '(EV Only)' : ''}
+                </option>
+              ))
+            ) : (
+              <option value="" disabled>No manufacturers available</option>
+            )}
+          </select>
+          <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+            <svg className="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+              <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
+            </svg>
+          </div>
         </div>
         
-        {/* Selected Manufacturer */}
-        {filters.manufacturer && (
+        {/* Selected Manufacturer Display */}
+        {localFilters.manufacturer && (
           <div className="mt-3 flex items-center justify-between bg-gradient-to-r from-gray-800/10 to-gray-900/10 dark:from-gray-700/30 dark:to-gray-800/30 p-3 rounded-lg">
             <div className="flex items-center gap-2">
               <div className="w-2 h-2 rounded-full bg-gray-800 dark:bg-gray-300"></div>
               <span className={`text-sm font-medium ${isDarkMode ? 'text-gray-300' : 'text-gray-800'}`}>
-                {filters.manufacturer}
+                {localFilters.manufacturer}
               </span>
             </div>
             <button
@@ -224,47 +244,6 @@ const FilterCard: React.FC<FilterCardProps> = ({
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
               </svg>
             </button>
-          </div>
-        )}
-        
-        {/* Manufacturer Suggestions */}
-        {searchTerm && !filters.manufacturer && (
-          <div className={`mt-3 max-h-40 overflow-y-auto rounded-lg border ${
-            isDarkMode ? 'border-gray-700 bg-gray-800' : 'border-gray-200 bg-white'
-          }`}>
-            {manufacturersLoading ? (
-              <div className="flex items-center justify-center p-4">
-                <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-gray-500"></div>
-              </div>
-            ) : manufacturers && manufacturers.length > 0 ? (
-              <div className="py-1">
-                {manufacturers.map((manufacturer) => (
-                  <button
-                    key={manufacturer.id}
-                    onClick={() => {
-                      handleFilterChange('manufacturer', manufacturer.name);
-                      setSearchTerm('');
-                    }}
-                    className={`w-full text-left px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors flex items-center justify-between ${
-                      isDarkMode ? 'text-gray-300' : 'text-gray-700'
-                    }`}
-                  >
-                    <span>{manufacturer.name}</span>
-                    <span className={`text-xs px-2 py-1 rounded-full ${
-                      manufacturer.is_ev_only
-                        ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200'
-                        : 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200'
-                    }`}>
-                      {manufacturer.is_ev_only ? 'EV Only' : 'Multiple'}
-                    </span>
-                  </button>
-                ))}
-              </div>
-            ) : (
-              <p className={`text-sm text-center p-4 ${isDarkMode ? 'text-gray-500' : 'text-gray-600'}`}>
-                No manufacturers found
-              </p>
-            )}
           </div>
         )}
       </div>
@@ -280,26 +259,42 @@ const FilterCard: React.FC<FilterCardProps> = ({
           </span>
         </div>
         <div className="relative">
-          <input
-            type="text"
-            placeholder="Search model..."
-            value={modelSearch}
-            onChange={(e) => setModelSearch(e.target.value)}
-            className={`w-full px-4 py-3 rounded-xl border ${
+          <select
+            value={localFilters.model || ''}
+            onChange={(e) => handleFilterChange('model', e.target.value || undefined)}
+            className={`w-full px-4 py-3 rounded-xl border appearance-none ${
               isDarkMode
-                ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400'
-                : 'bg-gray-50 border-gray-300 text-gray-900 placeholder-gray-500'
+                ? 'bg-gray-700 border-gray-600 text-white'
+                : 'bg-gray-50 border-gray-300 text-gray-900'
             } focus:outline-none focus:ring-2 focus:ring-gray-800`}
-          />
+          >
+            <option value="">Select Model</option>
+            {carsLoading ? (
+              <option value="" disabled>Loading models...</option>
+            ) : filterOptions.models.length > 0 ? (
+              filterOptions.models.map((model, index) => (
+                <option key={index} value={model}>
+                  {model}
+                </option>
+              ))
+            ) : (
+              <option value="" disabled>No models available</option>
+            )}
+          </select>
+          <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+            <svg className="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+              <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
+            </svg>
+          </div>
         </div>
         
-        {/* Selected Model */}
-        {filters.model && (
+        {/* Selected Model Display */}
+        {localFilters.model && (
           <div className="mt-3 flex items-center justify-between bg-gradient-to-r from-gray-800/10 to-gray-900/10 dark:from-gray-700/30 dark:to-gray-800/30 p-3 rounded-lg">
             <div className="flex items-center gap-2">
               <div className="w-2 h-2 rounded-full bg-gray-800 dark:bg-gray-300"></div>
               <span className={`text-sm font-medium ${isDarkMode ? 'text-gray-300' : 'text-gray-800'}`}>
-                {filters.model}
+                {localFilters.model}
               </span>
             </div>
             <button
@@ -310,36 +305,6 @@ const FilterCard: React.FC<FilterCardProps> = ({
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
               </svg>
             </button>
-          </div>
-        )}
-        
-        {/* Model Suggestions */}
-        {modelSearch && !filters.model && (
-          <div className={`mt-3 max-h-40 overflow-y-auto rounded-lg border ${
-            isDarkMode ? 'border-gray-700 bg-gray-800' : 'border-gray-200 bg-white'
-          }`}>
-            {carsLoading ? (
-              <div className="flex items-center justify-center p-4">
-                <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-gray-500"></div>
-              </div>
-            ) : (
-              <div className="py-1">
-                {filteredModels.map((model, index) => (
-                  <button
-                    key={index}
-                    onClick={() => {
-                      handleFilterChange('model', model);
-                      setModelSearch('');
-                    }}
-                    className={`w-full text-left px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors ${
-                      isDarkMode ? 'text-gray-300' : 'text-gray-700'
-                    }`}
-                  >
-                    {model}
-                  </button>
-                ))}
-              </div>
-            )}
           </div>
         )}
       </div>
@@ -356,7 +321,7 @@ const FilterCard: React.FC<FilterCardProps> = ({
         </div>
         <div className="grid grid-cols-2 gap-3">
           <select
-            value={filters.minYear || ''}
+            value={localFilters.minYear || ''}
             onChange={(e) => handleFilterChange('minYear', e.target.value ? parseInt(e.target.value) : undefined)}
             className={`px-4 py-3 rounded-xl border ${
               isDarkMode
@@ -373,7 +338,7 @@ const FilterCard: React.FC<FilterCardProps> = ({
           </select>
           
           <select
-            value={filters.maxYear || ''}
+            value={localFilters.maxYear || ''}
             onChange={(e) => handleFilterChange('maxYear', e.target.value ? parseInt(e.target.value) : undefined)}
             className={`px-4 py-3 rounded-xl border ${
               isDarkMode
@@ -405,7 +370,7 @@ const FilterCard: React.FC<FilterCardProps> = ({
         {/* Price Range Buttons */}
         <div className="grid grid-cols-2 gap-2 mb-4">
           {priceRanges.map((range) => {
-            const isSelected = filters.minPrice === range.min && filters.maxPrice === range.max;
+            const isSelected = localFilters.minPrice === range.min && localFilters.maxPrice === range.max;
             const label = range.max ? `${formatPrice(range.min)} - ${formatPrice(range.max)}` : `${formatPrice(range.min)}+`;
             
             return (
@@ -495,7 +460,7 @@ const FilterCard: React.FC<FilterCardProps> = ({
                 </p>
                 <div className="flex flex-wrap gap-2">
                   {exteriorColors.map((color) => {
-                    const isSelected = filters.colors?.includes(color.id) || false;
+                    const isSelected = localFilters.colors?.includes(color.id) || false;
                     return (
                       <button
                         key={color.id}
@@ -535,7 +500,7 @@ const FilterCard: React.FC<FilterCardProps> = ({
                 </p>
                 <div className="flex flex-wrap gap-2">
                   {interiorColors.map((color) => {
-                    const isSelected = filters.colors?.includes(color.id) || false;
+                    const isSelected = localFilters.colors?.includes(color.id) || false;
                     return (
                       <button
                         key={color.id}
@@ -572,7 +537,7 @@ const FilterCard: React.FC<FilterCardProps> = ({
             {selectedColorType !== 'all' && (
               <div className="flex flex-wrap gap-2">
                 {colors?.map((color) => {
-                  const isSelected = filters.colors?.includes(color.id) || false;
+                  const isSelected = localFilters.colors?.includes(color.id) || false;
                   return (
                     <button
                       key={color.id}
@@ -607,11 +572,11 @@ const FilterCard: React.FC<FilterCardProps> = ({
         )}
         
         {/* Selected Colors Summary */}
-        {filters.colors && filters.colors.length > 0 && (
+        {localFilters.colors && localFilters.colors.length > 0 && (
           <div className="mt-3 bg-gradient-to-r from-gray-800/10 to-gray-900/10 dark:from-gray-700/30 dark:to-gray-800/30 p-3 rounded-lg">
             <div className="flex items-center justify-between">
               <span className={`text-sm ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
-                Selected: {filters.colors.length} color{filters.colors.length !== 1 ? 's' : ''}
+                Selected: {localFilters.colors.length} color{localFilters.colors.length !== 1 ? 's' : ''}
               </span>
               <button
                 onClick={() => handleFilterChange('colors', [])}
@@ -639,7 +604,7 @@ const FilterCard: React.FC<FilterCardProps> = ({
           </span>
         </div>
         <select
-          value={filters.category || ''}
+          value={localFilters.category || ''}
           onChange={(e) => handleFilterChange('category', e.target.value || undefined)}
           className={`w-full px-4 py-3 rounded-xl border ${
             isDarkMode
@@ -663,19 +628,19 @@ const FilterCard: React.FC<FilterCardProps> = ({
             isDarkMode ? 'text-gray-300' : 'text-gray-700'
           }`}>
             <div className={`relative w-10 h-5 rounded-full transition-colors ${
-              filters.featured
+              localFilters.featured
                 ? 'bg-gradient-to-r from-gray-800 to-gray-900'
                 : isDarkMode ? 'bg-gray-700' : 'bg-gray-300'
             }`}>
               <div className={`absolute top-0.5 left-0.5 w-4 h-4 rounded-full bg-white transition-transform ${
-                filters.featured ? 'transform translate-x-5' : ''
+                localFilters.featured ? 'transform translate-x-5' : ''
               }`}></div>
             </div>
             <span className="font-medium">Show Featured Cars Only</span>
           </label>
           <input
             type="checkbox"
-            checked={filters.featured || false}
+            checked={localFilters.featured || false}
             onChange={(e) => handleFilterChange('featured', e.target.checked || undefined)}
             className="hidden"
           />
@@ -683,9 +648,9 @@ const FilterCard: React.FC<FilterCardProps> = ({
       )}
 
       {/* Apply Filters Button */}
-      {!compact && (
+      {!compact && onFilterChange && (
         <button
-          onClick={() => onFilterChange(filters)}
+          onClick={() => onFilterChange(localFilters)}
           className={`w-full py-3 rounded-xl font-semibold transition-all duration-300 overflow-hidden shadow-lg hover:shadow-xl hover:scale-105
             bg-gradient-to-r from-gray-800 to-gray-900 text-white group relative`}
         >

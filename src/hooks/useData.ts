@@ -5,10 +5,7 @@ import { CanceledError, type AxiosRequestConfig } from 'axios';
 export type Response<T> = T[];
 
 const useData = <T>(
-  endpoint: string,
-  requestConfig?: AxiosRequestConfig,
-  deps?: any[]
-) => {
+endpoint: string, requestConfig?: AxiosRequestConfig, deps?: any[], p0?: { onError: (error: any) => void; }) => {
   const [data, setData] = useState<T[]>([]);
   const [error, setError] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);

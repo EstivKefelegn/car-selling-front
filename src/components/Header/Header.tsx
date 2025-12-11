@@ -97,7 +97,7 @@ const Header: React.FC<HeaderProps> = ({ isDarkMode, handleToggle }) => {
     { name: 'Buy', hasDropdown: true, key: 'buy' },
     { name: 'Discounts', hasDropdown: false, key: 'discounts', link: '/discounts' },
     { name: 'Finance', hasDropdown: false, key: 'finance', link: '/finance' },
-    { name: 'New Cars', hasDropdown: true, key: 'newCars' },
+    { name: 'New Cars', hasDropdown: false, key: 'newCars' },
     { name: 'Services', hasDropdown: true, key: 'services' },
     { name: 'Events', hasDropdown: false, key: 'events', link: '/events' },
     { name: 'More', hasDropdown: true, key: 'more' }

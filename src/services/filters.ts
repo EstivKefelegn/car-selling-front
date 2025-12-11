@@ -1,4 +1,3 @@
-// types/filter.ts
 export interface CarFilter {
   manufacturer?: string;
   model?: string;
@@ -6,10 +5,12 @@ export interface CarFilter {
   maxYear?: number;
   minPrice?: number;
   maxPrice?: number;
-  colors?: number[]; // Changed to array of color IDs
+  colors?: number[];
   category?: string;
   featured?: boolean;
+  search?: string;
 }
+
 export interface Manufacturer {
   id: number;
   name: string;

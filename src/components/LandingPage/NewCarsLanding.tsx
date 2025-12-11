@@ -8,7 +8,6 @@ import {useDarkModeStore} from "../../store/useDarkModeStore"
 const NewCarsLanding: React.FC = () => {
   const [filters, setFilters] = useState<CarFilter>({});
   const isDarkMode = useDarkModeStore((state) => state.isDarkMode)
-  const handleToggle = useDarkModeStore((state) => state.toggleDarkMode)
   
 
 

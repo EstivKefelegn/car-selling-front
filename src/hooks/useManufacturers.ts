@@ -21,7 +21,7 @@ export interface ManufacturerQuery {
 const useManufacturer = (
     manufacturerQuery: ManufacturerQuery
 ) => useData<Manufacturer>(
-    "/car-manufacturer",
+    "/car-manufacturer/",
     {
         params: {
             name: manufacturerQuery.name,

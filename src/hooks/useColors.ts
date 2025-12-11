@@ -19,7 +19,7 @@ export interface ColorQuery {
 
 const useColors = (colorQuery?: ColorQuery) => 
     useData<CarColor>(
-        "/car-colors",
+        "/car-colors/",
         {
             params: {
                 name: colorQuery?.name,
