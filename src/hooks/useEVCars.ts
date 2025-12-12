@@ -39,6 +39,7 @@ export interface CarQuery {
   manufacturer_name?: string;
   model_name?: string;  
   category?: string;
+  status?: string;
   model_year?: number;
   min_year?: number;    
   max_year?: number;    
@@ -59,6 +60,7 @@ const useEVCars = (carQuery: CarQuery) => {
     if (carQuery.manufacturer_name?.trim()) result.manufacturer_name = carQuery.manufacturer_name;
     if (carQuery.model_name?.trim()) result.model_name = carQuery.model_name;
     if (carQuery.category?.trim()) result.category = carQuery.category;
+    if (carQuery.status) result.status = carQuery.status;
     if (carQuery.model_year) result.model_year = carQuery.model_year;
     if (carQuery.min_year) result.min_year = carQuery.min_year;
     if (carQuery.max_year) result.max_year = carQuery.max_year;

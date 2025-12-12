@@ -1,7 +1,8 @@
 import Header from "./components/Header/Header"
-import FeaturedCarsLanding from "./components/FeaturedCarsLanding"
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import {useDarkModeStore} from "./store/useDarkModeStore"
 import NewCarsLanding from "./components/LandingPage/NewCarsLanding"
+import AllCarsLanding from "./components/AllCarsLanding";
 
 function App() {
   const isDarkMode = useDarkModeStore((state) => state.isDarkMode)
@@ -15,11 +16,12 @@ function App() {
     }`}>
       
       <div className="relative z-10">
-        <Header isDarkMode={isDarkMode} handleToggle={handleToggle} />
-        
-        {/* Main content */}
-        <NewCarsLanding />
-        
+        <Header isDarkMode={isDarkMode} handleToggle={handleToggle} />        
+        <Router>
+          <Routes>
+            <Route path="/all-cars" element={<NewCarsLanding />} />
+          </Routes>
+        </Router>
 
       </div>
     </article>

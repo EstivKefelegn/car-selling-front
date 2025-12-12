@@ -1,7 +1,7 @@
 // In your main page or layout
 import React, { useState } from 'react';
 import StandaloneFilter from '../StandaloneFilter';
-import FeaturedCarsLanding from '../FeaturedCarsLanding';
+import FeaturedCarsLanding from '../AllCarsLanding';
 import type { CarFilter } from '../../services/filters';
 import {useDarkModeStore} from "../../store/useDarkModeStore"
 

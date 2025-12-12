@@ -22,7 +22,7 @@ const formatPrice = (price: number) => {
 
 const FeaturedCarsLanding: React.FC = () => {
   const { filters } = useCarFilterStore(); // Get filters from store
-  const { featuredCars, loading, error } = useFeaturedCars();
+  const { status: featuredCars, loading, error } = useFeaturedCars();
   const { isDarkMode } = useDarkModeStore();
 
   // Filter cars based on store filters
@@ -221,7 +221,7 @@ const FeaturedCarsLanding: React.FC = () => {
       <div className={`text-center py-12 ${isDarkMode ? 'bg-gray-900' : 'bg-gray-50'}`}>
         <div className={`inline-block animate-spin rounded-full h-12 w-12 border-b-2 ${isDarkMode ? 'border-gray-600' : 'border-gray-800'} mb-4`}></div>
         <p className={`text-lg ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
-          Loading featured cars...
+          Loading cars...
         </p>
       </div>
     );
@@ -411,9 +411,9 @@ const FeaturedCarsLanding: React.FC = () => {
                       <div className="absolute inset-0 bg-gradient-to-t from-gray-900/70 via-gray-800/40 to-transparent"></div>
                       
                       {/* Price badge - shows actual price value */}
-                      <div className="absolute top-4 right-4 bg-gradient-to-r from-gray-800 to-gray-900 backdrop-blur-sm text-white font-bold px-3 py-1 rounded-full text-sm shadow-lg">
+                      {/* <div className="absolute top-4 right-4 bg-gradient-to-r from-gray-800 to-gray-900 backdrop-blur-sm text-white font-bold px-3 py-1 rounded-full text-sm shadow-lg">
                         {formattedPrice}
-                      </div>
+                      </div> */}
                       
                       {/* Shine effect on hover */}
                       <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000"></div>

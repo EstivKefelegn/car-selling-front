@@ -3,11 +3,11 @@ import useEVCars from "./useEVCars";
 
 const useFeaturedCars = () => {
   const { data: cars, loading, error } = useEVCars({
-    featured: true
+    status: "available"
   });
 
   return {
-    featuredCars: cars,
+    status: cars,
     loading,
     error
   };
