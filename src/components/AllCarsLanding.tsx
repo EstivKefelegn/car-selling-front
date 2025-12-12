@@ -1,5 +1,5 @@
 import React from 'react';
-import useFeaturedCars from '../hooks/useFeaturesCars';
+import useAvailableCars from '../hooks/useAvailableCars';
 import { useDarkModeStore } from '../store/useDarkModeStore';
 import useCarFilterStore from '../store/useCarFilterStore';
 
@@ -22,7 +22,7 @@ const formatPrice = (price: number) => {
 
 const FeaturedCarsLanding: React.FC = () => {
   const { filters } = useCarFilterStore(); // Get filters from store
-  const { status: featuredCars, loading, error } = useFeaturedCars();
+  const { status: featuredCars, loading, error } = useAvailableCars();
   const { isDarkMode } = useDarkModeStore();
 
   // Filter cars based on store filters

@@ -1132,7 +1132,7 @@ const FilterCard: React.FC<FilterCardProps> = ({
       </div>
 
       {/* Featured Filter - Only show if standalone */}
-      {standalone && (
+      {/* {standalone && (
         <div className="mb-6">
           <label className={`flex items-center space-x-3 cursor-pointer group ${
             isDarkMode ? 'text-gray-300' : 'text-gray-700'
@@ -1155,10 +1155,10 @@ const FilterCard: React.FC<FilterCardProps> = ({
             className="hidden"
           />
         </div>
-      )}
+      )} */}
 
       {/* Apply Filters Button */}
-      {!compact && onFilterChange && (
+      {/* {!compact && onFilterChange && (
         <button
           onClick={() => onFilterChange(localFilters)}
           className={`w-full py-3 rounded-xl font-semibold transition-all duration-300 overflow-hidden shadow-lg hover:shadow-xl hover:scale-105
@@ -1168,7 +1168,7 @@ const FilterCard: React.FC<FilterCardProps> = ({
           <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent 
             -translate-x-full group-hover:translate-x-full transition-transform duration-700"></div>
         </button>
-      )}
+      )} */}
     </div>
   );
 };
