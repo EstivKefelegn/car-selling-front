@@ -1,20 +1,29 @@
-import {create} from 'zustand';
+import { create } from 'zustand';
 
 interface DarkModeState {
-    isDarkMode: boolean;
-    toggleDarkMode: () => void;
-    setDarkMode: (value: boolean) => void
+  isDarkMode: boolean;
+  toggleDarkMode: () => void;
+  setDarkMode: (value: boolean) => void;
 }
 
 export const useDarkModeStore = create<DarkModeState>((set) => ({
-    isDarkMode: false,
-    
-    toggleDarkMode: () => 
-        set((state) => ({ isDarkMode: !state.isDarkMode})),
+  // Initialize from localStorage
+  isDarkMode: typeof window !== 'undefined'
+    ? JSON.parse(localStorage.getItem('isDarkMode') || 'false')
+    : false,
 
-    setDarkMode: (value: boolean) => 
-        set({ isDarkMode: value})
-}))
+  toggleDarkMode: () => {
+    set((state) => {
+      const newMode = !state.isDarkMode;
+      localStorage.setItem('isDarkMode', JSON.stringify(newMode));
+      return { isDarkMode: newMode };
+    });
+  },
 
-
-
+  setDarkMode: (value: boolean) => {
+    set(() => {
+      localStorage.setItem('isDarkMode', JSON.stringify(value));
+      return { isDarkMode: value };
+    });
+  },
+}));

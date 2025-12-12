@@ -340,7 +340,7 @@ const Header: React.FC<HeaderProps> = ({ isDarkMode, handleToggle }) => {
   };
 
   return (
-    <header className={`sticky top-0 z-50 shadow-lg backdrop-blur-sm transition-all duration-500 ${
+    <header className={`sticky top-0 z-50 shadow-lg backdrop-blur-md transition-all duration-500 ${
         isDarkMode 
             ? 'bg-gradient-to-br from-gray-900/95 via-gray-800/95 to-gray-900/95 border-b border-gray-700' 
             : 'bg-gradient-to-br from-white/95 via-gray-50/95 to-white/95 border-b border-gray-300'
@@ -350,12 +350,16 @@ const Header: React.FC<HeaderProps> = ({ isDarkMode, handleToggle }) => {
           {/* Logo */}
           <div className="flex items-center space-x-4">
             <div className="flex items-center justify-center rounded-lg">
-              <img src={Logo} alt="Etiopikar Logo" className="h-20 w-auto object-contain" />
+              <img 
+                src={Logo} 
+                alt="Etiopikar Logo" 
+                className="h-16 sm:h-20 md:h-24 lg:h-32 w-auto object-contain" 
+              />
             </div>
             <div className="flex flex-col">
-              <span className={`text-2xl font-bold ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
-                Etiopikar
-              </span>
+               <span className={`text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
+                  Etiopikar
+                </span>
               <span className={`text-xs font-medium tracking-wide ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
                 Experience the difference
               </span>

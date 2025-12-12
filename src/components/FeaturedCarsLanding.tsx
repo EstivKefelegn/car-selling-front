@@ -1,9 +1,24 @@
 import React from 'react';
 import useFeaturedCars from '../hooks/useFeaturesCars';
 import { useDarkModeStore } from '../store/useDarkModeStore';
-import useCarFilterStore from '../store/useCarFilterStore'; // Add this import
+import useCarFilterStore from '../store/useCarFilterStore';
 
 const API_BASE_URL = 'http://localhost:8000';
+
+// Price formatting helper function
+const formatPrice = (price: number) => {
+  if (!price && price !== 0) return 'N/A';
+  if (price >= 10000000) {
+    return `${(price / 1000000).toFixed(0)}M`;
+  } else if (price >= 1000000) {
+    return `${(price / 1000000).toFixed(1)}M`;
+  } else if (price >= 100000) {
+    return `${(price / 1000).toFixed(0)}K`;
+  } else if (price >= 1000) {
+    return `${(price / 1000).toFixed(1)}K`;
+  }
+  return price.toLocaleString();
+};
 
 const FeaturedCarsLanding: React.FC = () => {
   const { filters } = useCarFilterStore(); // Get filters from store
@@ -29,19 +44,44 @@ const FeaturedCarsLanding: React.FC = () => {
       }
       
       // Year range filter
-      if (filters.minYear && car.model_year < filters.minYear) {
+      if (filters.minYear && car.model_year < Number(filters.minYear)) {
         return false;
       }
-      if (filters.maxYear && car.model_year > filters.maxYear) {
+      if (filters.maxYear && car.model_year > Number(filters.maxYear)) {
         return false;
       }
       
-      // Price range filter
-      if (filters.minPrice && car.base_price_value < filters.minPrice) {
-        return false;
+      // Price range filter - FIXED VERSION
+      // Get car price from base_price (string) or base_price_value (number)
+      const carPriceStr = car.base_price || car.base_price_value?.toString();
+      const carPrice = carPriceStr ? parseFloat(carPriceStr) : null;
+      
+      console.log('Car price check:', {
+        id: car.id,
+        name: car.model_name,
+        base_price: car.base_price,
+        base_price_value: car.base_price_value,
+        parsedPrice: carPrice,
+        minFilter: filters.minPrice,
+        maxFilter: filters.maxPrice
+      });
+      
+      // Apply min price filter
+      if (filters.minPrice !== undefined && carPrice !== null) {
+        const minPrice = Number(filters.minPrice);
+        if (!isNaN(minPrice) && carPrice < minPrice) {
+          console.log(`Car ${car.id} filtered out: ${carPrice} < ${minPrice}`);
+          return false;
+        }
       }
-      if (filters.maxPrice && car.base_price_value > filters.maxPrice) {
-        return false;
+      
+      // Apply max price filter
+      if (filters.maxPrice !== undefined && carPrice !== null) {
+        const maxPrice = Number(filters.maxPrice);
+        if (!isNaN(maxPrice) && carPrice > maxPrice) {
+          console.log(`Car ${car.id} filtered out: ${carPrice} > ${maxPrice}`);
+          return false;
+        }
       }
       
       // Category filter
@@ -54,29 +94,127 @@ const FeaturedCarsLanding: React.FC = () => {
         return false;
       }
       
-      // Color filter - assuming car has color_ids property
+      // Color filter - check exterior colors
+      if (filters.exterior_colors && filters.exterior_colors.length > 0) {
+        const carExteriorColors = car.available_exterior_colors || [];
+        const hasMatchingExterior = filters.exterior_colors.some(colorName => 
+          carExteriorColors.some(carColor => carColor.name === colorName)
+        );
+        if (!hasMatchingExterior) return false;
+      }
+      
+      // Color filter - check interior colors
+      if (filters.interior_colors && filters.interior_colors.length > 0) {
+        const carInteriorColors = car.available_interior_colors || [];
+        const hasMatchingInterior = filters.interior_colors.some(colorName => 
+          carInteriorColors.some(carColor => carColor.name === colorName)
+        );
+        if (!hasMatchingInterior) return false;
+      }
+      
+      // For backward compatibility - check old colors array
       if (filters.colors && filters.colors.length > 0) {
-        // You'll need to adapt this based on your car data structure
-        // This is just an example
-        if (car.color_ids) {
-          const carColors = Array.isArray(car.color_ids) ? car.color_ids : [car.color_ids];
-          const hasMatchingColor = carColors.some((colorId: number) => 
-            filters.colors?.includes(colorId)
-          );
-          if (!hasMatchingColor) return false;
-        }
+        // Combine all car colors
+        const allCarColors = [
+          ...(car.available_exterior_colors || []),
+          ...(car.available_interior_colors || [])
+        ];
+        
+        // Check if car has any of the selected colors by ID
+        const hasMatchingColor = filters.colors.some((colorId: number) => 
+          allCarColors.some(carColor => carColor.id === colorId)
+        );
+        if (!hasMatchingColor) return false;
       }
       
       return true;
     });
   }, [featuredCars, filters]);
+  // Debug: Log price filters and first car's price
+  React.useEffect(() => {
+    if (filters.minPrice !== undefined || filters.maxPrice !== undefined) {
+      console.log('Price Filters Active:', {
+        minPrice: filters.minPrice,
+        maxPrice: filters.maxPrice,
+        carCount: filteredCars.length,
+        totalCars: featuredCars?.length || 0
+      });
+    }
+  }, [filters.minPrice, filters.maxPrice, filteredCars.length, featuredCars]);
 
-  // Count active filters
-  const activeFilterCount = Object.keys(filters).filter(key => {
-    const value = filters[key as keyof typeof filters];
-    if (Array.isArray(value)) return value.length > 0;
-    return value !== undefined && value !== '';
-  }).length;
+  // Count active filters - UPDATED to properly count price filters
+  const activeFilterCount = React.useMemo(() => {
+    return Object.keys(filters).filter(key => {
+      const filterKey = key as keyof typeof filters;
+      const value = filters[filterKey];
+      
+      // Handle color arrays separately
+      if (filterKey === 'exterior_colors' || filterKey === 'interior_colors') {
+        return Array.isArray(value) && value.length > 0;
+      }
+      
+      // Handle price filters - they should only count if they're different from undefined
+      if (filterKey === 'minPrice' || filterKey === 'maxPrice') {
+        return value !== undefined && value !== null;
+      }
+      
+      // Handle other filters
+      if (Array.isArray(value)) return value.length > 0;
+      if (value === undefined || value === null) return false;
+      if (typeof value === 'string') return value.trim().length > 0;
+      if (typeof value === 'number') return value !== 0;
+      if (typeof value === 'boolean') return value;
+      
+      return true;
+    }).length;
+  }, [filters]);
+
+  // Helper to get price filter display text
+  const priceFilterText = React.useMemo(() => {
+    if (filters.minPrice !== undefined || filters.maxPrice !== undefined) {
+      const minText = filters.minPrice !== undefined ? formatPrice(Number(filters.minPrice)) : 'Any';
+      const maxText = filters.maxPrice !== undefined ? formatPrice(Number(filters.maxPrice)) : 'Any';
+      return `${minText} - ${maxText}`;
+    }
+    return '';
+  }, [filters.minPrice, filters.maxPrice]);
+
+  // Check if price filter is active
+  const isPriceFilterActive = React.useMemo(() => 
+    filters.minPrice !== undefined || filters.maxPrice !== undefined, 
+    [filters.minPrice, filters.maxPrice]
+  );
+
+  // Helper to get exterior colors count
+  const exteriorColorsCount = React.useMemo(() => 
+    filters.exterior_colors?.length || 0, 
+    [filters.exterior_colors]
+  );
+
+  // Helper to get interior colors count
+  const interiorColorsCount = React.useMemo(() => 
+    filters.interior_colors?.length || 0, 
+    [filters.interior_colors]
+  );
+
+  // Helper to get exterior colors text
+  const exteriorColorsText = React.useMemo(() => 
+    filters.exterior_colors?.join(', ') || '', 
+    [filters.exterior_colors]
+  );
+
+  // Helper to get interior colors text
+  const interiorColorsText = React.useMemo(() => 
+    filters.interior_colors?.join(', ') || '', 
+    [filters.interior_colors]
+  );
+
+  // Check if any color filters are active
+  const hasColorFilters = React.useMemo(() => 
+    (filters.exterior_colors?.length || 0) > 0 || 
+    (filters.interior_colors?.length || 0) > 0,
+    [filters.exterior_colors, filters.interior_colors]
+  );
 
   if (loading) {
     return (
@@ -119,6 +257,54 @@ const FeaturedCarsLanding: React.FC = () => {
             ? 'Try adjusting your filters to see more results' 
             : 'Check back soon for new featured vehicles'}
         </p>
+        
+        {/* Show active filters if any */}
+        {activeFilterCount > 0 && (
+          <div className={`mt-6 max-w-md mx-auto p-4 rounded-lg ${isDarkMode ? 'bg-gray-700/50' : 'bg-gray-200/50'}`}>
+            <p className={`text-sm font-medium mb-2 ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+              Active Filters:
+            </p>
+            <div className="flex flex-wrap gap-2 justify-center">
+              {filters.manufacturer && (
+                <span 
+                  className={`px-3 py-1 rounded-full text-sm ${isDarkMode ? 'bg-gray-600 text-gray-300' : 'bg-gray-300 text-gray-700'}`}
+                >
+                  Manufacturer: {filters.manufacturer}
+                </span>
+              )}
+              {filters.model && (
+                <span 
+                  className={`px-3 py-1 rounded-full text-sm ${isDarkMode ? 'bg-gray-600 text-gray-300' : 'bg-gray-300 text-gray-700'}`}
+                >
+                  Model: {filters.model}
+                </span>
+              )}
+              {isPriceFilterActive && (
+                <span 
+                  className={`px-3 py-1 rounded-full text-sm ${isDarkMode ? 'bg-gray-600 text-gray-300' : 'bg-gray-300 text-gray-700'}`}
+                >
+                  Price: {priceFilterText}
+                </span>
+              )}
+              {exteriorColorsCount > 0 && filters.exterior_colors?.map((color, index) => (
+                <span 
+                  key={`exterior-${index}`}
+                  className={`px-3 py-1 rounded-full text-sm ${isDarkMode ? 'bg-gray-600 text-gray-300' : 'bg-gray-300 text-gray-700'}`}
+                >
+                  Exterior: {color}
+                </span>
+              ))}
+              {interiorColorsCount > 0 && filters.interior_colors?.map((color, index) => (
+                <span 
+                  key={`interior-${index}`}
+                  className={`px-3 py-1 rounded-full text-sm ${isDarkMode ? 'bg-gray-600 text-gray-300' : 'bg-gray-300 text-gray-700'}`}
+                >
+                  Interior: {color}
+                </span>
+              ))}
+            </div>
+          </div>
+        )}
       </div>
     );
   }
@@ -146,227 +332,278 @@ const FeaturedCarsLanding: React.FC = () => {
               ({activeFilterCount} filter{activeFilterCount !== 1 ? 's' : ''} applied)
             </div>
           )}
+          
+          {/* Show active filters summary */}
+          {activeFilterCount > 0 && (
+            <div className="flex flex-wrap gap-2 justify-center mb-2">
+              {filters.manufacturer && (
+                <span className={`px-3 py-1 rounded-full text-sm ${isDarkMode ? 'bg-gray-800/70 text-gray-300' : 'bg-gray-100 text-gray-700'}`}>
+                  Manufacturer: {filters.manufacturer}
+                </span>
+              )}
+              {filters.model && (
+                <span className={`px-3 py-1 rounded-full text-sm ${isDarkMode ? 'bg-gray-800/70 text-gray-300' : 'bg-gray-100 text-gray-700'}`}>
+                  Model: {filters.model}
+                </span>
+              )}
+              {isPriceFilterActive && (
+                <span className={`px-3 py-1 rounded-full text-sm ${isDarkMode ? 'bg-gray-800/70 text-gray-300' : 'bg-gray-100 text-gray-700'}`}>
+                  Price: {priceFilterText}
+                </span>
+              )}
+              {hasColorFilters && (
+                <span className={`px-3 py-1 rounded-full text-sm ${isDarkMode ? 'bg-gray-800/70 text-gray-300' : 'bg-gray-100 text-gray-700'}`}>
+                  Colors: 
+                  {exteriorColorsCount > 0 && (
+                    <span className="ml-1">
+                      Exterior: {exteriorColorsText}
+                    </span>
+                  )}
+                  {interiorColorsCount > 0 && (
+                    <span className="ml-1">
+                      Interior: {interiorColorsText}
+                    </span>
+                  )}
+                </span>
+              )}
+            </div>
+          )}
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {filteredCars.map((car) => (
-            <div 
-              key={car.id} 
-              className={`group relative overflow-hidden rounded-2xl shadow-xl transition-all duration-500 hover:scale-[1.02] ${
-                isDarkMode 
-                  ? 'bg-gray-800/80 backdrop-blur-sm border border-gray-700/50 hover:border-gray-600/50' 
-                  : 'bg-white border border-gray-200/80 hover:border-gray-300/50'
-              }`}
-            >
-              {/* Featured Ribbon */}
-              <div className="absolute top-6 -right-10 rotate-45 bg-gradient-to-r from-gray-800 to-gray-900 text-white text-xs font-bold px-12 py-1 z-10">
-                FEATURED
-              </div>
-
-              {/* Image container */}
-              <div className="relative h-72 overflow-hidden">
-                {car.main_image_url ? (
-                  <>
-                    <img 
-                      src={`${API_BASE_URL}${car.main_image_url}`} 
-                      alt={`${car.manufacturer_name} ${car.model_name}`}
-                      className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                      onError={(e) => {
-                        e.currentTarget.style.display = 'none';
-                      }}
-                    />
-                    
-                    {/* Dark overlay with gradient */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-gray-900/70 via-gray-800/40 to-transparent"></div>
-                    
-                    {/* Shine effect on hover */}
-                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000"></div>
-                  </>
-                ) : (
-                  <div className={`w-full h-full flex items-center justify-center ${
-                    isDarkMode ? 'bg-gray-700/50' : 'bg-gradient-to-br from-gray-100 to-gray-200'
-                  }`}>
-                    <svg className="w-20 h-20 text-gray-400/50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
-                    </svg>
+          {filteredCars.map((car) => {
+            // Format car price for display
+            const carPrice = car.base_price_value !== undefined && car.base_price_value !== null 
+              ? Number(car.base_price_value) 
+              : null;
+            const formattedPrice = carPrice !== null ? formatPrice(carPrice) : 'Price not available';
+            
+            return (
+              <div 
+                key={car.id} 
+                className={`group relative overflow-hidden rounded-2xl shadow-xl transition-all duration-500 hover:scale-[1.02] ${
+                  isDarkMode 
+                    ? 'bg-gray-800/80 backdrop-blur-sm border border-gray-700/50 hover:border-gray-600/50' 
+                    : 'bg-white border border-gray-200/80 hover:border-gray-300/50'
+                }`}
+              >
+                {/* Featured Ribbon */}
+                {car.featured && (
+                  <div className="absolute top-6 -right-10 rotate-45 bg-gradient-to-r from-gray-800 to-gray-900 text-white text-xs font-bold px-12 py-1 z-10">
+                    FEATURED
                   </div>
                 )}
-                
-                {/* Year badge */}
-                <div className="absolute top-4 left-4 bg-white/90 dark:bg-gray-900/90 backdrop-blur-sm text-gray-800 dark:text-gray-300 font-bold px-3 py-1 rounded-full text-sm">
-                  {car.model_year}
-                </div>
-              </div>
-              
-              {/* Car Info */}
-              <div className={`p-6 ${isDarkMode ? 'bg-gray-800/80' : 'bg-white'}`}>
-                {/* Manufacturer and Model */}
-                <div className="flex items-center mb-4">
-                  {car.manufacturer_logo && (
-                    <div className="mr-3 p-2 bg-white dark:bg-gray-700 rounded-lg shadow-sm">
+
+                {/* Image container */}
+                <div className="relative h-72 overflow-hidden">
+                  {car.main_image_url ? (
+                    <>
                       <img 
-                        src={`${API_BASE_URL}${car.manufacturer_logo}`}
-                        alt={car.manufacturer_name}
-                        className="w-10 h-10 object-contain"
+                        src={`${API_BASE_URL}${car.main_image_url}`} 
+                        alt={`${car.manufacturer_name} ${car.model_name}`}
+                        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                         onError={(e) => {
                           e.currentTarget.style.display = 'none';
                         }}
                       />
+                      
+                      {/* Dark overlay with gradient */}
+                      <div className="absolute inset-0 bg-gradient-to-t from-gray-900/70 via-gray-800/40 to-transparent"></div>
+                      
+                      {/* Price badge - shows actual price value */}
+                      <div className="absolute top-4 right-4 bg-gradient-to-r from-gray-800 to-gray-900 backdrop-blur-sm text-white font-bold px-3 py-1 rounded-full text-sm shadow-lg">
+                        {formattedPrice}
+                      </div>
+                      
+                      {/* Shine effect on hover */}
+                      <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000"></div>
+                    </>
+                  ) : (
+                    <div className={`w-full h-full flex items-center justify-center ${
+                      isDarkMode ? 'bg-gray-700/50' : 'bg-gradient-to-br from-gray-100 to-gray-200'
+                    }`}>
+                      <svg className="w-20 h-20 text-gray-400/50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
+                      </svg>
                     </div>
                   )}
-                  <div>
-                    <h3 className={`text-2xl font-bold ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
-                      {car.manufacturer_name} <span className="text-gray-700 dark:text-gray-400">{car.model_name}</span>
-                    </h3>
-                    <p className={`text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
-                      {car.variant} • {car.category_display}
-                    </p>
+                  
+                  {/* Year badge */}
+                  <div className="absolute top-4 left-4 bg-white/90 dark:bg-gray-900/90 backdrop-blur-sm text-gray-800 dark:text-gray-300 font-bold px-3 py-1 rounded-full text-sm">
+                    {car.model_year}
                   </div>
                 </div>
                 
-                {/* Stats Grid */}
-                <div className="grid grid-cols-3 gap-3 mb-6">
-                  <div className={`text-center p-3 rounded-xl border ${
-                    isDarkMode 
-                      ? 'bg-gradient-to-b from-gray-800/50 to-gray-900/50 border-gray-700' 
-                      : 'bg-gradient-to-b from-gray-800/5 to-gray-900/5 border-gray-300'
-                  }`}>
-                    <p className={`text-xs font-medium mb-1 ${
-                      isDarkMode ? 'text-gray-300' : 'text-gray-800'
-                    }`}>
-                      RANGE
-                    </p>
-                    <p className={`text-xl font-bold ${
-                      isDarkMode ? 'text-white' : 'text-gray-900'
-                    }`}>
-                      {car.range_wltp}<span className="text-sm">km</span>
-                    </p>
-                  </div>
-                  <div className={`text-center p-3 rounded-xl border ${
-                    isDarkMode 
-                      ? 'bg-gradient-to-b from-gray-800/50 to-gray-900/50 border-gray-700' 
-                      : 'bg-gradient-to-b from-gray-800/5 to-gray-900/5 border-gray-300'
-                  }`}>
-                    <p className={`text-xs font-medium mb-1 ${
-                      isDarkMode ? 'text-gray-300' : 'text-gray-800'
-                    }`}>
-                      POWER
-                    </p>
-                    <p className={`text-xl font-bold ${
-                      isDarkMode ? 'text-white' : 'text-gray-900'
-                    }`}>
-                      {car.motor_power}<span className="text-sm">HP</span>
-                    </p>
-                  </div>
-                  <div className={`text-center p-3 rounded-xl border ${
-                    isDarkMode 
-                      ? 'bg-gradient-to-b from-gray-800/50 to-gray-900/50 border-gray-700' 
-                      : 'bg-gradient-to-b from-gray-800/5 to-gray-900/5 border-gray-300'
-                  }`}>
-                    <p className={`text-xs font-medium mb-1 ${
-                      isDarkMode ? 'text-gray-300' : 'text-gray-800'
-                    }`}>
-                      0-100
-                    </p>
-                    <p className={`text-xl font-bold ${
-                      isDarkMode ? 'text-white' : 'text-gray-900'
-                    }`}>
-                      {car.acceleration_0_100}<span className="text-sm">s</span>
-                    </p>
-                  </div>
-                </div>
-                
-                {/* Efficiency */}
-                <div className={`mb-6 p-4 rounded-xl border ${
-                  isDarkMode 
-                    ? 'bg-gradient-to-r from-gray-800/40 to-gray-900/40 border-gray-700' 
-                    : 'bg-gradient-to-r from-gray-800/5 to-gray-900/5 border-gray-300'
-                }`}>
-                  <div className="flex items-center justify-between">
+                {/* Car Info */}
+                <div className={`p-6 ${isDarkMode ? 'bg-gray-800/80' : 'bg-white'}`}>
+                  {/* Manufacturer and Model */}
+                  <div className="flex items-center mb-4">
+                    {car.manufacturer_logo && (
+                      <div className="mr-3 p-2 bg-white dark:bg-gray-700 rounded-lg shadow-sm">
+                        <img 
+                          src={`${API_BASE_URL}${car.manufacturer_logo}`}
+                          alt={car.manufacturer_name}
+                          className="w-10 h-10 object-contain"
+                          onError={(e) => {
+                            e.currentTarget.style.display = 'none';
+                          }}
+                        />
+                      </div>
+                    )}
                     <div>
-                      <p className={`text-sm font-medium ${
-                        isDarkMode ? 'text-gray-300' : 'text-gray-800'
-                      }`}>
-                        Efficiency
-                      </p>
-                      <p className={`text-xs ${
-                        isDarkMode ? 'text-gray-400/80' : 'text-gray-600/80'
-                      }`}>
-                        WLTP Combined
-                      </p>
-                    </div>
-                    <p className={`text-xl font-bold ${
-                      isDarkMode ? 'text-white' : 'text-gray-900'
-                    }`}>
-                      {car.efficiency} <span className="text-sm">km/kWh</span>
-                    </p>
-                  </div>
-                  <div className={`mt-2 h-2 rounded-full overflow-hidden ${
-                    isDarkMode ? 'bg-gray-700' : 'bg-gray-300'
-                  }`}>
-                    <div 
-                      className="h-full bg-gradient-to-r from-gray-800 to-gray-900 rounded-full"
-                      style={{ width: `${Math.min(car.efficiency * 10, 100)}%` }}
-                    ></div>
-                  </div>
-                </div>
-                
-                {/* Price and CTA */}
-                <div className={`pt-6 border-t ${
-                  isDarkMode ? 'border-gray-700' : 'border-gray-200'
-                }`}>
-                  <div className="flex items-center justify-between mb-6">
-                    <div>
-                      <p className={`text-sm ${
-                        isDarkMode ? 'text-gray-400' : 'text-gray-600'
-                      }`}>
-                        Starting from
-                      </p>
-                      <p className={`text-2xl font-bold ${
-                        isDarkMode ? 'text-white' : 'text-gray-900'
-                      }`}>
-                        {car.base_price}
-                      </p>
-                    </div>
-                    <div className="text-right">
-                      <p className={`text-xs ${
-                        isDarkMode ? 'text-gray-400' : 'text-gray-600'
-                      }`}>
-                        {car.total_configurations} configuration
-                        {car.total_configurations !== 1 ? 's' : ''}
-                      </p>
-                      <p className={`text-xs font-medium ${
-                        isDarkMode ? 'text-green-400' : 'text-green-600'
-                      }`}>
-                        {car.status_display}
+                      <h3 className={`text-2xl font-bold ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
+                        {car.manufacturer_name} <span className="text-gray-700 dark:text-gray-400">{car.model_name}</span>
+                      </h3>
+                      <p className={`text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+                        {car.variant} • {car.category_display}
                       </p>
                     </div>
                   </div>
                   
-                  <div className="flex gap-3">
-                    <button className={`flex-1 py-3 px-4 rounded-xl font-semibold transition-all duration-300 overflow-hidden shadow-lg hover:shadow-xl hover:scale-105
-                      bg-gradient-to-r from-gray-800 to-gray-900 text-white group relative`}>
-                      <div className="relative z-10">View Details</div>
-                      <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent 
-                        -translate-x-full group-hover:translate-x-full transition-transform duration-700"></div>
-                    </button>
-                    <button className={`py-3 px-4 rounded-xl font-semibold transition-all duration-300 border
-                      ${isDarkMode 
-                        ? 'border-gray-700 text-gray-300 hover:bg-gray-800 active:bg-gray-900' 
-                        : 'border-gray-800 text-gray-800 hover:bg-gray-50 active:bg-gray-100'
+                  {/* Stats Grid */}
+                  <div className="grid grid-cols-3 gap-3 mb-6">
+                    <div className={`text-center p-3 rounded-xl border ${
+                      isDarkMode 
+                        ? 'bg-gradient-to-b from-gray-800/50 to-gray-900/50 border-gray-700' 
+                        : 'bg-gradient-to-b from-gray-800/5 to-gray-900/5 border-gray-300'
+                    }`}>
+                      <p className={`text-xs font-medium mb-1 ${
+                        isDarkMode ? 'text-gray-300' : 'text-gray-800'
                       }`}>
-                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-                      </svg>
-                    </button>
+                        RANGE
+                      </p>
+                      <p className={`text-xl font-bold ${
+                        isDarkMode ? 'text-white' : 'text-gray-900'
+                      }`}>
+                        {car.range_wltp}<span className="text-sm">km</span>
+                      </p>
+                    </div>
+                    <div className={`text-center p-3 rounded-xl border ${
+                      isDarkMode 
+                        ? 'bg-gradient-to-b from-gray-800/50 to-gray-900/50 border-gray-700' 
+                        : 'bg-gradient-to-b from-gray-800/5 to-gray-900/5 border-gray-300'
+                    }`}>
+                      <p className={`text-xs font-medium mb-1 ${
+                        isDarkMode ? 'text-gray-300' : 'text-gray-800'
+                      }`}>
+                        POWER
+                      </p>
+                      <p className={`text-xl font-bold ${
+                        isDarkMode ? 'text-white' : 'text-gray-900'
+                      }`}>
+                        {car.motor_power}<span className="text-sm">HP</span>
+                      </p>
+                    </div>
+                    <div className={`text-center p-3 rounded-xl border ${
+                      isDarkMode 
+                        ? 'bg-gradient-to-b from-gray-800/50 to-gray-900/50 border-gray-700' 
+                        : 'bg-gradient-to-b from-gray-800/5 to-gray-900/5 border-gray-300'
+                    }`}>
+                      <p className={`text-xs font-medium mb-1 ${
+                        isDarkMode ? 'text-gray-300' : 'text-gray-800'
+                      }`}>
+                        0-100
+                      </p>
+                      <p className={`text-xl font-bold ${
+                        isDarkMode ? 'text-white' : 'text-gray-900'
+                      }`}>
+                        {car.acceleration_0_100}<span className="text-sm">s</span>
+                      </p>
+                    </div>
+                  </div>
+                  
+                  {/* Efficiency */}
+                  <div className={`mb-6 p-4 rounded-xl border ${
+                    isDarkMode 
+                      ? 'bg-gradient-to-r from-gray-800/40 to-gray-900/40 border-gray-700' 
+                      : 'bg-gradient-to-r from-gray-800/5 to-gray-900/5 border-gray-300'
+                  }`}>
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <p className={`text-sm font-medium ${
+                          isDarkMode ? 'text-gray-300' : 'text-gray-800'
+                        }`}>
+                          Efficiency
+                        </p>
+                        <p className={`text-xs ${
+                          isDarkMode ? 'text-gray-400/80' : 'text-gray-600/80'
+                        }`}>
+                          WLTP Combined
+                        </p>
+                      </div>
+                      <p className={`text-xl font-bold ${
+                        isDarkMode ? 'text-white' : 'text-gray-900'
+                      }`}>
+                        {car.efficiency} <span className="text-sm">km/kWh</span>
+                      </p>
+                    </div>
+                    <div className={`mt-2 h-2 rounded-full overflow-hidden ${
+                      isDarkMode ? 'bg-gray-700' : 'bg-gray-300'
+                    }`}>
+                      <div 
+                        className="h-full bg-gradient-to-r from-gray-800 to-gray-900 rounded-full"
+                        style={{ width: `${Math.min(car.efficiency * 10, 100)}%` }}
+                      ></div>
+                    </div>
+                  </div>
+                  
+                  {/* Price and CTA */}
+                  <div className={`pt-6 border-t ${
+                    isDarkMode ? 'border-gray-700' : 'border-gray-200'
+                  }`}>
+                    <div className="flex items-center justify-between mb-6">
+                      <div>
+                        <p className={`text-sm ${
+                          isDarkMode ? 'text-gray-400' : 'text-gray-600'
+                        }`}>
+                          Starting from
+                        </p>
+                        <p className={`text-2xl font-bold ${
+                          isDarkMode ? 'text-white' : 'text-gray-900'
+                        }`}>
+                          {car.base_price || formattedPrice}
+                        </p>
+                      </div>
+                      <div className="text-right">
+                        <p className={`text-xs ${
+                          isDarkMode ? 'text-gray-400' : 'text-gray-600'
+                        }`}>
+                          {car.total_configurations} configuration
+                          {car.total_configurations !== 1 ? 's' : ''}
+                        </p>
+                        <p className={`text-xs font-medium ${
+                          isDarkMode ? 'text-green-400' : 'text-green-600'
+                        }`}>
+                          {car.status_display}
+                        </p>
+                      </div>
+                    </div>
+                    
+                    <div className="flex gap-3">
+                      <button className={`flex-1 py-3 px-4 rounded-xl font-semibold transition-all duration-300 overflow-hidden shadow-lg hover:shadow-xl hover:scale-105
+                        bg-gradient-to-r from-gray-800 to-gray-900 text-white group relative`}>
+                        <div className="relative z-10">View Details</div>
+                        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent 
+                          -translate-x-full group-hover:translate-x-full transition-transform duration-700"></div>
+                      </button>
+                      <button className={`py-3 px-4 rounded-xl font-semibold transition-all duration-300 border
+                        ${isDarkMode 
+                          ? 'border-gray-700 text-gray-300 hover:bg-gray-800 active:bg-gray-900' 
+                          : 'border-gray-800 text-gray-800 hover:bg-gray-50 active:bg-gray-100'
+                        }`}>
+                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                        </svg>
+                      </button>
+                    </div>
                   </div>
                 </div>
+                
+                {/* Hover effect line */}
+                <div className={`absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-gray-500 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500`}></div>
               </div>
-              
-              {/* Hover effect line */}
-              <div className={`absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-gray-500 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500`}></div>
-            </div>
-          ))}
+            );
+          })}
         </div>
         
         {/* View All Button */}

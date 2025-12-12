@@ -2,9 +2,8 @@ import { useMemo } from "react";
 import useData from "./useData";
 
 export interface Car {
-  available_color_ids: any;
-  base_price_value: number;
   color_ids: any;
+  base_price_value: number;
   id: number;
   slug: string;
   manufacturer_name: string;
@@ -24,7 +23,16 @@ export interface Car {
   main_image_url: string;
   efficiency: number;
   total_configurations: number;
-  created_at: string; 
+  created_at: string;
+  available_exterior_colors: Color[];
+  available_interior_colors: Color[];
+}
+
+export interface Color {
+  id: number;
+  name: string;
+  hex_code: string;
+  type: 'exterior' | 'interior';
 }
 
 export interface CarQuery {
@@ -38,7 +46,9 @@ export interface CarQuery {
   max_price?: number;   
   featured?: boolean;
   search?: string;
-  colors?: number[];    
+  colors?: number[]; // For backward compatibility
+  exterior_colors?: string[]; // Color names like ['Grey', 'Blue']
+  interior_colors?: string[]; // Color names like ['Silver', 'Black']
 }
 
 const useEVCars = (carQuery: CarQuery) => {
@@ -56,7 +66,20 @@ const useEVCars = (carQuery: CarQuery) => {
     if (carQuery.max_price) result.max_price = carQuery.max_price;
     if (carQuery.featured !== undefined) result.featured = carQuery.featured;
     if (carQuery.search?.trim()) result.search = carQuery.search;
-    if (carQuery.colors && carQuery.colors.length > 0) result.colors = carQuery.colors.join(',');
+    
+    // Handle color filters - send as separate query parameters
+    if (carQuery.exterior_colors && carQuery.exterior_colors.length > 0) {
+      result.exterior_color = carQuery.exterior_colors.join(',');
+    }
+    
+    if (carQuery.interior_colors && carQuery.interior_colors.length > 0) {
+      result.interior_color = carQuery.interior_colors.join(',');
+    }
+    
+    // For backward compatibility
+    if (carQuery.colors && carQuery.colors.length > 0 && !carQuery.exterior_colors && !carQuery.interior_colors) {
+      result.colors = carQuery.colors.join(',');
+    }
 
     return result;
   }, [
@@ -70,7 +93,9 @@ const useEVCars = (carQuery: CarQuery) => {
     carQuery.max_price,
     carQuery.featured,
     carQuery.search,
-    carQuery.colors ? carQuery.colors.join(',') : ''
+    carQuery.colors,
+    carQuery.exterior_colors,
+    carQuery.interior_colors
   ]);
 
   // Use the useData hook

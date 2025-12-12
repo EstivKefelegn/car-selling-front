@@ -12,6 +12,11 @@ export interface FilterOptions {
   categoryDisplays: string[];
   statuses: string[];
   featuredOptions: boolean[];
+  
+  // Color options
+  exteriorColors: { id: number; name: string; hex_code: string }[];
+  interiorColors: { id: number; name: string; hex_code: string }[];
+  allColors: { id: number; name: string; hex_code: string; type: 'exterior' | 'interior' }[];
 
   minPrice: number;
   maxPrice: number;
@@ -38,6 +43,10 @@ const useCarsForFilter = () => {
         categoryDisplays: [],
         statuses: [],
         featuredOptions: [],
+        
+        exteriorColors: [],
+        interiorColors: [],
+        allColors: [],
 
         minPrice: 0,
         maxPrice: 0,
@@ -58,6 +67,11 @@ const useCarsForFilter = () => {
     const categoryDisplays = new Set<string>();
     const statuses = new Set<string>();
     const featured = new Set<boolean>();
+    
+    // Color maps for deduplication
+    const exteriorColorsMap = new Map<number, { id: number; name: string; hex_code: string }>();
+    const interiorColorsMap = new Map<number, { id: number; name: string; hex_code: string }>();
+    const allColorsMap = new Map<number, { id: number; name: string; hex_code: string; type: 'exterior' | 'interior' }>();
 
     let minPrice = Infinity;
     let maxPrice = 0;
@@ -87,7 +101,57 @@ const useCarsForFilter = () => {
 
       if (car.motor_power < minPower) minPower = car.motor_power;
       if (car.motor_power > maxPower) maxPower = car.motor_power;
+      
+      // Collect exterior colors
+      if (car.available_exterior_colors) {
+        car.available_exterior_colors.forEach(color => {
+          if (!exteriorColorsMap.has(color.id)) {
+            exteriorColorsMap.set(color.id, {
+              id: color.id,
+              name: color.name,
+              hex_code: color.hex_code
+            });
+          }
+          if (!allColorsMap.has(color.id)) {
+            allColorsMap.set(color.id, {
+              id: color.id,
+              name: color.name,
+              hex_code: color.hex_code,
+              type: 'exterior' as const
+            });
+          }
+        });
+      }
+      
+      // Collect interior colors
+      if (car.available_interior_colors) {
+        car.available_interior_colors.forEach(color => {
+          if (!interiorColorsMap.has(color.id)) {
+            interiorColorsMap.set(color.id, {
+              id: color.id,
+              name: color.name,
+              hex_code: color.hex_code
+            });
+          }
+          if (!allColorsMap.has(color.id)) {
+            allColorsMap.set(color.id, {
+              id: color.id,
+              name: color.name,
+              hex_code: color.hex_code,
+              type: 'interior' as const
+            });
+          }
+        });
+      }
     });
+
+    // Helper function to sort colors
+    const sortColors = <T extends { name: string }>(colors: T[]): T[] => 
+      colors.sort((a, b) => a.name.localeCompare(b.name));
+
+    const exteriorColors = Array.from(exteriorColorsMap.values());
+    const interiorColors = Array.from(interiorColorsMap.values());
+    const allColors = Array.from(allColorsMap.values());
 
     return {
       manufacturers: Array.from(manufacturers).sort(),
@@ -98,15 +162,19 @@ const useCarsForFilter = () => {
       categoryDisplays: Array.from(categoryDisplays).sort(),
       statuses: Array.from(statuses).sort(),
       featuredOptions: Array.from(featured),
+      
+      exteriorColors: sortColors(exteriorColors),
+      interiorColors: sortColors(interiorColors),
+      allColors: sortColors(allColors),
 
-      minPrice,
-      maxPrice,
+      minPrice: minPrice === Infinity ? 0 : minPrice,
+      maxPrice: maxPrice === 0 ? 0 : maxPrice,
 
-      minRange,
-      maxRange,
+      minRange: minRange === Infinity ? 0 : minRange,
+      maxRange: maxRange === 0 ? 0 : maxRange,
 
-      minPower,
-      maxPower,
+      minPower: minPower === Infinity ? 0 : minPower,
+      maxPower: maxPower === 0 ? 0 : maxPower,
     };
   }, [cars]);
 
