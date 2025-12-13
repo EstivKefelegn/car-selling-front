@@ -26,7 +26,7 @@ const useColors = (colorQuery?: ColorQuery) => {
   }, [colorQuery?.color_type, colorQuery?.search]);
 
   const { data: colors, loading, error } = useData<Color>(
-    "/colors/", // Your colors endpoint
+    "/cars/colors/", // Your colors endpoint
     { params },
     [params]
   );

@@ -291,7 +291,7 @@ const MainBg = () => {
                 </div>
 
                 {/* Quick Search Suggestions - Hidden on mobile, visible on tablet+ */}
-                <div className={`hidden sm:flex mt-3 sm:mt-4 flex-wrap gap-1.5 sm:gap-2 justify-center ${
+                {/* <div className={`hidden sm:flex mt-3 sm:mt-4 flex-wrap gap-1.5 sm:gap-2 justify-center ${
                   isDarkMode ? 'text-gray-300' : 'text-gray-600'
                 }`}>
                   <span className="text-xs sm:text-sm">Try:</span>
@@ -309,7 +309,7 @@ const MainBg = () => {
                       {term}
                     </button>
                   ))}
-                </div>
+                </div> */}
 
                 {/* Quick Search Suggestions - Mobile only (simplified) */}
                 <div className={`sm:hidden mt-2 flex flex-wrap gap-1 justify-center ${

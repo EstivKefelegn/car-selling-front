@@ -164,7 +164,7 @@ const Header: React.FC<HeaderProps> = ({ isDarkMode, handleToggle }) => {
             {manufacturers.length} manufacturers
           </div>
           
-          {/* Manufacturers list */}
+          {/* Manufacturers list with brand icons */}
           {manufacturers.map(manufacturer => (
             <a
               key={manufacturer.id}
@@ -176,25 +176,61 @@ const Header: React.FC<HeaderProps> = ({ isDarkMode, handleToggle }) => {
               }`}
               onClick={() => setIsMobileMenuOpen(false)}
             >
-              <span className="mr-3 text-lg">🚗</span>
+              {/* Brand Icon Container */}
+              <div className={`flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center mr-3 ${
+                isDarkMode 
+                  ? 'bg-gray-800 group-hover:bg-gray-700' 
+                  : 'bg-gray-100 group-hover:bg-gray-200'
+              } transition-colors`}>
+                {/* Brand Logo/Initial */}
+                {manufacturer.logo ? (
+                  <img 
+                    src={manufacturer.logo} 
+                    alt={manufacturer.name}
+                    className="w-6 h-6 object-contain"
+                    onError={(e) => {
+                      // If logo fails to load, show initial
+                      const target = e.target as HTMLImageElement;
+                      target.style.display = 'none';
+                      const parent = target.parentElement;
+                      if (parent) {
+                        const fallback = document.createElement('span');
+                        fallback.className = `font-bold ${
+                          isDarkMode ? 'text-gray-300' : 'text-gray-700'
+                        }`;
+                        fallback.textContent = manufacturer.name.charAt(0);
+                        parent.appendChild(fallback);
+                      }
+                    }}
+                  />
+                ) : (
+                  <span className={`font-bold ${
+                    isDarkMode ? 'text-gray-300' : 'text-gray-700'
+                  }`}>
+                    {manufacturer.name.charAt(0)}
+                  </span>
+                )}
+              </div>
+              
               <div className="flex-1">
-                <div className="font-medium">{manufacturer.name}</div>
+                <div className="font-medium flex items-center gap-2">
+                  {manufacturer.name}
+                  {manufacturer.is_ev_only && (
+                    <span className={`text-xs px-1.5 py-0.5 rounded-full ${
+                      isDarkMode 
+                        ? 'bg-green-900/30 text-green-300' 
+                        : 'bg-green-100 text-green-700'
+                    }`}>
+                      ⚡ EV
+                    </span>
+                  )}
+                </div>
                 <div className={`text-xs mt-1 flex items-center space-x-2 ${
                   isDarkMode ? 'text-gray-400' : 'text-gray-500'
                 }`}>
                   <span>{manufacturer.country}</span>
                   <span>•</span>
-                  <span>{manufacturer.founded_year}</span>
-                  {manufacturer.is_ev_only && (
-                    <>
-                      <span>•</span>
-                      <span className={`px-2 py-0.5 rounded-full text-xs ${
-                        isDarkMode ? 'bg-gray-800 text-gray-300' : 'bg-gray-200 text-gray-700'
-                      }`}>
-                        EV Only
-                      </span>
-                    </>
-                  )}
+                  <span>Since {manufacturer.founded_year}</span>
                 </div>
               </div>
             </a>
@@ -279,7 +315,7 @@ const Header: React.FC<HeaderProps> = ({ isDarkMode, handleToggle }) => {
             <a
               key={manufacturer.id}
               href={`/manufacturers/${manufacturer.id}`}
-              className={`block py-2.5 px-3 text-sm rounded-lg transition-all duration-200 hover:pl-6 ${
+              className={`flex items-center gap-3 py-2.5 px-3 text-sm rounded-lg transition-all duration-200 ${
                 isDarkMode 
                   ? 'text-gray-300 hover:text-white hover:bg-gray-800' 
                   : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
@@ -289,18 +325,54 @@ const Header: React.FC<HeaderProps> = ({ isDarkMode, handleToggle }) => {
                 closeAllDropdowns();
               }}
             >
-              <div className="font-medium">{manufacturer.name}</div>
-              <div className={`text-xs mt-1 flex items-center space-x-2 ${
-                isDarkMode ? 'text-gray-400' : 'text-gray-500'
+              {/* Brand Icon for Mobile */}
+              <div className={`flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center ${
+                isDarkMode 
+                  ? 'bg-gray-800' 
+                  : 'bg-gray-100'
               }`}>
-                <span>{manufacturer.country}</span>
-                {manufacturer.is_ev_only && (
-                  <span className={`ml-2 px-1.5 py-0.5 rounded text-xs ${
-                    isDarkMode ? 'bg-gray-800 text-gray-300' : 'bg-gray-200 text-gray-700'
+                {manufacturer.logo ? (
+                  <img 
+                    src={manufacturer.logo} 
+                    alt={manufacturer.name}
+                    className="w-5 h-5 object-contain"
+                    onError={(e) => {
+                      const target = e.target as HTMLImageElement;
+                      target.style.display = 'none';
+                      const parent = target.parentElement;
+                      if (parent) {
+                        const fallback = document.createElement('span');
+                        fallback.className = `text-sm font-bold ${
+                          isDarkMode ? 'text-gray-300' : 'text-gray-700'
+                        }`;
+                        fallback.textContent = manufacturer.name.charAt(0);
+                        parent.appendChild(fallback);
+                      }
+                    }}
+                  />
+                ) : (
+                  <span className={`text-sm font-bold ${
+                    isDarkMode ? 'text-gray-300' : 'text-gray-700'
                   }`}>
-                    EV
+                    {manufacturer.name.charAt(0)}
                   </span>
                 )}
+              </div>
+              
+              <div>
+                <div className="font-medium">{manufacturer.name}</div>
+                <div className={`text-xs mt-1 flex items-center space-x-2 ${
+                  isDarkMode ? 'text-gray-400' : 'text-gray-500'
+                }`}>
+                  <span>{manufacturer.country}</span>
+                  {manufacturer.is_ev_only && (
+                    <span className={`ml-2 px-1.5 py-0.5 rounded text-xs ${
+                      isDarkMode ? 'bg-gray-800 text-gray-300' : 'bg-gray-200 text-gray-700'
+                    }`}>
+                      EV
+                    </span>
+                  )}
+                </div>
               </div>
             </a>
           ))}
@@ -343,11 +415,6 @@ const Header: React.FC<HeaderProps> = ({ isDarkMode, handleToggle }) => {
   };
 
   return (
-    // <header className={`sticky top-0 z-50 shadow-xl backdrop-blur-md transition-all duration-500 ${
-    //   isDarkMode 
-    //     ? 'bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 border-b border-gray-700' 
-    //     : 'bg-gradient-to-br from-white via-gray-50 to-white border-b border-gray-300'
-    // }`} onMouseLeave={closeAllDropdowns}>
     <header
       className={`sticky top-0 z-50 shadow-xl backdrop-blur-md transition-all duration-500 ${
         isDarkMode 
@@ -356,7 +423,6 @@ const Header: React.FC<HeaderProps> = ({ isDarkMode, handleToggle }) => {
       }`}
       onMouseLeave={closeAllDropdowns}
     >
-
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-20">
           {/* Logo */}
@@ -383,13 +449,17 @@ const Header: React.FC<HeaderProps> = ({ isDarkMode, handleToggle }) => {
           </div>
 
           {/* Desktop Menu */}
-          <nav className="hidden lg:flex items-center space-x-1">
+          <nav className="hidden lg:flex items-center">
             {menuItems.map(item => (
-              <div key={item.key} className="relative" onMouseEnter={() => item.hasDropdown && toggleDropdown(item.key)}>
+              <div
+                key={item.key}
+                className="relative mr-3" // spacing between buttons
+                onMouseEnter={() => item.hasDropdown && toggleDropdown(item.key)}
+              >
                 {item.hasDropdown ? (
                   <button
                     type="button"
-                    className={`group flex items-center px-4 py-3 font-medium rounded-xl transition-all duration-300 overflow-hidden ${
+                    className={`group flex items-center px-4 py-3 font-medium rounded-xl transition-all duration-300 overflow-hidden cursor-pointer ${
                       isDarkMode 
                         ? `text-gray-300 hover:text-white ${
                             activeDropdown === item.key 
@@ -416,51 +486,34 @@ const Header: React.FC<HeaderProps> = ({ isDarkMode, handleToggle }) => {
                       <svg className={`ml-2 w-4 h-4 transition-transform duration-300 ${
                         activeDropdown === item.key ? 'rotate-180' : ''
                       } ${isDarkMode ? 'text-gray-400 group-hover:text-white' : 'text-gray-600 group-hover:text-gray-900'}`} 
-                        fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path>
                       </svg>
                     </div>
-                    {activeDropdown === item.key && (
-                      <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent 
-                        -translate-x-full group-hover:translate-x-full transition-transform duration-700"></div>
-                    )}
                   </button>
                 ) : (
-                  <a href={item.link} className={`group relative px-4 py-3 font-medium rounded-xl transition-all duration-300 overflow-hidden ${
-                    isDarkMode 
-                      ? 'text-gray-300 hover:text-white hover:bg-gray-800/50' 
-                      : 'text-gray-700 hover:text-gray-900 hover:bg-gray-100'
-                  }`}>
+                  <a
+                    href={item.link}
+                    className={`group relative px-4 py-3 font-medium rounded-xl transition-all duration-300 overflow-hidden cursor-pointer ${
+                      isDarkMode 
+                        ? 'text-gray-300 hover:text-white hover:bg-gray-800/50' 
+                        : 'text-gray-700 hover:text-gray-900 hover:bg-gray-100'
+                    }`}
+                  >
                     <div className="relative z-10">{item.name}</div>
-                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent 
-                      -translate-x-full group-hover:translate-x-full transition-transform duration-700"></div>
                   </a>
                 )}
 
-                {/* {item.hasDropdown && activeDropdown === item.key && (
-                  <div className={`absolute top-full left-0 mt-2 rounded-2xl shadow-2xl border py-3 z-50 backdrop-blur-xl animate-fadeIn ${
-                    isDarkMode 
-                      ? 'bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 border-gray-700' 
-                      : 'bg-gradient-to-br from-white via-gray-50 to-white border-gray-300'
-                  } ${item.key === 'buy' ? 'w-80' : 'w-64'}`}>
+                {item.hasDropdown && activeDropdown === item.key && (
+                  <div
+                    className={`absolute top-full left-0 mt-2 rounded-2xl shadow-2xl py-3 z-50
+                    backdrop-blur-xl animate-fadeIn border transition-all duration-300
+                    ${isDarkMode ? 'bg-gray-900/70 border-gray-700' : 'bg-white/70 border-gray-300'}
+                    ${item.key === 'buy' ? 'w-80' : 'w-64'}`}
+                  >
                     {renderDropdownContent(item.key)}
                   </div>
-                )} */}
-                {item.hasDropdown && activeDropdown === item.key && (
-  <div
-    className={`absolute top-full left-0 mt-2 rounded-2xl shadow-2xl py-3 z-50
-    backdrop-blur-xl animate-fadeIn border transition-all duration-300
-    ${
-      isDarkMode
-        ? 'bg-gray-900/70 border-gray-700'   // dark mode: transparent dark
-        : 'bg-white/70 border-gray-300'      // light mode: transparent light
-    }
-    ${item.key === 'buy' ? 'w-80' : 'w-64'}`}
-  >
-    {renderDropdownContent(item.key)}
-  </div>
-)}
-
+                )}
               </div>
             ))}
           </nav>

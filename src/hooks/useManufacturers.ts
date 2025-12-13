@@ -5,6 +5,7 @@ export interface Manufacturer {
     name: string;
     country: string;
     founded_year: number;
+    logo: string;
     is_ev_only: boolean;
     description: string;
     website: string;
@@ -21,7 +22,7 @@ export interface ManufacturerQuery {
 const useManufacturer = (
     manufacturerQuery: ManufacturerQuery
 ) => useData<Manufacturer>(
-    "/car-manufacturer/",
+    "/cars/car-manufacturer/",
     {
         params: {
             name: manufacturerQuery.name,

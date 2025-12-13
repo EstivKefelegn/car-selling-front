@@ -1,6 +1,8 @@
 
 import FeaturedCarsRow from './FeaturedCarRow';
+import Footer from './Footer';
 import MainBg from './MainBg';
+import PopularSearches from './PopularSearches';
 import QuickManufacturerSearches from './QuickManufacturerSearches';
 import ShopByManufacturer from './ShowByManufacturer';
 
@@ -16,6 +18,8 @@ const MainLandingPage = () => {
         subtitle="Browse cars by your favorite manufacturer"
         maxItems={10}
       />
+      <PopularSearches />
+      <Footer />
     </>      
   );
 };

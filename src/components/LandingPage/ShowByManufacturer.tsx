@@ -5,6 +5,7 @@ import useManufacturer, { type Manufacturer, type ManufacturerQuery } from '../.
 import useEVCars from '../../hooks/useEVCars';
 import { Link } from 'react-router-dom';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
+import apiClient from '../../services/api-client';
 
 interface ShopByManufacturerProps {
   title?: string;

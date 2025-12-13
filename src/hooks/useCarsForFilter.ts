@@ -29,7 +29,7 @@ export interface FilterOptions {
 }
 
 const useCarsForFilter = () => {
-  const { data: cars, loading, error } = useData<Car>("/electric-cars/");
+  const { data: cars, loading, error } = useData<Car>("/cars/electric-cars/");
 
   // Memoize computed filter options
   const filterOptions: FilterOptions = useMemo(() => {

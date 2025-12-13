@@ -102,7 +102,7 @@ const useEVCars = (carQuery: CarQuery) => {
 
   // Use the useData hook
   return useData<Car>(
-    "/electric-cars/",
+    "/cars/electric-cars/",
     { params },
     [params], // only re-run if params object changes
     {
