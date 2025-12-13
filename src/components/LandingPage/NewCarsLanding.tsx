@@ -1,7 +1,7 @@
 // In your main page or layout
 import React, { useState } from 'react';
-import StandaloneFilter from '../StandaloneFilter';
-import FeaturedCarsLanding from '../AllCarsLanding';
+import StandaloneFilter from '../FilterCard/StandaloneFilter';
+import AllCarsLanding from '../carsLanding/AllCarsLanding';
 import type { CarFilter } from '../../services/filters';
 import {useDarkModeStore} from "../../store/useDarkModeStore"
 
@@ -48,7 +48,7 @@ const NewCarsLanding: React.FC = () => {
     />
   </div>
         <div className="lg:col-span-3">
-    <FeaturedCarsLanding />
+    <AllCarsLanding />
   </div>
       </div>
     </div>

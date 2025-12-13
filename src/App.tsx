@@ -6,7 +6,7 @@ import MainLandingPage from "./components/LandingPage/MainLandingPage";
 
 function App() {
   const isDarkMode = useDarkModeStore((state) => state.isDarkMode)
-
+  
   return (
     <article className={`min-h-screen transition-all duration-500 ${
       isDarkMode 
@@ -15,7 +15,8 @@ function App() {
     }`}>
       
       <div className="relative z-10">
-        
+    
+
         <Router>
           <Header />     
           <Routes>

@@ -1,6 +1,6 @@
 // components/hero/SearchBox.tsx
 import React from 'react';
-import FindCarsButton from '../FindCarsButton';
+import FindCarsButton from '../../../utils/FindCarsButton';
 
 interface SearchBoxProps {
   searchQuery: string;

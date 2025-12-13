@@ -1,6 +1,6 @@
 // components/hero/CTAButtons.tsx
 import React from 'react';
-import FindCarsButton from '../FindCarsButton';
+import FindCarsButton from '../../../utils/FindCarsButton';
 
 interface CTAButtonsProps {
   isDarkMode: boolean;

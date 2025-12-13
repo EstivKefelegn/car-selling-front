@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import type { CarFilter } from '../services/filters';
-import FilterCard from './FilterCard';
+import type { CarFilter } from '../../services/filters';
+import FilterCard from './Card/FilterCard';
 
 interface StandaloneFilterProps {
   onFilterChange: (filters: CarFilter) => void;
