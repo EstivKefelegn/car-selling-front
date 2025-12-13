@@ -2,12 +2,10 @@ import Header from "./components/Header/Header"
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import {useDarkModeStore} from "./store/useDarkModeStore"
 import NewCarsLanding from "./components/LandingPage/NewCarsLanding"
-import AllCarsLanding from "./components/AllCarsLanding";
 import MainLandingPage from "./components/LandingPage/MainLandingPage";
 
 function App() {
   const isDarkMode = useDarkModeStore((state) => state.isDarkMode)
-  const handleToggle = useDarkModeStore((state) => state.toggleDarkMode)
 
   return (
     <article className={`min-h-screen transition-all duration-500 ${
@@ -19,7 +17,7 @@ function App() {
       <div className="relative z-10">
         
         <Router>
-          <Header isDarkMode={isDarkMode} handleToggle={handleToggle} />     
+          <Header />     
           <Routes>
             <Route path="/" element={<MainLandingPage />}/>             
             <Route path="/all-cars" element={<NewCarsLanding />} />

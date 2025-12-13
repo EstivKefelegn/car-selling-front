@@ -1,9 +1,9 @@
 
-import FeaturedCarsRow from './FeaturedCarRow';
+import FeaturedCarsRow from './featured-car/FeaturedCarRow';
 import Footer from './Footer';
-import MainBg from './MainBg';
+import MainBg from './mainBg/MainBg';
 import PopularSearches from './PopularSearches';
-import QuickManufacturerSearches from './QuickManufacturerSearches';
+import QuickManufacturerSearches from './quickSearch/QuickManufacturerSearches';
 import ShopByManufacturer from './ShowByManufacturer';
 
 const MainLandingPage = () => {

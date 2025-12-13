@@ -1,3 +1,4 @@
+// components/Header.tsx
 import React, { useState, useEffect } from 'react';
 import Logo from '../../assets/logo.png';
 import useManufacturer, { type ManufacturerQuery } from '../../hooks/useManufacturers'; 
@@ -5,36 +6,14 @@ import DarkModeButton from '../../utils/DarkModeButton';
 import FindCarsButton from '../../utils/FindCars';
 import MobileToggleButton from '../../utils/MobileToggleButton';
 import { Link } from 'react-router-dom';
+import { useDarkModeStore } from '../../store/useDarkModeStore';
+import { menuItems } from './navigations/menuItems';
+import DesktopNav from './navigations/DesktopNav';
+import MobileNav from './navigations/MobileNav';
+import type { DropdownData } from './navigations/types';
 
-interface HeaderProps {
-    isDarkMode: boolean;
-    handleToggle: () => void;
-}
-
-interface DropdownItem {
-  id: number | string;
-  name: string;
-  link: string;
-  icon?: string;
-}
-
-type DropdownKey = 'buy' | 'newCars' | 'services' | 'more';
-
-interface MenuItem {
-  name: string;
-  hasDropdown: boolean;
-  key: string;
-  link?: string; 
-}
-
-interface DropdownData {
-  buy: DropdownItem[];
-  newCars: DropdownItem[];
-  services: DropdownItem[];
-  more: DropdownItem[];
-}
-
-const Header: React.FC<HeaderProps> = ({ isDarkMode, handleToggle }) => {
+const Header: React.FC = () => {
+  const { isDarkMode, toggleDarkMode } = useDarkModeStore();
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState<boolean>(false);
   const [dropdownData, setDropdownData] = useState<DropdownData>({
@@ -46,13 +25,13 @@ const Header: React.FC<HeaderProps> = ({ isDarkMode, handleToggle }) => {
 
   // Initialize manufacturer query
   const [manufacturerQuery] = useState<ManufacturerQuery>({
-    name: '', // Empty string to get all manufacturers
+    name: '',
     is_ev_only: undefined,
     country: undefined,
     founded_year: undefined
   });
 
-  // Use the manufacturer hook - CORRECTED: using 'loading' instead of 'isLoading'
+  // Use the manufacturer hook
   const { data: manufacturers, loading: manufacturersLoading, error: manufacturersError } = 
     useManufacturer(manufacturerQuery);
 
@@ -68,7 +47,7 @@ const Header: React.FC<HeaderProps> = ({ isDarkMode, handleToggle }) => {
         })) || [];
 
         setDropdownData({
-          buy: manufacturerItems, // Populate buy dropdown with manufacturers
+          buy: manufacturerItems,
           newCars: [],
           services: [],
           more: []
@@ -79,7 +58,7 @@ const Header: React.FC<HeaderProps> = ({ isDarkMode, handleToggle }) => {
     };
     
     fetchDropdownData();
-  }, [manufacturers]); // Re-run when manufacturers data changes
+  }, [manufacturers]);
 
   const toggleDropdown = (menu: string): void => {
     setActiveDropdown(activeDropdown === menu ? null : menu);
@@ -89,22 +68,7 @@ const Header: React.FC<HeaderProps> = ({ isDarkMode, handleToggle }) => {
     setActiveDropdown(null);
   };
 
-  const isDropdownKey = (key: string): key is DropdownKey => {
-    return ['buy', 'newCars', 'services', 'more'].includes(key);
-  };
-
-  const menuItems: MenuItem[] = [
-    { name: 'News', hasDropdown: false, key: 'news', link: '/news' },
-    { name: 'Buy', hasDropdown: true, key: 'buy' },
-    { name: 'Discounts', hasDropdown: false, key: 'discounts', link: '/discounts' },
-    { name: 'Finance', hasDropdown: false, key: 'finance', link: '/finance' },
-    { name: 'New Cars', hasDropdown: false, key: 'newCars' },
-    { name: 'Services', hasDropdown: true, key: 'services' },
-    { name: 'Events', hasDropdown: false, key: 'events', link: '/events' },
-    { name: 'More', hasDropdown: true, key: 'more' }
-  ];
-
-  const handleMobileItemClick = (item: MenuItem): void => {
+  const handleMobileItemClick = (item: typeof menuItems[0]): void => {
     if (item.hasDropdown) {
       toggleDropdown(item.key);
     } else if (item.link) {
@@ -113,313 +77,12 @@ const Header: React.FC<HeaderProps> = ({ isDarkMode, handleToggle }) => {
     }
   };
 
-  const renderDropdownContent = (key: string): React.ReactNode => {
-    if (!isDropdownKey(key)) return null;
-    const items = dropdownData[key];
-
-    // Special rendering for Buy dropdown with manufacturers
-    if (key === 'buy') {
-      if (manufacturersLoading) {
-        return (
-          <div className="px-4 py-8 text-center">
-            <div className={`animate-spin rounded-full h-6 w-6 border-b-2 mx-auto mb-2 ${
-              isDarkMode ? 'border-gray-400' : 'border-gray-600'
-            }`}></div>
-            <p className={`text-sm ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>
-              Loading manufacturers...
-            </p>
-          </div>
-        );
-      }
-
-      if (manufacturersError) {
-        return (
-          <div className="px-4 py-8 text-center">
-            <p className={`text-sm ${isDarkMode ? 'text-red-300' : 'text-red-600'}`}>
-              Failed to load manufacturers
-            </p>
-          </div>
-        );
-      }
-
-      if (!manufacturers || manufacturers.length === 0) {
-        return (
-          <div className="px-4 py-8 text-center">
-            <p className={`text-sm ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>
-              No manufacturers found
-            </p>
-          </div>
-        );
-      }
-
-      return (
-        <div className="max-h-96 overflow-y-auto
-        [&::-webkit-scrollbar]:hidden 
-        [-ms-overflow-style:'none'] 
-        [scrollbar-width:'none']">
-          {/* Manufacturer count */}
-          <div className={`px-4 py-2 text-xs border-b ${
-            isDarkMode ? 'border-gray-800 text-gray-400' : 'border-gray-300 text-gray-500'
-          }`}>
-            {manufacturers.length} manufacturers
-          </div>
-          
-          {/* Manufacturers list with brand icons */}
-          {manufacturers.map(manufacturer => (
-            <a
-              key={manufacturer.id}
-              href={`/manufacturers/${manufacturer.id}`}
-              className={`group flex items-center px-4 py-3 text-sm transition-all duration-300 hover:pl-6 rounded-lg ${
-                isDarkMode 
-                  ? 'text-gray-300 hover:bg-gray-800 hover:text-white' 
-                  : 'text-gray-700 hover:bg-gray-100 hover:text-gray-900'
-              }`}
-              onClick={() => setIsMobileMenuOpen(false)}
-            >
-              {/* Brand Icon Container */}
-              <div className={`flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center mr-3 ${
-                isDarkMode 
-                  ? 'bg-gray-800 group-hover:bg-gray-700' 
-                  : 'bg-gray-100 group-hover:bg-gray-200'
-              } transition-colors`}>
-                {/* Brand Logo/Initial */}
-                {manufacturer.logo ? (
-                  <img 
-                    src={manufacturer.logo} 
-                    alt={manufacturer.name}
-                    className="w-6 h-6 object-contain"
-                    onError={(e) => {
-                      // If logo fails to load, show initial
-                      const target = e.target as HTMLImageElement;
-                      target.style.display = 'none';
-                      const parent = target.parentElement;
-                      if (parent) {
-                        const fallback = document.createElement('span');
-                        fallback.className = `font-bold ${
-                          isDarkMode ? 'text-gray-300' : 'text-gray-700'
-                        }`;
-                        fallback.textContent = manufacturer.name.charAt(0);
-                        parent.appendChild(fallback);
-                      }
-                    }}
-                  />
-                ) : (
-                  <span className={`font-bold ${
-                    isDarkMode ? 'text-gray-300' : 'text-gray-700'
-                  }`}>
-                    {manufacturer.name.charAt(0)}
-                  </span>
-                )}
-              </div>
-              
-              <div className="flex-1">
-                <div className="font-medium flex items-center gap-2">
-                  {manufacturer.name}
-                  {manufacturer.is_ev_only && (
-                    <span className={`text-xs px-1.5 py-0.5 rounded-full ${
-                      isDarkMode 
-                        ? 'bg-green-900/30 text-green-300' 
-                        : 'bg-green-100 text-green-700'
-                    }`}>
-                      ⚡ EV
-                    </span>
-                  )}
-                </div>
-                <div className={`text-xs mt-1 flex items-center space-x-2 ${
-                  isDarkMode ? 'text-gray-400' : 'text-gray-500'
-                }`}>
-                  <span>{manufacturer.country}</span>
-                  <span>•</span>
-                  <span>Since {manufacturer.founded_year}</span>
-                </div>
-              </div>
-            </a>
-          ))}
-        </div>
-      );
-    }
-
-    // For other dropdowns (newCars, services, more)
-    if (items.length === 0) {
-      return (
-        <div className="px-4 py-8 text-center">
-          <div className={`animate-spin rounded-full h-6 w-6 border-b-2 mx-auto mb-2 ${
-            isDarkMode ? 'border-gray-400' : 'border-gray-600'
-          }`}></div>
-          <p className={`text-sm ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>
-            Loading menu items...
-          </p>
-        </div>
-      );
-    }
-
-    return items.map(item => (
-      <a
-        key={item.id}
-        href={item.link}
-        className={`block px-4 py-3 text-sm transition-all duration-300 hover:pl-6 rounded-lg ${
-          isDarkMode 
-            ? 'text-gray-300 hover:bg-gray-800 hover:text-white' 
-            : 'text-gray-700 hover:bg-gray-100 hover:text-gray-900'
-        }`}
-        onClick={() => setIsMobileMenuOpen(false)}
-      >
-        {item.icon && <span className="mr-2">{item.icon}</span>}
-        {item.name}
-      </a>
-    ));
-  };
-
-  const renderMobileDropdownContent = (key: string): React.ReactNode => {
-    if (!isDropdownKey(key)) return null;
-    const items = dropdownData[key];
-
-    // Special rendering for Buy dropdown in mobile
-    if (key === 'buy') {
-      if (manufacturersLoading) {
-        return (
-          <div className="text-center py-4">
-            <div className={`animate-spin rounded-full h-5 w-5 border-b-2 mx-auto mb-2 ${
-              isDarkMode ? 'border-gray-400' : 'border-gray-600'
-            }`}></div>
-            <p className={`text-sm ${isDarkMode ? 'text-gray-300' : 'text-gray-500'}`}>
-              Loading manufacturers...
-            </p>
-          </div>
-        );
-      }
-
-      if (manufacturersError) {
-        return (
-          <div className="text-center py-4">
-            <p className={`text-sm ${isDarkMode ? 'text-red-300' : 'text-red-600'}`}>
-              Failed to load
-            </p>
-          </div>
-        );
-      }
-
-      if (!manufacturers || manufacturers.length === 0) {
-        return (
-          <div className="text-center py-4">
-            <p className={`text-sm ${isDarkMode ? 'text-gray-300' : 'text-gray-500'}`}>
-              No manufacturers
-            </p>
-          </div>
-        );
-      }
-
-      return (
-        <div className="space-y-1">
-          {manufacturers.map(manufacturer => (
-            <a
-              key={manufacturer.id}
-              href={`/manufacturers/${manufacturer.id}`}
-              className={`flex items-center gap-3 py-2.5 px-3 text-sm rounded-lg transition-all duration-200 ${
-                isDarkMode 
-                  ? 'text-gray-300 hover:text-white hover:bg-gray-800' 
-                  : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
-              }`}
-              onClick={() => {
-                setIsMobileMenuOpen(false);
-                closeAllDropdowns();
-              }}
-            >
-              {/* Brand Icon for Mobile */}
-              <div className={`flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center ${
-                isDarkMode 
-                  ? 'bg-gray-800' 
-                  : 'bg-gray-100'
-              }`}>
-                {manufacturer.logo ? (
-                  <img 
-                    src={manufacturer.logo} 
-                    alt={manufacturer.name}
-                    className="w-5 h-5 object-contain"
-                    onError={(e) => {
-                      const target = e.target as HTMLImageElement;
-                      target.style.display = 'none';
-                      const parent = target.parentElement;
-                      if (parent) {
-                        const fallback = document.createElement('span');
-                        fallback.className = `text-sm font-bold ${
-                          isDarkMode ? 'text-gray-300' : 'text-gray-700'
-                        }`;
-                        fallback.textContent = manufacturer.name.charAt(0);
-                        parent.appendChild(fallback);
-                      }
-                    }}
-                  />
-                ) : (
-                  <span className={`text-sm font-bold ${
-                    isDarkMode ? 'text-gray-300' : 'text-gray-700'
-                  }`}>
-                    {manufacturer.name.charAt(0)}
-                  </span>
-                )}
-              </div>
-              
-              <div>
-                <div className="font-medium">{manufacturer.name}</div>
-                <div className={`text-xs mt-1 flex items-center space-x-2 ${
-                  isDarkMode ? 'text-gray-400' : 'text-gray-500'
-                }`}>
-                  <span>{manufacturer.country}</span>
-                  {manufacturer.is_ev_only && (
-                    <span className={`ml-2 px-1.5 py-0.5 rounded text-xs ${
-                      isDarkMode ? 'bg-gray-800 text-gray-300' : 'bg-gray-200 text-gray-700'
-                    }`}>
-                      EV
-                    </span>
-                  )}
-                </div>
-              </div>
-            </a>
-          ))}
-        </div>
-      );
-    }
-
-    // For other dropdowns
-    if (items.length === 0) {
-      return (
-        <div className="text-center py-4">
-          <div className={`animate-spin rounded-full h-5 w-5 border-b-2 mx-auto mb-2 ${
-            isDarkMode ? 'border-gray-400' : 'border-gray-600'
-          }`}></div>
-          <p className={`text-sm ${isDarkMode ? 'text-gray-300' : 'text-gray-500'}`}>
-            Loading...
-          </p>
-        </div>
-      );
-    }
-
-    return items.map(item => (
-      <a
-        key={item.id}
-        href={item.link}
-        className={`block py-2.5 px-3 text-sm rounded-lg transition-all duration-200 hover:pl-6 ${
-          isDarkMode 
-            ? 'text-gray-300 hover:text-white hover:bg-gray-800' 
-            : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
-        }`}
-        onClick={() => {
-          setIsMobileMenuOpen(false);
-          closeAllDropdowns();
-        }}
-      >
-        {item.icon && <span className="mr-2">{item.icon}</span>}
-        {item.name}
-      </a>
-    ));
-  };
-
   return (
     <header
       className={`sticky top-0 z-50 shadow-xl backdrop-blur-md transition-all duration-500 ${
         isDarkMode 
-          ? 'bg-gray-900/50'  // dark mode: dark gray with 50% opacity
-          : 'bg-white/50'      // light mode: white with 50% opacity
+          ? 'bg-gray-900/50'
+          : 'bg-white/50'
       }`}
       onMouseLeave={closeAllDropdowns}
     >
@@ -448,83 +111,22 @@ const Header: React.FC<HeaderProps> = ({ isDarkMode, handleToggle }) => {
             </div>
           </div>
 
-          {/* Desktop Menu */}
-          <nav className="hidden lg:flex items-center">
-            {menuItems.map(item => (
-              <div
-                key={item.key}
-                className="relative mr-3" // spacing between buttons
-                onMouseEnter={() => item.hasDropdown && toggleDropdown(item.key)}
-              >
-                {item.hasDropdown ? (
-                  <button
-                    type="button"
-                    className={`group flex items-center px-4 py-3 font-medium rounded-xl transition-all duration-300 overflow-hidden cursor-pointer ${
-                      isDarkMode 
-                        ? `text-gray-300 hover:text-white ${
-                            activeDropdown === item.key 
-                              ? 'bg-gradient-to-r from-gray-800 to-gray-900 text-white shadow-lg' 
-                              : 'hover:bg-gray-800/50'
-                          }` 
-                        : `text-gray-700 hover:text-gray-900 ${
-                            activeDropdown === item.key 
-                              ? 'bg-gradient-to-r from-gray-800 to-gray-900 text-white shadow-lg' 
-                              : 'hover:bg-gray-100'
-                          }`
-                    }`}
-                    onClick={() => toggleDropdown(item.key)}
-                  >
-                    <div className="relative z-10 flex items-center">
-                      {item.name}
-                      {item.key === 'buy' && manufacturers && (
-                        <span className={`ml-2 text-xs px-1.5 py-0.5 rounded-full ${
-                          isDarkMode ? 'bg-gray-700 text-gray-300' : 'bg-gray-200 text-gray-700'
-                        }`}>
-                          {manufacturers.length}
-                        </span>
-                      )}
-                      <svg className={`ml-2 w-4 h-4 transition-transform duration-300 ${
-                        activeDropdown === item.key ? 'rotate-180' : ''
-                      } ${isDarkMode ? 'text-gray-400 group-hover:text-white' : 'text-gray-600 group-hover:text-gray-900'}`} 
-                        fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path>
-                      </svg>
-                    </div>
-                  </button>
-                ) : (
-                  <a
-                    href={item.link}
-                    className={`group relative px-4 py-3 font-medium rounded-xl transition-all duration-300 overflow-hidden cursor-pointer ${
-                      isDarkMode 
-                        ? 'text-gray-300 hover:text-white hover:bg-gray-800/50' 
-                        : 'text-gray-700 hover:text-gray-900 hover:bg-gray-100'
-                    }`}
-                  >
-                    <div className="relative z-10">{item.name}</div>
-                  </a>
-                )}
-
-                {item.hasDropdown && activeDropdown === item.key && (
-                  <div
-                    className={`absolute top-full left-0 mt-2 rounded-2xl shadow-2xl py-3 z-50
-                    backdrop-blur-xl animate-fadeIn border transition-all duration-300
-                    ${isDarkMode ? 'bg-gray-900/70 border-gray-700' : 'bg-white/70 border-gray-300'}
-                    ${item.key === 'buy' ? 'w-80' : 'w-64'}`}
-                  >
-                    {renderDropdownContent(item.key)}
-                  </div>
-                )}
-              </div>
-            ))}
-          </nav>
+          {/* Desktop Navigation */}
+          <DesktopNav
+            menuItems={menuItems}
+            manufacturers={manufacturers}
+            manufacturersLoading={manufacturersLoading}
+            manufacturersError={manufacturersError}
+            isDarkMode={isDarkMode}
+            activeDropdown={activeDropdown}
+            dropdownData={dropdownData}
+            onToggleDropdown={toggleDropdown}
+            onItemClick={() => setIsMobileMenuOpen(false)}
+          />
 
           {/* Right Side Actions */}
           <div className="hidden lg:flex items-center space-x-4">
-            
-            {/* Dark/Light Mode Toggle */}
-            <DarkModeButton isDark={isDarkMode} onToggle={handleToggle} />
-          
-            {/* Find Cars Button */}  
+            <DarkModeButton isDark={isDarkMode} onToggle={toggleDarkMode} />
             <Link to="/all-cars">
               <FindCarsButton isDark={isDarkMode} />
             </Link>
@@ -532,12 +134,8 @@ const Header: React.FC<HeaderProps> = ({ isDarkMode, handleToggle }) => {
 
           {/* Mobile Menu Button */}
           <div className="lg:hidden flex items-center space-x-3">
-            
-            {/* Dark Mode Toggle Mobile */}
-            <DarkModeButton isDark={isDarkMode} onToggle={handleToggle} />
-            
-            {/* Mobile Menu Toggle */}
-             <MobileToggleButton
+            <DarkModeButton isDark={isDarkMode} onToggle={toggleDarkMode} />
+            <MobileToggleButton
               isOpen={isMobileMenuOpen}
               onToggle={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
               isDarkMode={isDarkMode}
@@ -546,125 +144,21 @@ const Header: React.FC<HeaderProps> = ({ isDarkMode, handleToggle }) => {
           </div>
         </div>
 
-        {/* Mobile Menu + Backdrop */}
-        {isMobileMenuOpen && (
-          <>
-            {/* Glass Backdrop */}
-            <div 
-              className={`fixed inset-0 z-30 lg:hidden backdrop-blur-md transition-all duration-500 ${
-                isDarkMode ? 'bg-gray-900/80' : 'bg-white/80'
-              }`} 
-              onClick={() => setIsMobileMenuOpen(false)} 
-              aria-hidden="true"
-            ></div>
-            
-            {/* Glass Mobile Menu */}
-            <div className={`lg:hidden fixed top-20 right-4 left-4 mx-auto rounded-2xl shadow-2xl z-40 overflow-hidden border transition-all duration-500 animate-fadeIn ${
-              isDarkMode 
-                ? 'bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 backdrop-blur-xl border-gray-700' 
-                : 'bg-gradient-to-br from-white via-gray-50 to-white backdrop-blur-xl border-gray-300'
-            }`}>
-              <div className="p-4 space-y-2 max-h-[70vh] overflow-y-auto">
-                {menuItems.map(item => (
-                  <div key={`mobile-${item.key}`} className="group">
-                    {item.hasDropdown ? (
-                      <button 
-                        type="button" 
-                        className={`group relative flex items-center justify-between w-full px-4 py-3 text-left rounded-xl transition-all duration-300 overflow-hidden ${
-                          isDarkMode 
-                            ? 'text-gray-300 hover:text-white hover:bg-gray-800/50' 
-                            : 'text-gray-700 hover:text-gray-900 hover:bg-gray-100'
-                        }`} 
-                        onClick={() => handleMobileItemClick(item)}
-                      >
-                        <div className="relative z-10 flex items-center">
-                          <span className="font-medium">{item.name}</span>
-                          {item.key === 'buy' && manufacturers && (
-                            <span className={`ml-2 text-xs px-1.5 py-0.5 rounded-full ${
-                              isDarkMode ? 'bg-gray-700 text-gray-300' : 'bg-gray-200 text-gray-700'
-                            }`}>
-                              {manufacturers.length}
-                            </span>
-                          )}
-                        </div>
-                        <div className="relative z-10">
-                          <svg className={`w-4 h-4 transition-transform duration-300 ${
-                            activeDropdown === item.key ? 'rotate-180' : ''
-                          } ${
-                            isDarkMode 
-                              ? 'text-gray-400 group-hover:text-white' 
-                              : 'text-gray-600 group-hover:text-gray-900'
-                          }`} fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path>
-                          </svg>
-                        </div>
-                        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent 
-                          -translate-x-full group-hover:translate-x-full transition-transform duration-700"></div>
-                      </button>
-                    ) : (
-                      <a 
-                        href={item.link} 
-                        className={`group relative flex items-center justify-between w-full px-4 py-3 text-left rounded-xl transition-all duration-300 overflow-hidden ${
-                          isDarkMode 
-                            ? 'text-gray-300 hover:text-white hover:bg-gray-800/50' 
-                            : 'text-gray-700 hover:text-gray-900 hover:bg-gray-100'
-                        }`} 
-                        onClick={() => setIsMobileMenuOpen(false)}
-                      >
-                        <div className="relative z-10 font-medium">{item.name}</div>
-                        <div className="relative z-10">
-                          <svg className="w-4 h-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
-                          </svg>
-                        </div>
-                        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent 
-                          -translate-x-full group-hover:translate-x-full transition-transform duration-700"></div>
-                      </a>
-                    )}
-                    {item.hasDropdown && activeDropdown === item.key && (
-                      <div className={`ml-6 mt-2 rounded-xl p-3 space-y-2 ${
-                        isDarkMode 
-                          ? 'bg-gray-800/50' 
-                          : 'bg-gray-100'
-                      }`}>
-                        {renderMobileDropdownContent(item.key)}
-                      </div>
-                    )}
-                  </div>
-                ))}
-
-                {/* Bottom Buttons */}
-                <div className={`border-t mt-4 pt-4 px-4 space-y-3 ${
-                  isDarkMode 
-                    ? 'border-gray-700' 
-                    : 'border-gray-300'
-                }`}>
-                  
-                  {/* Find Cars Button Mobile */}
-                  <Link to="/all-cars" className="block">
-                    <button 
-                      type="button" 
-                      className={`group relative w-full py-3 font-medium rounded-xl transition-all duration-300 ease-in-out overflow-hidden shadow-xl ${
-                        isDarkMode 
-                          ? 'bg-gradient-to-r from-gray-800 to-gray-900 text-white' 
-                          : 'bg-gradient-to-r from-gray-800 to-gray-900 text-white'
-                      } hover:scale-[1.02]`} 
-                      onClick={() => setIsMobileMenuOpen(false)}
-                    >
-                      <div className="relative z-10 flex items-center justify-center space-x-2">
-                        <svg className="w-5 h-5 group-hover:scale-110 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                        </svg>
-                        <span className="font-semibold">Find Cars</span>
-                      </div>
-                      <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700"></div>
-                    </button>
-                  </Link>
-                </div>
-              </div>
-            </div>
-          </>
-        )}
+        {/* Mobile Navigation */}
+        <MobileNav
+          menuItems={menuItems}
+          manufacturers={manufacturers}
+          manufacturersLoading={manufacturersLoading}
+          manufacturersError={manufacturersError}
+          isDarkMode={isDarkMode}
+          activeDropdown={activeDropdown}
+          dropdownData={dropdownData}
+          isMobileMenuOpen={isMobileMenuOpen}
+          onToggleDropdown={toggleDropdown}
+          onCloseMobileMenu={() => setIsMobileMenuOpen(false)}
+          onCloseAllDropdowns={closeAllDropdowns}
+          onMobileItemClick={handleMobileItemClick}
+        />
       </div>
     </header>
   );
