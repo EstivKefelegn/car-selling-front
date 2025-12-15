@@ -1,3 +1,15 @@
 {
-  "welcome": "አዳዲስ መኪኖች"
+  "news": "ኣዲስ መረጃ",
+  "newCars": "አዲስ መኪኖች",
+  "buy": "ግዢ",
+  "finance": "የክፍያ ስርዓት",
+  "services": "አገልግሎቶች",
+  "events": "ክንዉኖች",
+  "more": "ተጨማሪ",
+  "languageSelector": {
+    "english": "እንግሊዝኛ",
+    "amharic": "አማርኛ",
+    "selectLanguage": "ቋንቋ ይምረጡ"
+  },
+  "findCars": "መኪና ይፈልጉ"
 }

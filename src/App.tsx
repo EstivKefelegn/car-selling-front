@@ -3,6 +3,8 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import {useDarkModeStore} from "./store/useDarkModeStore"
 import NewCarsLanding from "./components/LandingPage/NewCarsLanding"
 import MainLandingPage from "./components/LandingPage/MainLandingPage";
+import AboutPage from "./components/about/AboutPage"; 
+import Footer from "./components/Footer/Footer";
 
 function App() {
   const isDarkMode = useDarkModeStore((state) => state.isDarkMode)
@@ -22,7 +24,9 @@ function App() {
           <Routes>
             <Route path="/" element={<MainLandingPage />}/>             
             <Route path="/all-cars" element={<NewCarsLanding />} />
+            <Route path="/about" element={<AboutPage />} />
           </Routes>
+          <Footer />
         </Router>
 
       </div>

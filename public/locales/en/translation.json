@@ -1,3 +1,15 @@
 {
-  "New Cars": "New Cars"
+  "news": "News",
+  "newCars": "New Cars",
+  "buy": "Buy",
+  "finance": "Finance",
+  "services": "Services",
+  "events": "Events",
+  "more": "More",
+  "languageSelector": {
+    "english": "English",
+    "amharic": "Amharic",
+    "selectLanguage": "Select language"
+  },
+  "findCars": "Find Cars"
 }

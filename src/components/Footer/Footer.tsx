@@ -12,7 +12,7 @@ const Footer: React.FC = () => {
 
   return (
     <footer className={`${isDarkMode ? 'bg-gray-900 text-gray-300' : 'bg-gray-50 text-gray-700'}`}>
-      <Newsletter isDarkMode={isDarkMode} />
+      <Newsletter  />
       
       <div className="py-8">
         <div className="container mx-auto px-4">

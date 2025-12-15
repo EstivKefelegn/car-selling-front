@@ -19,7 +19,7 @@ const MainLandingPage = () => {
         maxItems={10}
       />
       <PopularBrands />
-      <Footer />
+      
     </>      
   );
 };
