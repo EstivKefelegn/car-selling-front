@@ -1,3 +1,4 @@
+// MainBg.tsx (your current file)
 import { useDarkModeStore } from '../../../store/useDarkModeStore';
 import BG1 from "../../../assets/bg1.avif"
 import BG2 from "../../../assets/bg2.avif"
@@ -8,9 +9,11 @@ import CTAButtons from './CTAButtons';
 import ScrollIndicator from './ScrollIndicator';
 import { useCarousel } from '../../../hooks/useCarousale';
 import { useSearch } from '../../../hooks/useSearch';
+import { useNavigate } from 'react-router-dom'; // Add this import
 
 const MainBg = () => {
   const { isDarkMode } = useDarkModeStore();
+  const navigate = useNavigate(); // Add this
   
   // Carousel images
   const carouselImages = [BG1, BG2, BG3];
@@ -24,9 +27,9 @@ const MainBg = () => {
     window.location.href = '/all-cars';
   };
 
-  const handleScheduleTestDrive = () => {
-    console.log('Schedule Test Drive clicked');
-    // Add your navigation logic here
+  const handleGoToLocation = () => {
+    // Navigate to About page with a hash/anchor
+    navigate('/about#contact-section');
   };
 
   return (
@@ -65,7 +68,7 @@ const MainBg = () => {
           <CTAButtons
             isDarkMode={isDarkMode}
             onBrowseInventory={handleBrowseInventory}
-            onScheduleTestDrive={handleScheduleTestDrive}
+            onScheduleTestDrive={handleGoToLocation} 
           />
         </div>
       </div>

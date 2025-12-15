@@ -28,7 +28,7 @@ const HeaderSection: React.FC<HeaderSectionProps> = ({
   return (
     <div className="mb-12 flex flex-col items-center">
       <h2 className={`text-3xl md:text-4xl mb-4 ${isDarkMode ? "text-white" : "text-gray-900"}`}>
-        New Arrival Electric Vehicles
+        Find Your Perfect Electric Car
       </h2>
       
       {activeFilterCount > 0 && (

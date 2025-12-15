@@ -75,19 +75,18 @@ const SearchBox: React.FC<SearchBoxProps> = ({
             </div>
             
             <input
-              type="text"
-              value={searchQuery}
-              onChange={(e) => onSearchChange(e.target.value)}
-              onFocus={onSearchFocus}
-              onBlur={onSearchBlur}
-              placeholder="Search cars..."
-              className={`flex-1 py-2 sm:py-3 md:py-4 px-2 sm:px-2 text-sm sm:text-base md:text-lg bg-transparent outline-none w-full ${
-                isDarkMode 
-                  ? 'text-white placeholder-gray-400' 
-                  : 'text-gray-900 placeholder-gray-500'
-              }`}
-            />
-            
+            type="text"
+            value={searchQuery}
+            onChange={(e) => onSearchChange(e.target.value)}
+            onFocus={onSearchFocus}
+            onBlur={onSearchBlur}
+            placeholder="Search cars by make, model, year, features..."
+            className={`flex-1 py-2 sm:py-3 md:py-4 px-2 sm:px-2 text-sm sm:text-base md:text-lg bg-transparent outline-none w-full ${
+              isDarkMode 
+                ? 'text-white placeholder-gray-400' 
+                : 'text-gray-900 placeholder-gray-500'
+            }`}
+          />            
             <div className="w-full sm:w-auto px-3 pb-2 sm:pb-0 sm:pr-3 sm:pl-2">
               <FindCarsButton 
                 isDark={isDarkMode}

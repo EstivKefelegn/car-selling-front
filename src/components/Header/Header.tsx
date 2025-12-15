@@ -91,11 +91,13 @@ const Header: React.FC = () => {
           {/* Logo */}
           <div className="flex items-center space-x-4">
             <div className="flex items-center justify-center rounded-lg">
+               <Link to="/">
               <img 
                 src={Logo} 
                 alt="Etiopikar Logo" 
                 className="h-16 sm:h-20 md:h-24 lg:h-32 w-auto object-contain" 
               />
+              </Link>
             </div>
             <div className="flex flex-col">
               <span className={`text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold ${
@@ -128,7 +130,7 @@ const Header: React.FC = () => {
           <div className="hidden lg:flex items-center space-x-4">
             <DarkModeButton isDark={isDarkMode} onToggle={toggleDarkMode} />
             <Link to="/all-cars">
-              <FindCarsButton isDark={isDarkMode} />
+              <FindCarsButton isDark={isDarkMode} text='Find Your Perfect Car'/>
             </Link>
           </div>
 

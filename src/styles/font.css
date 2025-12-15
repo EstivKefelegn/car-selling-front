@@ -1,0 +1,56 @@
+
+/* Apply to entire project */
+* {
+  font-family: 'Inter', 'Montserrat', sans-serif;
+}
+
+/* Thin font classes */
+.font-thin-primary {
+  font-family: 'Inter', 'Montserrat', sans-serif;
+  font-weight: 300;
+  letter-spacing: 0.5px;
+}
+
+.font-thin-secondary {
+  font-family:'Inter', 'Raleway', sans-serif;
+  font-weight: 300;
+  letter-spacing: 0.3px;
+}
+
+.font-thin-elegant {
+  font-family: 'EB Garamond', serif;
+  font-weight: 300;
+  letter-spacing: 1px;
+}
+
+.font-thin-heading {
+  font-family: 'Inter', 'Playfair Display', serif;
+  font-weight: 300;
+  font-style: italic;
+  letter-spacing: 1.5px;
+}
+
+/* Apply to headings globally */
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Inter', 'Playfair Display', serif;
+  font-weight: 300;
+}
+
+/* Apply to large text */
+.text-xl, .text-2xl, .text-3xl, .text-4xl, .text-5xl, .text-6xl, .text-7xl {
+  font-family:'Inter', 'EB Garamond', serif;
+  font-weight: 300;
+  letter-spacing: 0.5px;
+}
+
+/* Apply to body text */
+body {
+  font-family: 'Inter', 'Montserrat', sans-serif;
+  font-weight: 300;
+}
+
+/* Apply to buttons and interactive elements */
+button, .btn, a {
+  font-family: 'Inter', sans-serif;
+  font-weight: 300;
+}

@@ -110,73 +110,113 @@ const MobileNav: React.FC<MobileNavProps> = ({
           : 'bg-gradient-to-br from-white via-gray-50 to-white backdrop-blur-xl border-gray-300'
       }`}>
         <div className="p-4 space-y-2 max-h-[70vh] overflow-y-auto">
-          {menuItems.map(item => (
-            <div key={`mobile-${item.key}`} className="group">
-              {item.hasDropdown ? (
-                <button 
-                  type="button" 
-                  className={`group relative flex items-center justify-between w-full px-4 py-3 text-left rounded-xl transition-all duration-300 overflow-hidden ${
-                    isDarkMode 
-                      ? 'text-gray-300 hover:text-white hover:bg-gray-800/50' 
-                      : 'text-gray-700 hover:text-gray-900 hover:bg-gray-100'
-                  }`} 
-                  onClick={() => onMobileItemClick(item)}
-                >
-                  <div className="relative z-10 flex items-center">
-                    <span className="font-medium">{item.name}</span>
-                    {item.key === 'buy' && manufacturers && (
-                      <span className={`ml-2 text-xs px-1.5 py-0.5 rounded-full ${
-                        isDarkMode ? 'bg-gray-700 text-gray-300' : 'bg-gray-200 text-gray-700'
-                      }`}>
-                        {manufacturers.length}
-                      </span>
-                    )}
-                  </div>
-                  <div className="relative z-10">
-                    <svg className={`w-4 h-4 transition-transform duration-300 ${
-                      activeDropdown === item.key ? 'rotate-180' : ''
-                    } ${
+          {menuItems.map(item => {
+            // Check if this is the "New Cars" item
+            const isNewCarsItem = item.key === 'newCars';
+            
+            return (
+              <div key={`mobile-${item.key}`} className="group">
+                {isNewCarsItem ? (
+                  // Special handling for New Cars - direct link to /new-cars
+                  <a 
+                    href="/new-cars"
+                    className={`group relative flex items-center justify-between w-full px-4 py-3 text-left rounded-xl transition-all duration-300 overflow-hidden ${
                       isDarkMode 
-                        ? 'text-gray-400 group-hover:text-white' 
-                        : 'text-gray-600 group-hover:text-gray-900'
-                    }`} fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path>
-                    </svg>
-                  </div>
-                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent 
-                    -translate-x-full group-hover:translate-x-full transition-transform duration-700"></div>
-                </button>
-              ) : (
-                <a 
-                  href={item.link} 
-                  className={`group relative flex items-center justify-between w-full px-4 py-3 text-left rounded-xl transition-all duration-300 overflow-hidden ${
+                        ? 'text-gray-300 hover:text-white hover:bg-gray-800/50' 
+                        : 'text-gray-700 hover:text-gray-900 hover:bg-gray-100'
+                    }`} 
+                    onClick={() => {
+                      onCloseMobileMenu();
+                      onCloseAllDropdowns();
+                    }}
+                  >
+                    <div className="relative z-10 flex items-center gap-2">
+                      <span className="font-medium">{item.name}</span>
+                      {/* New badge for mobile */}
+                      <span className={`text-xs px-2 py-0.5 rounded-full font-bold ${
+                        isDarkMode 
+                          ? 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white' 
+                          : 'bg-gradient-to-r from-blue-500 to-indigo-500 text-white'
+                      }`}>
+                        NEW
+                      </span>
+                    </div>
+                    <div className="relative z-10">
+                      <svg className="w-4 h-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
+                      </svg>
+                    </div>
+                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent 
+                      -translate-x-full group-hover:translate-x-full transition-transform duration-700"></div>
+                  </a>
+                ) : item.hasDropdown ? (
+                  <button 
+                    type="button" 
+                    className={`group relative flex items-center justify-between w-full px-4 py-3 text-left rounded-xl transition-all duration-300 overflow-hidden ${
+                      isDarkMode 
+                        ? 'text-gray-300 hover:text-white hover:bg-gray-800/50' 
+                        : 'text-gray-700 hover:text-gray-900 hover:bg-gray-100'
+                    }`} 
+                    onClick={() => onMobileItemClick(item)}
+                  >
+                    <div className="relative z-10 flex items-center">
+                      <span className="font-medium">{item.name}</span>
+                      {item.key === 'buy' && manufacturers && (
+                        <span className={`ml-2 text-xs px-1.5 py-0.5 rounded-full ${
+                          isDarkMode ? 'bg-gray-700 text-gray-300' : 'bg-gray-200 text-gray-700'
+                        }`}>
+                          {manufacturers.length}
+                        </span>
+                      )}
+                    </div>
+                    <div className="relative z-10">
+                      <svg className={`w-4 h-4 transition-transform duration-300 ${
+                        activeDropdown === item.key ? 'rotate-180' : ''
+                      } ${
+                        isDarkMode 
+                          ? 'text-gray-400 group-hover:text-white' 
+                          : 'text-gray-600 group-hover:text-gray-900'
+                      }`} fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path>
+                      </svg>
+                    </div>
+                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent 
+                      -translate-x-full group-hover:translate-x-full transition-transform duration-700"></div>
+                  </button>
+                ) : (
+                  <a 
+                    href={item.link} 
+                    className={`group relative flex items-center justify-between w-full px-4 py-3 text-left rounded-xl transition-all duration-300 overflow-hidden ${
+                      isDarkMode 
+                        ? 'text-gray-300 hover:text-white hover:bg-gray-800/50' 
+                        : 'text-gray-700 hover:text-gray-900 hover:bg-gray-100'
+                    }`} 
+                    onClick={onCloseMobileMenu}
+                  >
+                    <div className="relative z-10 font-medium">{item.name}</div>
+                    <div className="relative z-10">
+                      <svg className="w-4 h-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
+                      </svg>
+                    </div>
+                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent 
+                      -translate-x-full group-hover:translate-x-full transition-transform duration-700"></div>
+                  </a>
+                )}
+                
+                {/* Dropdown content for non-new-cars dropdown items */}
+                {!isNewCarsItem && item.hasDropdown && activeDropdown === item.key && (
+                  <div className={`ml-6 mt-2 rounded-xl p-3 space-y-2 ${
                     isDarkMode 
-                      ? 'text-gray-300 hover:text-white hover:bg-gray-800/50' 
-                      : 'text-gray-700 hover:text-gray-900 hover:bg-gray-100'
-                  }`} 
-                  onClick={onCloseMobileMenu}
-                >
-                  <div className="relative z-10 font-medium">{item.name}</div>
-                  <div className="relative z-10">
-                    <svg className="w-4 h-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
-                    </svg>
+                      ? 'bg-gray-800/50' 
+                      : 'bg-gray-100'
+                  }`}>
+                    {renderMobileDropdownContent(item.key)}
                   </div>
-                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent 
-                    -translate-x-full group-hover:translate-x-full transition-transform duration-700"></div>
-                </a>
-              )}
-              {item.hasDropdown && activeDropdown === item.key && (
-                <div className={`ml-6 mt-2 rounded-xl p-3 space-y-2 ${
-                  isDarkMode 
-                    ? 'bg-gray-800/50' 
-                    : 'bg-gray-100'
-                }`}>
-                  {renderMobileDropdownContent(item.key)}
-                </div>
-              )}
-            </div>
-          ))}
+                )}
+              </div>
+            );
+          })}
 
           {/* Bottom Buttons */}
           <div className={`border-t mt-4 pt-4 px-4 space-y-3 ${

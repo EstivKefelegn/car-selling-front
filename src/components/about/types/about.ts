@@ -9,6 +9,7 @@ export interface AboutUsData {
     latitude: number;
     longitude: number;
   };
+  address: string;
   phone_number: string;
   secondary_phone?: string;
   email: string;
@@ -27,6 +28,7 @@ export interface AboutUsData {
     linkedin?: string;
     youtube?: string;
   };
+  
   mission_statement?: string;
   vision_statement?: string;
   core_values?: string;

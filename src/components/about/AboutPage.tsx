@@ -3,23 +3,23 @@ import React, { useState, useEffect } from 'react';
 import { useDarkModeStore } from '../../store/useDarkModeStore';
 import { useAllAboutData } from '../../hooks/useAbout';
 import { 
-  History, Users, Image, MapPin, RefreshCw, 
-  ChevronRight, Sparkles, Car, Battery, Zap, Globe,
+  History, MapPin, RefreshCw, 
+  ChevronRight, Sparkles, Car, 
   Award, Shield, TrendingUp, Heart, Clock, Home,
   Phone, Mail, Facebook, Twitter, Instagram, Linkedin
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import LoadingSpinner from '../../utils/LoadingSpinner';
 import AboutSection from './AboutSection';
-import TeamSection from './TeamSection';
-import GallerySection from './GallerySection';
 import ContactSection from './ContactSection';
 
 const AboutPage: React.FC = () => {
   const { isDarkMode } = useDarkModeStore();
   const { about, team, gallery, loading, error, refetch } = useAllAboutData();
-  const [activeTab, setActiveTab] = useState<'about' | 'team' | 'gallery' | 'contact'>('about');
+  const [activeTab, setActiveTab] = useState<'about' | 'contact'>('contact');
   const [scrolled, setScrolled] = useState(false);
+
+  
 
   // Handle scroll for header effect
   useEffect(() => {
@@ -56,7 +56,7 @@ const AboutPage: React.FC = () => {
           <div className="text-center max-w-md mx-4">
             <div className={`relative p-4 rounded-2xl mb-6 ${
               isDarkMode ? 'bg-gray-800' : 'bg-white'
-            } shadow-lg`}>
+            }`}>
               <Home size={48} className={`mx-auto ${
                 isDarkMode ? 'text-gray-400' : 'text-gray-600'
               }`} />
@@ -78,7 +78,7 @@ const AboutPage: React.FC = () => {
                   isDarkMode 
                     ? 'bg-gray-800 text-white hover:bg-gray-700' 
                     : 'bg-gray-900 text-white hover:bg-gray-800'
-                } shadow-md hover:shadow-lg`}
+                }`}
               >
                 <RefreshCw size={20} className="mr-2" />
                 Try Again
@@ -89,7 +89,7 @@ const AboutPage: React.FC = () => {
                   isDarkMode 
                     ? 'bg-gray-800 text-white hover:bg-gray-700' 
                     : 'bg-gray-100 text-gray-900 hover:bg-gray-200'
-                } shadow-sm hover:shadow`}
+                }`}
               >
                 <Home size={20} className="mr-2" />
                 Go to Homepage
@@ -107,7 +107,7 @@ const AboutPage: React.FC = () => {
         <div className="text-center max-w-md mx-4">
           <div className={`relative p-4 rounded-2xl mb-6 ${
             isDarkMode ? 'bg-gray-800' : 'bg-white'
-          } shadow-lg`}>
+          }`}>
             <RefreshCw size={48} className={`mx-auto ${
               isDarkMode ? 'text-gray-400' : 'text-gray-600'
             }`} />
@@ -128,7 +128,7 @@ const AboutPage: React.FC = () => {
               isDarkMode 
                 ? 'bg-gray-800 text-white hover:bg-gray-700' 
                 : 'bg-gray-900 text-white hover:bg-gray-800'
-            } shadow-lg hover:shadow-xl`}
+            }`}
           >
             <span className="relative z-10 flex items-center justify-center">
               <RefreshCw size={20} className="mr-3 group-hover:rotate-180 transition-transform duration-500" />
@@ -148,7 +148,7 @@ const AboutPage: React.FC = () => {
         <div className="text-center max-w-md mx-4">
           <div className={`relative p-4 rounded-2xl mb-6 ${
             isDarkMode ? 'bg-gray-800' : 'bg-white'
-          } shadow-lg`}>
+          }`}>
             <Car size={48} className={`mx-auto ${
               isDarkMode ? 'text-gray-400' : 'text-gray-600'
             }`} />
@@ -180,7 +180,7 @@ const AboutPage: React.FC = () => {
           ? 'bg-gradient-to-b from-gray-800 to-gray-900' 
           : 'bg-gradient-to-b from-white to-gray-100'
       }`}>
-        <div className="container relative mx-auto px-4 py-20 md:py-32">
+        <div className="container relative mx-auto px-4 py-10 md:py-5">
           <div className="max-w-5xl mx-auto">
             {/* Logo */}
             {about.logo_url && (
@@ -188,7 +188,7 @@ const AboutPage: React.FC = () => {
                 <img 
                   src={about.logo_url} 
                   alt={about.dealership_name}
-                  className="h-28 md:h-32 mx-auto object-contain"
+                  className="h-28 md:h-50 mx-auto object-contain"
                   onError={(e) => {
                     (e.target as HTMLImageElement).style.display = 'none';
                   }}
@@ -197,9 +197,9 @@ const AboutPage: React.FC = () => {
             )}
             
             {/* Main title */}
-            <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold mb-6 text-center">
+            {/* <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold mb-6 text-center">
               {about.dealership_name}
-            </h1>
+            </h1> */}
             
             {/* Tagline */}
             {about.tagline && (
@@ -223,7 +223,7 @@ const AboutPage: React.FC = () => {
               isDarkMode 
                 ? 'bg-gray-800/50 border border-gray-700' 
                 : 'bg-white border border-gray-200'
-            } shadow-xl`}>
+            }`}>
               <p className={`text-lg md:text-xl leading-relaxed text-center ${
                 isDarkMode ? 'text-gray-300' : 'text-gray-700'
               }`}>
@@ -241,7 +241,7 @@ const AboutPage: React.FC = () => {
               ].map((stat, index) => (
                 <div key={index} className={`p-4 rounded-xl text-center ${
                   isDarkMode ? 'bg-gray-800/50 border border-gray-700' : 'bg-white border border-gray-200'
-                } shadow-lg`}>
+                }`}>
                   <div className="flex items-center justify-center mb-2">
                     <stat.icon className={`mr-2 ${
                       isDarkMode ? 'text-gray-400' : 'text-gray-600'
@@ -267,7 +267,7 @@ const AboutPage: React.FC = () => {
       {/* Navigation Tabs */}
       <div className={`sticky top-0 z-50 transition-all duration-300 ${
         scrolled 
-          ? `shadow-lg ${
+          ? `${
               isDarkMode ? 'bg-gray-900' : 'bg-white'
             }` 
           : `${
@@ -278,8 +278,6 @@ const AboutPage: React.FC = () => {
           <div className="flex overflow-x-auto scrollbar-hide">
             {[
               { id: 'about', icon: History, label: 'Our Story' },
-              { id: 'team', icon: Users, label: 'Dream Team' },
-              { id: 'gallery', icon: Image, label: 'Gallery' },
               { id: 'contact', icon: MapPin, label: 'Find Us' },
             ].map((tab) => (
               <button
@@ -308,10 +306,8 @@ const AboutPage: React.FC = () => {
           isDarkMode 
             ? 'bg-gray-800/30 border border-gray-700' 
             : 'bg-white border border-gray-200'
-        } shadow-lg`}>
+        }`}>
           {activeTab === 'about' && <AboutSection data={about} isDarkMode={isDarkMode} />}
-          {activeTab === 'team' && <TeamSection team={team} isDarkMode={isDarkMode} />}
-          {activeTab === 'gallery' && <GallerySection gallery={gallery} isDarkMode={isDarkMode} />}
           {activeTab === 'contact' && <ContactSection data={about} isDarkMode={isDarkMode} />}
         </div>
 
@@ -319,7 +315,7 @@ const AboutPage: React.FC = () => {
         <div className="mt-20 text-center">
           <div className={`relative p-8 md:p-10 rounded-2xl ${
             isDarkMode ? 'bg-gray-800/50 border border-gray-700' : 'bg-white border border-gray-200'
-          } shadow-xl`}>
+          }`}>
             <Heart className={`w-16 h-16 mx-auto mb-6 ${
               isDarkMode ? 'text-gray-400' : 'text-gray-600'
             }`} />
@@ -338,7 +334,7 @@ const AboutPage: React.FC = () => {
                 isDarkMode 
                   ? 'bg-gray-800 text-white hover:bg-gray-700' 
                   : 'bg-gray-900 text-white hover:bg-gray-800'
-              } shadow-lg hover:shadow-xl`}>
+              }`}>
                 <span className="flex items-center justify-center">
                   Book a Test Drive
                   <ChevronRight className="ml-3" size={20} />
@@ -355,92 +351,6 @@ const AboutPage: React.FC = () => {
                 </span>
               </button>
             </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Quick Contact Bar */}
-      <div className={`sticky bottom-0 z-40 ${
-        isDarkMode ? 'bg-gray-900 border-t border-gray-800' : 'bg-white border-t border-gray-200'
-      } shadow-lg`}>
-        <div className="container mx-auto px-4 py-3">
-          <div className="flex flex-wrap items-center justify-between gap-4">
-            <div className="flex items-center space-x-4">
-              <a href={`tel:${about.phone_number}`} className="flex items-center space-x-2 hover:opacity-80 transition-opacity">
-                <Phone size={18} className={isDarkMode ? 'text-gray-400' : 'text-gray-600'} />
-                <span className={`font-medium ${
-                  isDarkMode ? 'text-gray-300' : 'text-gray-700'
-                }`}>
-                  {about.phone_number}
-                </span>
-              </a>
-              <a href={`mailto:${about.email}`} className="flex items-center space-x-2 hover:opacity-80 transition-opacity">
-                <Mail size={18} className={isDarkMode ? 'text-gray-400' : 'text-gray-600'} />
-                <span className={`font-medium ${
-                  isDarkMode ? 'text-gray-300' : 'text-gray-700'
-                }`}>
-                  {about.email}
-                </span>
-              </a>
-            </div>
-            <div className="flex items-center space-x-4">
-              {about.social_media_links?.facebook && (
-                <a href={about.social_media_links.facebook} target="_blank" rel="noopener noreferrer" 
-                   className={`p-2 rounded-full hover:scale-110 transition-transform ${
-                     isDarkMode ? 'hover:bg-gray-800' : 'hover:bg-gray-100'
-                   }`}>
-                  <Facebook size={18} className={isDarkMode ? 'text-gray-400' : 'text-gray-600'} />
-                </a>
-              )}
-              {about.social_media_links?.twitter && (
-                <a href={about.social_media_links.twitter} target="_blank" rel="noopener noreferrer"
-                   className={`p-2 rounded-full hover:scale-110 transition-transform ${
-                     isDarkMode ? 'hover:bg-gray-800' : 'hover:bg-gray-100'
-                   }`}>
-                  <Twitter size={18} className={isDarkMode ? 'text-gray-400' : 'text-gray-600'} />
-                </a>
-              )}
-              {about.social_media_links?.instagram && (
-                <a href={about.social_media_links.instagram} target="_blank" rel="noopener noreferrer"
-                   className={`p-2 rounded-full hover:scale-110 transition-transform ${
-                     isDarkMode ? 'hover:bg-gray-800' : 'hover:bg-gray-100'
-                   }`}>
-                  <Instagram size={18} className={isDarkMode ? 'text-gray-400' : 'text-gray-600'} />
-                </a>
-              )}
-              {about.social_media_links?.linkedin && (
-                <a href={about.social_media_links.linkedin} target="_blank" rel="noopener noreferrer"
-                   className={`p-2 rounded-full hover:scale-110 transition-transform ${
-                     isDarkMode ? 'hover:bg-gray-800' : 'hover:bg-gray-100'
-                   }`}>
-                  <Linkedin size={18} className={isDarkMode ? 'text-gray-400' : 'text-gray-600'} />
-                </a>
-              )}
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Footer */}
-      <div className={`border-t ${
-        isDarkMode ? 'border-gray-800 bg-gray-900' : 'border-gray-200 bg-white'
-      }`}>
-        <div className="container mx-auto px-4 py-8 text-center">
-          <p className={`mb-2 ${
-            isDarkMode ? 'text-gray-400' : 'text-gray-600'
-          }`}>
-            © {new Date().getFullYear()} {about.dealership_name}. Driving Ethiopia's Sustainable Future.
-          </p>
-          <div className="flex justify-center space-x-6 mt-4">
-            <Globe className={`w-5 h-5 ${
-              isDarkMode ? 'text-gray-500' : 'text-gray-600'
-            }`} />
-            <Zap className={`w-5 h-5 ${
-              isDarkMode ? 'text-gray-500' : 'text-gray-600'
-            }`} />
-            <Car className={`w-5 h-5 ${
-              isDarkMode ? 'text-gray-500' : 'text-gray-600'
-            }`} />
           </div>
         </div>
       </div>

@@ -34,7 +34,7 @@ export interface Color {
   hex_code: string;
   type: 'exterior' | 'interior';
 }
-
+// In useEVCars.ts, update the CarQuery interface
 export interface CarQuery {
   manufacturer_name?: string;
   model_name?: string;  
@@ -47,11 +47,13 @@ export interface CarQuery {
   max_price?: number;   
   featured?: boolean;
   search?: string;
-  colors?: number[]; // For backward compatibility
-  exterior_colors?: string[]; // Color names like ['Grey', 'Blue']
-  interior_colors?: string[]; // Color names like ['Silver', 'Black']
+  colors?: number[];
+  exterior_colors?: string[];
+  interior_colors?: string[];
+  ordering?: string; // Add this for API sorting
+  timestamp?: number; // Optional: for forcing re-fetch
 }
-
+// Updated useEVCars function with ordering support
 const useEVCars = (carQuery: CarQuery) => {
   // Build query params dynamically and remove empty values
   const params = useMemo(() => {
@@ -69,7 +71,7 @@ const useEVCars = (carQuery: CarQuery) => {
     if (carQuery.featured !== undefined) result.featured = carQuery.featured;
     if (carQuery.search?.trim()) result.search = carQuery.search;
     
-    // Handle color filters - send as separate query parameters
+    // Handle color filters
     if (carQuery.exterior_colors && carQuery.exterior_colors.length > 0) {
       result.exterior_color = carQuery.exterior_colors.join(',');
     }
@@ -81,6 +83,11 @@ const useEVCars = (carQuery: CarQuery) => {
     // For backward compatibility
     if (carQuery.colors && carQuery.colors.length > 0 && !carQuery.exterior_colors && !carQuery.interior_colors) {
       result.colors = carQuery.colors.join(',');
+    }
+
+    // Add ordering if provided
+    if (carQuery.ordering) {
+      result.ordering = carQuery.ordering;
     }
 
     return result;
@@ -97,14 +104,16 @@ const useEVCars = (carQuery: CarQuery) => {
     carQuery.search,
     carQuery.colors,
     carQuery.exterior_colors,
-    carQuery.interior_colors
+    carQuery.interior_colors,
+    carQuery.ordering,
+    carQuery.timestamp
   ]);
 
   // Use the useData hook
   return useData<Car>(
     "/cars/electric-cars/",
     { params },
-    [params], // only re-run if params object changes
+    [params],
     {
       onError: (error: any) => {
         console.error("Failed to fetch electric cars. Possible reasons:");
@@ -116,4 +125,4 @@ const useEVCars = (carQuery: CarQuery) => {
   );
 };
 
-export default useEVCars;
+export default useEVCars

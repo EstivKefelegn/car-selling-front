@@ -8,6 +8,7 @@ interface FindCarsButtonProps {
   className?: string;
   children?: React.ReactNode;
   type?: 'button' | 'submit' | 'reset';
+  
 }
 
 const FindCarsButton: React.FC<FindCarsButtonProps> = ({ 
@@ -15,7 +16,8 @@ const FindCarsButton: React.FC<FindCarsButtonProps> = ({
   onClick, 
   className = '',
   children,
-  type = 'button'
+  type = 'button',
+  
 }) => {
   const { t, i18n, ready } = useTranslation();
   

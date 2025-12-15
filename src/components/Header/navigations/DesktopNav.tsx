@@ -46,8 +46,28 @@ const DesktopNav: React.FC<DesktopNavProps> = ({
       );
     }
 
-    // For other dropdowns (newCars, services, more)
-    if (items.length === 0) {
+    // For "more" dropdown, always ensure About button exists
+    let displayItems = [...items];
+    if (key === 'more') {
+      // Add About button if not already present
+      const hasAbout = items.some(item => 
+        item.link === '/about' || item.name.toLowerCase().includes('about')
+      );
+      
+      if (!hasAbout) {
+        displayItems = [
+          {
+            id: 'about-link',
+            name: 'About Us',
+            link: '/about',
+          },
+          ...displayItems
+        ];
+      }
+    }
+
+    // Check if we have items to display (after potentially adding About)
+    if (displayItems.length === 0) {
       return (
         <div className="px-4 py-8 text-center">
           <div className={`animate-spin rounded-full h-6 w-6 border-b-2 mx-auto mb-2 ${
@@ -60,7 +80,7 @@ const DesktopNav: React.FC<DesktopNavProps> = ({
       );
     }
 
-    return items.map(item => (
+    return displayItems.map(item => (
       <a
         key={item.id}
         href={item.link}
@@ -79,72 +99,103 @@ const DesktopNav: React.FC<DesktopNavProps> = ({
 
   return (
     <nav className="hidden lg:flex items-center">
-      {menuItems.map(item => (
-        <div
-          key={item.key}
-          className="relative mr-3"
-          onMouseEnter={() => item.hasDropdown && onToggleDropdown(item.key)}
-        >
-          {item.hasDropdown ? (
-            <button
-              type="button"
-              className={`group flex items-center px-4 py-3 font-medium rounded-xl transition-all duration-300 overflow-hidden cursor-pointer ${
-                isDarkMode 
-                  ? `text-gray-300 hover:text-white ${
-                      activeDropdown === item.key 
-                        ? 'bg-gradient-to-r from-gray-800 to-gray-900 text-white shadow-lg' 
-                        : 'hover:bg-gray-800/50'
-                    }` 
-                  : `text-gray-700 hover:text-gray-900 ${
-                      activeDropdown === item.key 
-                        ? 'bg-gradient-to-r from-gray-800 to-gray-900 text-white shadow-lg' 
-                        : 'hover:bg-gray-100'
-                    }`
-              }`}
-              onClick={() => onToggleDropdown(item.key)}
-            >
-              <div className="relative z-10 flex items-center">
-                {item.name}
-                {item.key === 'buy' && manufacturers && (
-                  <span className={`ml-2 text-xs px-1.5 py-0.5 rounded-full ${
-                    isDarkMode ? 'bg-gray-700 text-gray-300' : 'bg-gray-200 text-gray-700'
-                  }`}>
-                    {manufacturers.length}
-                  </span>
-                )}
-                <svg className={`ml-2 w-4 h-4 transition-transform duration-300 ${
-                  activeDropdown === item.key ? 'rotate-180' : ''
-                } ${isDarkMode ? 'text-gray-400 group-hover:text-white' : 'text-gray-600 group-hover:text-gray-900'}`} 
-                  fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path>
-                </svg>
-              </div>
-            </button>
-          ) : (
-            <a
-              href={item.link}
-              className={`group relative px-4 py-3 font-medium rounded-xl transition-all duration-300 overflow-hidden cursor-pointer ${
-                isDarkMode 
-                  ? 'text-gray-300 hover:text-white hover:bg-gray-800/50' 
-                  : 'text-gray-700 hover:text-gray-900 hover:bg-gray-100'
-              }`}
-            >
-              <div className="relative z-10">{item.name}</div>
-            </a>
-          )}
+      {menuItems.map(item => {
+        // Check if this is the "New Cars" item
+        const isNewCarsItem = item.key === 'newCars';
+        
+        return (
+          <div
+            key={item.key}
+            className="relative mr-3"
+            onMouseEnter={() => item.hasDropdown && !isNewCarsItem && onToggleDropdown(item.key)}
+            onMouseLeave={() => item.hasDropdown && !isNewCarsItem && activeDropdown === item.key && onToggleDropdown(item.key)}
+          >
+            {isNewCarsItem ? (
+              // Special rendering for New Cars - always redirect to /new-cars
+              <a
+                href="/new-cars"
+                className={`group relative px-4 py-3 font-medium rounded-xl transition-all duration-300 overflow-hidden cursor-pointer flex items-center ${
+                  isDarkMode 
+                    ? 'text-gray-300 hover:text-white hover:bg-gray-800/50' 
+                    : 'text-gray-700 hover:text-gray-900 hover:bg-gray-100'
+                }`}
+                onClick={onItemClick}
+              >
+                <span className="relative z-10">{item.name}</span>
+                {/* New badge */}
+                <span className={`ml-2 text-xs px-2 py-0.5 rounded-full font-bold ${
+                  isDarkMode 
+                    ? 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white' 
+                    : 'bg-gradient-to-r from-blue-500 to-indigo-500 text-white'
+                }`}>
+                  NEW
+                </span>
+              </a>
+            ) : item.hasDropdown ? (
+              // Existing dropdown items
+              <button
+                type="button"
+                className={`group flex items-center px-4 py-3 font-medium rounded-xl transition-all duration-300 overflow-hidden cursor-pointer ${
+                  isDarkMode 
+                    ? `text-gray-300 hover:text-white ${
+                        activeDropdown === item.key 
+                          ? 'bg-gradient-to-r from-gray-800 to-gray-900 text-white shadow-lg' 
+                          : 'hover:bg-gray-800/50'
+                      }` 
+                    : `text-gray-700 hover:text-gray-900 ${
+                        activeDropdown === item.key 
+                          ? 'bg-gradient-to-r from-gray-800 to-gray-900 text-white shadow-lg' 
+                          : 'hover:bg-gray-100'
+                      }`
+                }`}
+                onClick={() => onToggleDropdown(item.key)}
+              >
+                <div className="relative z-10 flex items-center">
+                  {item.name}
+                  {item.key === 'buy' && manufacturers && (
+                    <span className={`ml-2 text-xs px-1.5 py-0.5 rounded-full ${
+                      isDarkMode ? 'bg-gray-700 text-gray-300' : 'bg-gray-200 text-gray-700'
+                    }`}>
+                      {manufacturers.length}
+                    </span>
+                  )}
+                  <svg className={`ml-2 w-4 h-4 transition-transform duration-300 ${
+                    activeDropdown === item.key ? 'rotate-180' : ''
+                  } ${isDarkMode ? 'text-gray-400 group-hover:text-white' : 'text-gray-600 group-hover:text-gray-900'}`} 
+                    fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path>
+                  </svg>
+                </div>
+              </button>
+            ) : (
+              // Regular link items (non-dropdown, non-new-cars)
+              <a
+                href={item.link}
+                className={`group relative px-4 py-3 font-medium rounded-xl transition-all duration-300 overflow-hidden cursor-pointer ${
+                  isDarkMode 
+                    ? 'text-gray-300 hover:text-white hover:bg-gray-800/50' 
+                    : 'text-gray-700 hover:text-gray-900 hover:bg-gray-100'
+                }`}
+                onClick={onItemClick}
+              >
+                <div className="relative z-10">{item.name}</div>
+              </a>
+            )}
 
-          {item.hasDropdown && activeDropdown === item.key && (
-            <div
-              className={`absolute top-full left-0 mt-2 rounded-2xl shadow-2xl py-3 z-50
-              backdrop-blur-xl animate-fadeIn border transition-all duration-300
-              ${isDarkMode ? 'bg-gray-900/70 border-gray-700' : 'bg-white/70 border-gray-300'}
-              ${item.key === 'buy' ? 'w-80' : 'w-64'}`}
-            >
-              {renderDropdownContent(item.key)}
-            </div>
-          )}
-        </div>
-      ))}
+            {/* Dropdown content for non-new-cars dropdown items */}
+            {!isNewCarsItem && item.hasDropdown && activeDropdown === item.key && (
+              <div
+                className={`absolute top-full left-0 mt-2 rounded-2xl shadow-2xl py-3 z-50
+                backdrop-blur-xl animate-fadeIn border transition-all duration-300
+                ${isDarkMode ? 'bg-gray-900/70 border-gray-700' : 'bg-white/70 border-gray-300'}
+                ${item.key === 'buy' ? 'w-80' : 'w-64'}`}
+              >
+                {renderDropdownContent(item.key)}
+              </div>
+            )}
+          </div>
+        );
+      })}
     </nav>
   );
 };

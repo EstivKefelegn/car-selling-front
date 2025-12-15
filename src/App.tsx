@@ -1,10 +1,13 @@
 import Header from "./components/Header/Header"
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import {useDarkModeStore} from "./store/useDarkModeStore"
-import NewCarsLanding from "./components/LandingPage/NewCarsLanding"
+import DreamCarsLanding from "./components/LandingPage/NewCarsLanding"
 import MainLandingPage from "./components/LandingPage/MainLandingPage";
 import AboutPage from "./components/about/AboutPage"; 
 import Footer from "./components/Footer/Footer";
+import NewCarsSection from "./components/new-cars/NewCarsSection";
+import AllCarsPage from "./components/allCars/AllCarsPage";
+import CarDetailPage from "./components/carDetail/CarDetailPage";
 
 function App() {
   const isDarkMode = useDarkModeStore((state) => state.isDarkMode)
@@ -23,8 +26,11 @@ function App() {
           <Header />     
           <Routes>
             <Route path="/" element={<MainLandingPage />}/>             
-            <Route path="/all-cars" element={<NewCarsLanding />} />
+            <Route path="/all-cars" element={<DreamCarsLanding />} />
             <Route path="/about" element={<AboutPage />} />
+            <Route path="/new-cars" element={<NewCarsSection />} />
+            <Route path="/cars" element={<AllCarsPage />} />
+            <Route path="/car/:slug" element={<CarDetailPage />} />
           </Routes>
           <Footer />
         </Router>

@@ -1,7 +1,7 @@
 import React from 'react';
 
 interface ErrorStateProps {
-  error: string;
+  error: string | React.ReactNode;
   isDarkMode: boolean;
 }
 
