@@ -23,7 +23,7 @@ const CompactCarCard: React.FC<CompactCarCardProps> = ({ car }) => {
 
   return (
     <Link
-      to={`/car/${car.slug}`}
+      to={`/car/${car.id}`}
       className={`group block rounded-lg overflow-hidden transition-all duration-300 hover:shadow-xl hover:scale-[1.02] h-full border ${
         isDarkMode
           ? 'bg-gray-800/50 border-gray-700 hover:border-gray-600'

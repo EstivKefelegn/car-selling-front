@@ -1,14 +1,16 @@
 // services/filters.ts
 export interface CarFilter {
+  country?: string;
+  is_ev_only?: boolean;
   manufacturer?: string;
   model?: string;
   minYear?: number;
   maxYear?: number;
   minPrice?: number;
   maxPrice?: number;
-  colors?: number[]; // For backward compatibility (color IDs)
-  exterior_colors?: string[]; // Color names like 'Grey', 'Blue'
-  interior_colors?: string[]; // Color names like 'Silver', 'Black'
+  colors?: number[]; 
+  exterior_colors?: string[]; 
+  interior_colors?: string[]; 
   category?: string;
   featured?: boolean;
   search?: string;

@@ -21,7 +21,7 @@ export const useAbout = (): AboutResult<AboutUsData> => {
     setLoading(true);
 
     try {
-      const response = await apiClient.get<AboutUsData>('/cars/about-us/', {
+      const response = await apiClient.get<AboutUsData>('/company/about-us/', {
         signal: controller.signal,
       });
       setData(response.data);
@@ -53,7 +53,7 @@ export const useTeamMembers = (): { data: TeamMember[]; error: string; loading: 
     setLoading(true);
 
     try {
-      const response = await apiClient.get<TeamMember[]>('/cars/about-us/team/', {
+      const response = await apiClient.get<TeamMember[]>('/company/about-us/team/', {
         signal: controller.signal,
       });
       setData(response.data);
@@ -85,7 +85,7 @@ export const useDealershipGallery = (): { data: DealershipPhoto[]; error: string
     setLoading(true);
 
     try {
-      const response = await apiClient.get<DealershipPhoto[]>('/cars/about-us/gallery/', {
+      const response = await apiClient.get<DealershipPhoto[]>('/company/about-us/gallery/', {
         signal: controller.signal,
       });
       setData(response.data);

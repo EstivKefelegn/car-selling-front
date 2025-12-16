@@ -33,13 +33,15 @@ const QuickManufacturerSearches: React.FC<QuickManufacturerSearchesProps> = ({
     useManufacturerData(manufacturers, maxItems);
 
   const handleManufacturerClick = (manufacturer: Manufacturer) => {
-    if (onManufacturerClick) {
-      onManufacturerClick(manufacturer);
-    } else {
+    // if (onManufacturerClick) {
+    //   // onManufacturerClick(manufacturer);
+    //   getManufacturerSearchUrl(manufacturer.name)
+    // } else {
       // Default behavior: navigate to manufacturer page
-      window.location.href = `/all-cars?manufacturer=${encodeURIComponent(manufacturer.name)}`;
-    }
+      window.location.href = `/cars?search=${encodeURIComponent(manufacturer.name)}`;
+    // }
   };
+
 
   return (
     <section className="py-16">

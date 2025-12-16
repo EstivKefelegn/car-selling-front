@@ -10,7 +10,7 @@ interface Manufacturer {
   country: string;
   founded_year: number;
   is_ev_only: boolean;
-  electric_cars?: number[]; // Add this if available from API
+  electric_cars?: number[];
 }
 
 interface BuyDropdownProps {
@@ -27,6 +27,17 @@ const BuyDropdown: React.FC<BuyDropdownProps> = ({
   onItemClick
 }) => {
   const { isDarkMode } = useDarkModeStore();
+
+  // Function to generate search URL with manufacturer filter
+  const getManufacturerSearchUrl = (manufacturerName: string) => {
+    return `/cars?search=${encodeURIComponent(manufacturerName)}`;
+  };
+
+  // Function to get filter URL
+  const getFilterUrl = (params: Record<string, string>) => {
+    const queryString = new URLSearchParams(params).toString();
+    return `/cars?${queryString}`;
+  };
 
   if (manufacturersLoading) {
     return (
@@ -73,33 +84,84 @@ const BuyDropdown: React.FC<BuyDropdownProps> = ({
 
   const sortedLetters = Object.keys(groupedManufacturers).sort();
 
+  // Get unique countries
+  const countries = Array.from(new Set(manufacturers.map(m => m.country))).sort();
+
   return (
     <div className="max-h-[70vh] overflow-y-auto
     [&::-webkit-scrollbar]:hidden 
     [-ms-overflow-style:'none'] 
     [scrollbar-width:'none']">
-      {/* Browse All Cars Button */}
+      
+      {/* Quick Filter Links */}
       <div className="px-4 py-3 border-b border-gray-200 dark:border-gray-700">
-        <Link
-          to="/cars"
-          className={`flex items-center justify-between px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${
-            isDarkMode
-              ? 'bg-blue-900/30 text-blue-300 hover:bg-blue-800/50'
-              : 'bg-blue-50 text-blue-700 hover:bg-blue-100'
-          }`}
-          onClick={onItemClick}
-        >
-          <div className="flex items-center">
-            <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-            </svg>
-            Browse All Cars
-          </div>
-          <span className="text-xs opacity-75">
-            {manufacturers.reduce((total, m) => total + (m.electric_cars?.length || 0), 0)} cars
-          </span>
-        </Link>
+        <div className="space-y-2">
+          {/* Browse All Cars */}
+          <Link
+            to="/cars"
+            className={`flex items-center justify-between px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${
+              isDarkMode
+                ? 'bg-blue-900/30 text-blue-300 hover:bg-blue-800/50'
+                : 'bg-blue-50 text-blue-700 hover:bg-blue-100'
+            }`}
+            onClick={onItemClick}
+          >
+            <div className="flex items-center">
+              <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+              </svg>
+              Browse All Cars
+            </div>
+            <span className="text-xs opacity-75">
+              {manufacturers.reduce((total, m) => total + (m.electric_cars?.length || 0), 0)} cars
+            </span>
+          </Link>
+
+          {/* EV Only Filter */}
+          <Link
+            to={getFilterUrl({ is_ev_only: 'true' })}
+            className={`flex items-center justify-between px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${
+              isDarkMode
+                ? 'bg-green-900/30 text-green-300 hover:bg-green-800/50'
+                : 'bg-green-50 text-green-700 hover:bg-green-100'
+            }`}
+            onClick={onItemClick}
+          >
+            <div className="flex items-center">
+              <span className="mr-2">⚡</span>
+              EV Only Manufacturers
+            </div>
+            <span className="text-xs opacity-75">
+              {manufacturers.filter(m => m.is_ev_only).length} brands
+            </span>
+          </Link>
+        </div>
       </div>
+
+      {/* Countries Filter - Quick Access */}
+      {countries.length > 0 && (
+        <div className="px-4 py-3 border-b border-gray-200 dark:border-gray-700">
+          <h3 className={`text-xs font-semibold mb-2 ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+            Filter by Country
+          </h3>
+          <div className="flex flex-wrap gap-1">
+            {countries.slice(0, 6).map(country => (
+              <Link
+                key={country}
+                to={getFilterUrl({ country })}
+                className={`px-2 py-1 text-xs rounded transition-colors ${
+                  isDarkMode
+                    ? 'bg-gray-800 text-gray-300 hover:bg-gray-700'
+                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                }`}
+                onClick={onItemClick}
+              >
+                {country}
+              </Link>
+            ))}
+          </div>
+        </div>
+      )}
 
       {/* Manufacturers List */}
       <div className="p-2">
@@ -114,7 +176,7 @@ const BuyDropdown: React.FC<BuyDropdownProps> = ({
               {groupedManufacturers[letter].map(manufacturer => (
                 <Link
                   key={manufacturer.id}
-                  to={`/cars?manufacturer=${encodeURIComponent(manufacturer.name)}`}
+                  to={getManufacturerSearchUrl(manufacturer.name)}
                   className={`group flex items-center px-3 py-2.5 text-sm transition-all duration-200 rounded-lg ${
                     isDarkMode 
                       ? 'hover:bg-gray-800 text-gray-300 hover:text-white' 
@@ -201,10 +263,10 @@ const BuyDropdown: React.FC<BuyDropdownProps> = ({
         ))}
       </div>
 
-      {/* New Arrivals Link */}
+      {/* Additional Quick Links */}
       <div className="px-4 py-3 border-t border-gray-200 dark:border-gray-700">
         <Link
-          to="/new-cars"
+          to={getFilterUrl({ sort_by: 'year', sort_order: 'desc' })}
           className={`flex items-center justify-between px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${
             isDarkMode
               ? 'bg-purple-900/30 text-purple-300 hover:bg-purple-800/50'

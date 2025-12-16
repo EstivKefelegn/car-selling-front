@@ -44,7 +44,7 @@ const CarCard: React.FC<CarCardProps> = ({ car }) => {
 
   return (
     <Link
-      to={`/car/${car.slug}`}
+      to={`/car/${car.id}`}
       className={`group relative rounded-2xl overflow-hidden transition-all duration-300 hover:scale-[1.02] hover:shadow-2xl ${
         isDarkMode 
           ? 'bg-gradient-to-b from-gray-800 to-gray-900 border border-gray-700' 

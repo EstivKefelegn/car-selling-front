@@ -24,7 +24,7 @@ const CarCard: React.FC<CarCardProps> = ({ car, isDarkMode }) => {
 
   return (
     <Link
-      to={`/car/${car.slug}`}
+      to={`/car/${car.id}`}
       className={`group relative rounded-xl overflow-hidden transition-all duration-300 hover:scale-105 hover:shadow-xl ${
         isDarkMode 
           ? 'bg-gray-800/60 border border-gray-700' 
