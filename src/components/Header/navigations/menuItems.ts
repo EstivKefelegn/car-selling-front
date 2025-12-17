@@ -3,7 +3,7 @@
 import type { MenuItem } from './types';
 
 export const menuItems: MenuItem[] = [
-  { name: 'News', hasDropdown: false, key: 'news', link: '/news' },
+  // { name: 'News', hasDropdown: false, key: 'news', link: '/news' },
   { name: 'Buy', hasDropdown: true, key: 'buy' },
   // { name: 'Discounts', hasDropdown: false, key: 'discounts', link: '/discounts' },
   { name: 'Finance', hasDropdown: false, key: 'finance', link: '/finance' },

@@ -1,13 +1,13 @@
 // components/cars/AllCarsGrid.tsx
 import React, { useState, useEffect } from 'react';
-import useEVCars from '../../hooks/useEVCars';
+import useEVCars, { type CarQuery } from '../../hooks/useEVCars';
 import type { CarFilter } from '../../services/filters';
 import CompactCarCard from './CompactCarCard';
 import { useDarkModeStore } from '../../store/useDarkModeStore';
 import { useLocation } from 'react-router-dom';
 
 interface AllCarsGridProps {
-  initialFilters?: CarFilter;
+  initialFilters?: CarQuery;
   showFilters?: boolean;
   title?: string;
   itemsPerPage?: number;
@@ -79,36 +79,37 @@ const AllCarsGrid: React.FC<AllCarsGridProps> = ({
   }
 
   if (error) {
-    return (
-      <div className={`text-center py-12 rounded-xl ${
-        isDarkMode ? 'bg-red-900/20' : 'bg-red-50'
-      }`}>
-        <div className="mb-4">
-          <svg className="w-12 h-12 text-red-500 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.196 16.5c-.77.833.192 2.5 1.732 2.5z" />
-          </svg>
-        </div>
-        <h3 className={`text-lg font-semibold mb-2 ${
-          isDarkMode ? 'text-red-300' : 'text-red-800'
-        }`}>
-          Failed to load cars
-        </h3>
-        <p className={`mb-4 ${isDarkMode ? 'text-red-400' : 'text-red-600'}`}>
-          {error.message || 'Network error'}
-        </p>
-        <button
-          onClick={() => window.location.reload()}
-          className={`px-4 py-2 rounded-lg font-medium ${
-            isDarkMode
-              ? 'bg-red-700 hover:bg-red-600 text-white'
-              : 'bg-red-600 hover:bg-red-700 text-white'
-          }`}
-        >
-          Retry
-        </button>
+  return (
+    <div className={`text-center py-12 rounded-xl ${
+      isDarkMode ? 'bg-red-900/20' : 'bg-red-50'
+    }`}>
+      <div className="mb-4">
+        <svg className="w-12 h-12 text-red-500 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.196 16.5c-.77.833.192 2.5 1.732 2.5z" />
+        </svg>
       </div>
-    );
-  }
+      <h3 className={`text-lg font-semibold mb-2 ${
+        isDarkMode ? 'text-red-300' : 'text-red-800'
+      }`}>
+        Failed to load cars
+      </h3>
+      {/* Fixed line below - removed .message */}
+      <p className={`mb-4 ${isDarkMode ? 'text-red-400' : 'text-red-600'}`}>
+        {error || 'Network error'}
+      </p>
+      <button
+        onClick={() => window.location.reload()}
+        className={`px-4 py-2 rounded-lg font-medium ${
+          isDarkMode
+            ? 'bg-red-700 hover:bg-red-600 text-white'
+            : 'bg-red-600 hover:bg-red-700 text-white'
+        }`}
+      >
+        Retry
+      </button>
+    </div>
+  );
+}
 
   return (
     <div className="w-full space-y-6">

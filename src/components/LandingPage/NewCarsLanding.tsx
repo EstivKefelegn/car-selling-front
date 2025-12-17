@@ -39,6 +39,7 @@ const NewCarsLanding: React.FC = () => {
     }`}
   >
   {/* Filter (Does NOT Scroll) */}
+  
    <div className="lg:col-span-1 sticky top-4 h-[calc(100vh-2rem)] overflow-y-auto overflow-y-scroll [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
     <StandaloneFilter 
       onFilterChange={handleFilterChange}

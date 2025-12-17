@@ -9,6 +9,9 @@ import NewCarsSection from "./components/new-cars/NewCarsSection";
 import AllCarsPage from "./components/allCars/AllCarsPage";
 import CarDetailPage from "./components/carDetail/CarDetailPage";
 import LatestEventPage from "./components/events/LatestEventPage";
+import NewsPage from "./components/news/NewsPage";
+import NewsDetailPage from "./components/news/NewsDetailPage";
+import FinancePage from "./components/financePage/FinancePage";
 
 function App() {
   const isDarkMode = useDarkModeStore((state) => state.isDarkMode)
@@ -33,6 +36,9 @@ function App() {
             <Route path="/cars" element={<AllCarsPage />} />
             <Route path="/car/:slug" element={<CarDetailPage />} />
             <Route path="/events" element={<LatestEventPage />} />
+            <Route path="/finance" element={<FinancePage />} />
+            {/* <Route path="/events" element={<LatestEventPage />} /> */}
+            {/* <Route path="/news" element={<NewsDetailPage />} /> */}
           </Routes>
           <Footer />
         </Router>

@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 interface CarInfoSectionProps {
   car: any;
@@ -161,12 +162,16 @@ const PriceAndCTA = ({ car, isDarkMode, formattedPrice }: any) => (
     </div>
     
     <div className="flex gap-3">
-      <button className={`flex-1 py-3 px-4 rounded-xl font-semibold transition-all duration-300 overflow-hidden shadow-lg hover:shadow-xl hover:scale-105
-        bg-gradient-to-r from-gray-800 to-gray-900 text-white group relative`}>
-        <div className="relative z-10">View Details</div>
-        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent 
-          -translate-x-full group-hover:translate-x-full transition-transform duration-700"></div>
-      </button>
+      <div className="w-full">
+        <Link to={`/car/${car.id}`}>
+          <button className={`w-full py-3 px-4 rounded-xl font-semibold transition-all duration-300 overflow-hidden shadow-lg hover:shadow-xl hover:scale-105
+            bg-gradient-to-r from-gray-800 to-gray-900 text-white group relative`}>
+            <div className="relative z-10">View Details</div>
+            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent 
+              -translate-x-full group-hover:translate-x-full transition-transform duration-700"></div>
+          </button>
+        </Link>
+      </div>
       <button className={`py-3 px-4 rounded-xl font-semibold transition-all duration-300 border
         ${isDarkMode 
           ? 'border-gray-700 text-gray-300 hover:bg-gray-800 active:bg-gray-900' 

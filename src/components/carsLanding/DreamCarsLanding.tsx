@@ -50,13 +50,15 @@ const AllCarsLanding: React.FC = () => {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {filteredCars.map((car) => (
-            <CarCard 
-              key={car.id}
-              car={car}
-              isDarkMode={isDarkMode}
-              apiBaseUrl={API_BASE_URL}
-              formatPrice={formatPrice}
-            />
+            
+              <CarCard 
+                key={car.id}
+                car={car}
+                isDarkMode={isDarkMode}
+                apiBaseUrl={API_BASE_URL}
+                formatPrice={formatPrice}
+              />
+            
           ))}
         </div>
 

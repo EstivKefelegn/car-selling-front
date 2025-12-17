@@ -12,7 +12,7 @@ interface NewCarsSectionProps {
 }
 
 const NewCarsSection: React.FC<NewCarsSectionProps> = ({ 
-  limit = 4,
+  limit = 5,
   title = "Newly Added Cars",
   subtitle = "Latest arrivals in our EV collection"
 }) => {

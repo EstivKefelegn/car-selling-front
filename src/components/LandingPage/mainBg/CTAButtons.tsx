@@ -32,7 +32,7 @@ const CTAButtons: React.FC<CTAButtonsProps> = ({
         }`}
       >
         <div className="relative z-10">Our Location</div>
-        <div className={`absolute inset-0 bg-gradient-to-r from-transparent ${
+        <div className={`absolute inset-0 bg-gradient-to-r from-transparent text ${
           isDarkMode ? 'via-white/10' : 'via-gray-900/10'
         } to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700`}></div>
       </button>

@@ -38,7 +38,7 @@ const NewCarsPage: React.FC = () => {
             <AllCarsGrid 
               initialFilters={{
                 ...filters,
-                ordering: '-created_at' // Always show newest first
+                ordering: '-created_at' 
               }}
               title="New Arrivals"
               itemsPerPage={20}
