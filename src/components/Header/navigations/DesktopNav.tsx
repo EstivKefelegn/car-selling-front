@@ -132,7 +132,7 @@ const DesktopNav: React.FC<DesktopNavProps> = ({
                 </span>
               </a>
             ) : item.hasDropdown ? (
-              // Existing dropdown items
+              
               <button
                 type="button"
                 className={`group flex items-center px-4 py-3 font-medium rounded-xl transition-all duration-300 overflow-hidden cursor-pointer ${

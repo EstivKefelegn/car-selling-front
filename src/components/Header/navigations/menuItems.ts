@@ -8,7 +8,7 @@ export const menuItems: MenuItem[] = [
   // { name: 'Discounts', hasDropdown: false, key: 'discounts', link: '/discounts' },
   { name: 'Finance', hasDropdown: false, key: 'finance', link: '/finance' },
   { name: 'New Cars', hasDropdown: false, key: 'newCars' },
-  { name: 'Services', hasDropdown: true, key: 'services' },
+  { name: 'Services', hasDropdown: false, key: 'services', link: '/service' },
   { name: 'Events', hasDropdown: false, key: 'events', link: '/events' },
   { name: 'More', hasDropdown: true, key: 'more' }
 ];

@@ -6,7 +6,7 @@ const useEventBySlug = (slug: string) =>
   useData<Event>(
     `/company/events/${slug}/`,
     {},
-    [slug] // Only re-fetch when slug changes
+    [slug] 
   );
 
 export default useEventBySlug;
