@@ -1,6 +1,6 @@
 // components/NewsCard.tsx
 import React from 'react';
-import { type News } from '../../hooks/useNews';
+import { type News } from '../../hooks/cars/useNews';
 
 interface NewsCardProps {
   news: News;  // Single News object, not News[]

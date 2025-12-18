@@ -1,7 +1,7 @@
 // components/Header.tsx
 import React, { useState, useEffect } from 'react';
-  import Logo from '../../assets/logo.png';
-import useManufacturer, { type ManufacturerQuery } from '../../hooks/useManufacturers'; 
+import Logo from '../../assets/logo.png';
+import useManufacturer, { type ManufacturerQuery } from '../../hooks/manufacturer/useManufacturers'; 
 import DarkModeButton from '../../utils/DarkModeButton';
 import FindCarsButton from '../../utils/FindCars';
 import MobileToggleButton from '../../utils/MobileToggleButton';
@@ -11,6 +11,7 @@ import { menuItems } from './navigations/menuItems';
 import DesktopNav from './navigations/DesktopNav';
 import MobileNav from './navigations/MobileNav';
 import type { DropdownData } from './navigations/types';
+import { useTranslation } from 'react-i18next';
 
 const Header: React.FC = () => {
   const { isDarkMode, toggleDarkMode } = useDarkModeStore();
@@ -34,6 +35,8 @@ const Header: React.FC = () => {
   // Use the manufacturer hook
   const { data: manufacturers, loading: manufacturersLoading, error: manufacturersError } = 
     useManufacturer(manufacturerQuery);
+
+   const { t } = useTranslation();  
 
   useEffect(() => {
     const fetchDropdownData = async () => {
@@ -130,7 +133,7 @@ const Header: React.FC = () => {
           <div className="hidden lg:flex items-center space-x-4">
             <DarkModeButton isDark={isDarkMode} onToggle={toggleDarkMode} />
             <Link to="/all-cars">
-              <FindCarsButton isDark={isDarkMode} text='Find Your Perfect Car'/>
+              <FindCarsButton isDark={isDarkMode} text={t('findCar')}/>
             </Link>
           </div>
 

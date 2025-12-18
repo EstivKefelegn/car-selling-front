@@ -1,6 +1,6 @@
 // components/manufacturers/ManufacturerGrid.tsx
 import React from 'react';
-import { type Manufacturer } from '../../../hooks/useManufacturers';
+import { type Manufacturer } from '../../../hooks/manufacturer/useManufacturers';
 import ManufacturerCard from './ManufacturerCard';
 
 interface ManufacturerGridProps {

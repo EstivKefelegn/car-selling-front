@@ -1,8 +1,8 @@
 // components/ShopByManufacturer.tsx
 import React, { useMemo } from 'react';
 import { useDarkModeStore } from '../../store/useDarkModeStore';
-import useManufacturer, { type ManufacturerQuery } from '../../hooks/useManufacturers';
-import useEVCars from '../../hooks/useEVCars';
+import useManufacturer, { type ManufacturerQuery } from '../../hooks/manufacturer/useManufacturers';
+import useEVCars from '../../hooks/cars/useEVCars';
 import SectionTitle from './shop-by-manufacturer/SectionTitle';
 import LoadingState from './shop-by-manufacturer/LoadingState';
 import ErrorState from './shop-by-manufacturer/ErrorState';

@@ -1,7 +1,7 @@
 // pages/NewsDetailPage.tsx
 import React, { useEffect } from 'react';
 import { useDarkModeStore } from '../../store/useDarkModeStore';
-import { useLatestNews } from '../../hooks/useNews';
+import { useLatestNews } from '../../hooks/cars/useNews';
 import LoadingSpinner from '../../utils/LoadingSpinner';
 import ErrorMessage from '../../utils/ErrorMessage';
 import { FaCalendar, FaUser, FaArrowLeft, FaShareAlt } from 'react-icons/fa';

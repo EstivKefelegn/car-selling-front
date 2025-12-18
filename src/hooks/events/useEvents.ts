@@ -1,5 +1,5 @@
 // hooks/useEvents.ts
-import useData from "./useData";
+import useData from "../data/useData";
 
 export interface Event {
   zip_code: string;

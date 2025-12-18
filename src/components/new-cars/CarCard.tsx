@@ -1,7 +1,7 @@
 // components/new-cars/CarCard.tsx
 import React from 'react';
 import { Link } from 'react-router-dom';
-import type { Car } from '../../hooks/useEVCars';
+import type { Car } from '../../hooks/cars/useEVCars';
 import { buildImageUrl } from '../../utils/imageUrlBuilder';
 import { formatPrice } from '../../utils/priceFormatter';
 import { useDarkModeStore } from '../../store/useDarkModeStore';

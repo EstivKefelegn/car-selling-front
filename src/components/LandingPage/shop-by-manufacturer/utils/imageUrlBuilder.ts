@@ -1,4 +1,6 @@
 // components/shop-by-manufacturer/utils/imageUrlBuilder.ts
+import apiClient from "../../../../services/api-client";
+
 export const buildImageUrl = (imagePath: string): string => {
   if (!imagePath) return '';
   
@@ -9,8 +11,8 @@ export const buildImageUrl = (imagePath: string): string => {
   
   // If it starts with /, it's probably a relative path from backend
   if (imagePath.startsWith('/')) {
-    const backendUrl = 'http://localhost:8000';
-    return `${backendUrl}${imagePath}`;
+    // const backendUrl = 'http://localhost:8000';
+    return `${apiClient}${imagePath}`;
   }
   
   // Otherwise, assume it's a relative path

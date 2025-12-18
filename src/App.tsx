@@ -38,7 +38,7 @@ function App() {
             <Route path="/car/:slug" element={<CarDetailPage />} />
             <Route path="/events" element={<LatestEventPage />} />
             <Route path="/finance" element={<FinancePage />} />
-            {/* <Route path="/events" element={<LatestEventPage />} /> */}
+            {/* <Route path="/news" element={<NewsDetailPage />} /> */}
             <Route path="/service" element={<ServicesPage />} />
           </Routes>
           <Footer />

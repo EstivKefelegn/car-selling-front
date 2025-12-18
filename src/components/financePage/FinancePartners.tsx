@@ -42,7 +42,7 @@ const FinancePartners: React.FC<FinancePartnersProps> = ({
             <div className="h-16 mb-3 flex items-center justify-center">
               {partner.logo_url ? (
                 <img 
-                  src={partner.logo_url} 
+                  src={partner.logo} 
                   alt={partner.name}
                   className="max-h-full max-w-full object-contain"
                 />

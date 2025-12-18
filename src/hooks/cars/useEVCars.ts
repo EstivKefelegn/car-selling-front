@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import useData from "./useData";
+import useData from "../data/useData";
 
 export interface Car {
   color_ids: any;

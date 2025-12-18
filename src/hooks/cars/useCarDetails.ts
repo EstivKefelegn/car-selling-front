@@ -1,7 +1,7 @@
 // hooks/useCarDetails.ts
 import { useMemo } from "react";
-import useData from "./useData";
-import useSingleData from "./useSingleData";
+import useData from "../data/useData";
+import useSingleData from "../data/useSingleData";
 
 export interface CarDetail {
   id: number;

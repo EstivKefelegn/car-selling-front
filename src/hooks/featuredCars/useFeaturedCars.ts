@@ -1,5 +1,5 @@
 // hooks/useFeaturedCars.ts
-import useEVCars from './useEVCars';
+import useEVCars from '../cars/useEVCars';
 
 interface FeaturedCar {
   id: number;

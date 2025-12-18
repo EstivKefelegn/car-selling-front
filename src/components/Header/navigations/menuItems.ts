@@ -1,14 +1,44 @@
-// components/navigation/menuItems.ts
-// components/navigation/menuItems.ts
-import type { MenuItem } from './types';
 
+import type { MenuItem } from './types';
 export const menuItems: MenuItem[] = [
-  // { name: 'News', hasDropdown: false, key: 'news', link: '/news' },
-  { name: 'Buy', hasDropdown: true, key: 'buy' },
-  // { name: 'Discounts', hasDropdown: false, key: 'discounts', link: '/discounts' },
-  { name: 'Finance', hasDropdown: false, key: 'finance', link: '/finance' },
-  { name: 'New Cars', hasDropdown: false, key: 'newCars' },
-  { name: 'Services', hasDropdown: false, key: 'services', link: '/service' },
-  { name: 'Events', hasDropdown: false, key: 'events', link: '/events' },
-  { name: 'More', hasDropdown: true, key: 'more' }
+  // {
+  //   name: 'news',
+  //   key: 'news',
+  //   hasDropdown: false,
+  //   link: '/news',
+  // },
+  {
+    name: 'newCars',
+    key: 'newCars',
+    hasDropdown: false,
+    link: '/new-cars',
+  },
+  {
+    name: 'buy',
+    key: 'buy',
+    hasDropdown: true,
+  },
+  {
+    name: 'finance',
+    key: 'finance',
+    hasDropdown: false,
+    link: '/finance',
+  },
+  {
+    name: 'services',
+    key: 'services',
+    hasDropdown: false,
+    link: '/service',
+  },
+  {
+    name: 'events',
+    key: 'events',
+    hasDropdown: false,
+    link: '/events',
+  },
+  {
+    name: 'more',
+    key: 'more',
+    hasDropdown: true,
+  },
 ];

@@ -2,7 +2,7 @@ import React from "react";
 import ImageSection from "./ImageSection";
 import CarInfoSection from "./CarInfoSection";
 import { formatPrice as defaultFormatPrice } from "../utils/helpers";
-import type { Car } from "../../../hooks/useEVCars";
+import type { Car } from "../../../hooks/cars/useEVCars";
 
 interface CarCardProps {
   car: Car;

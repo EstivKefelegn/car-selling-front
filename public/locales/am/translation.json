@@ -11,5 +11,7 @@
     "amharic": "አማርኛ",
     "selectLanguage": "ቋንቋ ይምረጡ"
   },
-  "findCars": "መኪና ይፈልጉ"
+  "findCar": "የሚፈልጉትን ኣይነት ይምረጡ",
+  "new": "ኣዲስ",
+  "about": "ስለ እኛ"
 }

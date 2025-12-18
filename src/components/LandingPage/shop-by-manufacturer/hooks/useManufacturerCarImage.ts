@@ -1,6 +1,6 @@
 // components/shop-by-manufacturer/hooks/useManufacturerCarImages.ts
 import { useState, useEffect, useMemo } from 'react';
-import { type Manufacturer } from '../../../../hooks/useManufacturers';
+import { type Manufacturer } from '../../../../hooks/manufacturer/useManufacturers';
 
 interface Car {
   manufacturer_name: string;

@@ -1,7 +1,7 @@
 // components/shop-by-manufacturer/ManufacturerCard.tsx
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { type Manufacturer } from '../../../hooks/useManufacturers';
+import { type Manufacturer } from '../../../hooks/manufacturer/useManufacturers';
 
 interface ManufacturerCardProps {
   manufacturer: Manufacturer;

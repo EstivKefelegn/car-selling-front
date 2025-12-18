@@ -1,5 +1,5 @@
 // components/shop-by-manufacturer/types.ts
-import { type Manufacturer } from '../../..//hooks/useManufacturers';
+import { type Manufacturer } from '../../../hooks/manufacturer/useManufacturers';
 
 export interface ShopByManufacturerProps {
   title?: string;

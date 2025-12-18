@@ -1,4 +1,4 @@
-import type { Manufacturer } from '../../../hooks/useManufacturers';
+import type { Manufacturer } from '../../../hooks/manufacturer/useManufacturers';
 
 export interface QuickManufacturerSearchesProps {
   title?: string;

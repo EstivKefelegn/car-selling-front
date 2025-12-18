@@ -1,5 +1,5 @@
 // components/popular-brands/types.ts
-import { type Manufacturer } from '../../../hooks/useManufacturers';
+import { type Manufacturer } from '../../../hooks/manufacturer/useManufacturers';
 
 export interface PopularBrandsWithModelsProps {
   maxBrands?: number;

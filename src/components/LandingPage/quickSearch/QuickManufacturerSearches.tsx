@@ -1,6 +1,6 @@
 // components/QuickManufacturerSearches.tsx
 import React from 'react';
-import useManufacturer, { type Manufacturer, type ManufacturerQuery } from '../../../hooks/useManufacturers';
+import useManufacturer, { type Manufacturer, type ManufacturerQuery } from '../../../hooks/manufacturer/useManufacturers';
 import { useDarkModeStore } from '../../../store/useDarkModeStore';
 import type { QuickManufacturerSearchesProps } from './types';
 import SectionTitle from './SectionTitle';
@@ -9,7 +9,7 @@ import ErrorState from './ErrorState';
 import EmptyState from './EmptyState';
 import ManufacturerGrid from './ManufaturerGrid';
 import ShowMoreButton from './ShowMoreButton';
-import { useManufacturerData } from '../../../hooks/useManufacturerData';
+import { useManufacturerData } from '../../../hooks/manufacturer/useManufacturerData';
 
 const QuickManufacturerSearches: React.FC<QuickManufacturerSearchesProps> = ({
   title = "Quick Searches",

@@ -1,12 +1,15 @@
+// hooks/useSingleData.ts
 import { useState, useEffect } from 'react';
-import apiClient from '../services/api-client';
+import apiClient from '../../services/api-client';
 import { CanceledError, type AxiosRequestConfig } from 'axios';
 
-export type Response<T> = T[];
-
-const useData = <T>(
-endpoint: string, requestConfig?: AxiosRequestConfig, deps?: any[], p0?: { onError: (error: any) => void; }) => {
-  const [data, setData] = useState<T[]>([]);
+const useSingleData = <T>(
+  endpoint: string, 
+  requestConfig?: AxiosRequestConfig, 
+  deps?: any[], 
+  config?: { onError: (error: any) => void; }
+) => {
+  const [data, setData] = useState<T | null>(null);
   const [error, setError] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
 
@@ -15,7 +18,7 @@ endpoint: string, requestConfig?: AxiosRequestConfig, deps?: any[], p0?: { onErr
     setLoading(true);
 
     apiClient
-      .get<Response<T>>(endpoint, { signal: controller.signal, ...requestConfig })
+      .get<T>(endpoint, { signal: controller.signal, ...requestConfig })
       .then((response) => {
         setData(response.data);
         setLoading(false);
@@ -24,12 +27,15 @@ endpoint: string, requestConfig?: AxiosRequestConfig, deps?: any[], p0?: { onErr
         if (err instanceof CanceledError) return;
         setError(err?.message ?? 'Something went wrong');
         setLoading(false);
+        if (config?.onError) {
+          config.onError(err);
+        }
       });
 
     return () => controller.abort();
   }, deps ?? []);
 
-  return { data, setData, error, loading };
+  return { data, error, loading };
 };
 
-export default useData;
+export default useSingleData;

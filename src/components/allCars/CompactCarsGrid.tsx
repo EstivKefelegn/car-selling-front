@@ -1,6 +1,6 @@
 // components/cars/CompactCarsGrid.tsx
 import React from 'react';
-import type { Car } from '../../hooks/useEVCars';
+import type { Car } from '../../hooks/cars/useEVCars';
 import ShortCarCard from './ShortCarCard';
 import { useDarkModeStore } from '../../store/useDarkModeStore';
 

@@ -1,6 +1,6 @@
 // components/shop-by-manufacturer/ManufacturersGrid.tsx
 import React, { useRef } from 'react';
-import { type Manufacturer } from '../../../hooks/useManufacturers';
+import { type Manufacturer } from '../../../hooks/manufacturer/useManufacturers';
 import ManufacturerCard from './ManufacturerCard';
 import ScrollControls from './ScrollControls';
 import GradientOverlays from './GradientOverlays';

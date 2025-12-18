@@ -1,7 +1,7 @@
 // pages/CarDetailPage.tsx
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
-import useCarDetails, { type ColorImage, type ColorGalleryItem } from '../../hooks/useCarDetails';
+import useCarDetails, { type ColorImage, type ColorGalleryItem } from '../../hooks/cars/useCarDetails';
 import { useDarkModeStore } from '../../store/useDarkModeStore';
 import { buildImageUrl } from '../../utils/imageUrlBuilder';
 import { formatPrice } from '../../utils/priceFormatter';

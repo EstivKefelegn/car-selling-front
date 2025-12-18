@@ -1,7 +1,7 @@
 // components/events/EventCard.tsx
 import React from 'react';
 import { Link } from 'react-router-dom';
-import {type Event } from '../../hooks/useEvents';
+import {type Event } from '../../hooks/events/useEvents';
 import { useDarkModeStore } from '../../store/useDarkModeStore';
 
 interface EventCardProps {

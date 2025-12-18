@@ -7,8 +7,8 @@ import Carousel from './Carousel'
 import SearchBox from './SearchBox';
 import CTAButtons from './CTAButtons';
 import ScrollIndicator from './ScrollIndicator';
-import { useCarousel } from '../../../hooks/useCarousale';
-import { useSearch } from '../../../hooks/useSearch';
+import { useCarousel } from '../../../hooks/landingPage/useCarousale';
+import { useSearch } from '../../../hooks/search/useSearch';
 import { useNavigate } from 'react-router-dom'; // Add this import
 
 const MainBg = () => {

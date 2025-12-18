@@ -1,5 +1,5 @@
 import React from 'react';
-import useAvailableCars from '../../hooks/useAvailableCars';
+import useAvailableCars from '../../hooks/cars/useAvailableCars';
 import { useDarkModeStore } from '../../store/useDarkModeStore';
 import useCarFilterStore from '../../store/useCarFilterStore';
 import LoadingState from './LoadingState/LoadingState';

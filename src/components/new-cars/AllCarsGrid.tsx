@@ -1,6 +1,6 @@
 // components/cars/AllCarsGrid.tsx
 import React, { useState, useEffect } from 'react';
-import useEVCars, { type CarQuery } from '../../hooks/useEVCars';
+import useEVCars, { type CarQuery } from '../../hooks/cars/useEVCars';
 import type { CarFilter } from '../../services/filters';
 import CompactCarCard from './CompactCarCard';
 import { useDarkModeStore } from '../../store/useDarkModeStore';

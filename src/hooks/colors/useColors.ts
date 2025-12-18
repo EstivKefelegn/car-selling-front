@@ -1,6 +1,6 @@
 // hooks/useColors.ts
 import { useMemo } from "react";
-import useData from "./useData";
+import useData from "../data/useData";
 
 export interface Color {
   id: number;

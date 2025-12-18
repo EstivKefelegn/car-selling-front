@@ -1,6 +1,6 @@
 // components/popular-brands/hooks/useBrandModels.ts
 import { useMemo } from 'react';
-import { type Manufacturer } from '../../../../hooks/useManufacturers';
+import { type Manufacturer } from '../../../../hooks/manufacturer/useManufacturers';
 
 interface UseBrandModelsProps {
   allCars: any[] | undefined;

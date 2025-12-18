@@ -1,8 +1,8 @@
 // components/PopularBrandsWithModels.tsx
 import React from 'react';
 import { useDarkModeStore } from '../../store/useDarkModeStore';
-import useManufacturer, { type ManufacturerQuery } from '../../hooks/useManufacturers';
-import useEVCars from '../../hooks/useEVCars';
+import useManufacturer, { type ManufacturerQuery } from '../../hooks/manufacturer/useManufacturers';
+import useEVCars from '../../hooks/cars/useEVCars';
 import LoadingState from './popular-brands/LoadingState';
 import SectionHeader from './popular-brands/SectionHeader';
 import BrandsGrid from './popular-brands/BrandsGrid';

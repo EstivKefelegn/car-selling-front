@@ -1,6 +1,6 @@
 // components/new-cars/NewCarsSection.tsx
 import React from 'react';
-import useNewCars from '../../hooks/useNewCars';
+import useNewCars from '../../hooks/cars/useNewCars';
 import NewCarsGrid from './NewCarsGrid';
 import LoadingSpinner from '../../utils/LoadingSpinner';
 import ErrorMessage from '../../utils/ErrorMessage';

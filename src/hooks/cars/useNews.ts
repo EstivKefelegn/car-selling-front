@@ -1,5 +1,5 @@
 // hooks/useNews.ts
-import useData from "./useData";
+import useData from "../data/useData";
 
 export interface News {
   id: number;

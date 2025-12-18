@@ -6,7 +6,7 @@ import ErrorState from './ErrorState';
 import EmptyState from './EmptyState';
 import SectionHeader from './SectionHeader';
 import CarsGrid from './CarsGrid';
-import { useFeaturedCarsData } from '../../../hooks/useFeaturedCarsData';
+import { useFeaturedCarsData } from '../../../hooks/featuredCars/useFeaturedCarsData';
 
 const FeaturedCarsRow: React.FC = () => {
   const { isDarkMode } = useDarkModeStore();

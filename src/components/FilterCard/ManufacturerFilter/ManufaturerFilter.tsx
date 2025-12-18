@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import useManufacturer from '../../../hooks/useManufacturers';
+import useManufacturer from '../../../hooks/manufacturer/useManufacturers';
 import type { CarFilter } from '../../../services/filters';
 
 interface ManufacturerFilterProps {

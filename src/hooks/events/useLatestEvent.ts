@@ -1,5 +1,5 @@
 // hooks/useLatestEvent.ts
-import useData from "./useData";
+import useData from "../data/useData";
 import { type Event } from "./useEvents";
 
 const useLatestEvent = () => 

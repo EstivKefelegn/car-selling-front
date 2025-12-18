@@ -1,6 +1,6 @@
 // hooks/useCarsForFilter.ts
 import { useMemo } from "react";
-import useData from "./useData";
+import useData from "../data/useData";
 import type { Car } from "./useEVCars";
 
 export interface FilterOptions {

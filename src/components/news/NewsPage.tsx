@@ -1,6 +1,6 @@
 // pages/NewsPage.tsx
 import React from 'react';
-import { useLatestNews } from '../../hooks/useNews';
+import { useLatestNews } from '../../hooks/cars/useNews';
 import LoadingSpinner from '../../utils/LoadingSpinner';
 import ErrorMessage from '../../utils/ErrorMessage';
 import NewsCard from './NewsCard';

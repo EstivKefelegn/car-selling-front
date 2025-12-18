@@ -2,7 +2,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { useDarkModeStore } from '../../store/useDarkModeStore';
-import useLatestEvent from '../../hooks/useLatestEvent';
+import useLatestEvent from '../../hooks/events/useLatestEvent';
 import FindCarsButton from '../../utils/FindCars';
 
 const LatestEventPage: React.FC = () => {

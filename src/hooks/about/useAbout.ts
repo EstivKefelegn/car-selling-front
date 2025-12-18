@@ -1,8 +1,8 @@
 // hooks/useAbout.ts
 import { useState, useEffect } from 'react';
-import apiClient from '../services/api-client';
+import apiClient from '../../services/api-client';
 import { CanceledError } from 'axios';
-import type { AboutUsData, TeamMember, DealershipPhoto } from '../components/about/types/about';
+import type { AboutUsData, TeamMember, DealershipPhoto } from '../../components/about/types/about';
 
 interface AboutResult<T> {
   data: T | null;

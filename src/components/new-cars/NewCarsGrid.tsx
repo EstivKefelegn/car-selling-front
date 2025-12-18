@@ -1,6 +1,6 @@
 // components/new-cars/NewCarsGrid.tsx
 import React from 'react';
-import type { Car } from '../../hooks/useEVCars';
+import type { Car } from '../../hooks/cars/useEVCars';
 import CompactCarCard from './CompactCarCard';
 import { useDarkModeStore } from '../../store/useDarkModeStore';
 import { Link } from 'react-router-dom';

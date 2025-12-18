@@ -1,7 +1,7 @@
 // pages/ServicesPage.tsx
 import React from 'react';
 import { useDarkModeStore } from '../../store/useDarkModeStore';
-import useServices from '../../hooks/useServices';
+import useServices from '../../hooks/services/useServices';
 import LoadingSpinner from '../../utils/LoadingSpinner';
 import ErrorMessage from '../../utils/ErrorMessage';
 import ServiceHero from './ServiceHero';

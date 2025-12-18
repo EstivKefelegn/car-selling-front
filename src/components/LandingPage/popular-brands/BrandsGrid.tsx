@@ -1,6 +1,6 @@
 // components/popular-brands/BrandsGrid.tsx
 import React from 'react';
-import type { Manufacturer } from '../../../hooks/useManufacturers';
+import type { Manufacturer } from '../../../hooks/manufacturer/useManufacturers';
 import BrandCard from './BrandCard';
 
 interface BrandsGridProps {
