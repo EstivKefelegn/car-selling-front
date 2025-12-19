@@ -1,5 +1,5 @@
-// components/ShopByManufacturer.tsx
 import React, { useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useDarkModeStore } from '../../store/useDarkModeStore';
 import useManufacturer, { type ManufacturerQuery } from '../../hooks/manufacturer/useManufacturers';
 import useEVCars from '../../hooks/cars/useEVCars';
@@ -15,13 +15,13 @@ import { useScroll } from './shop-by-manufacturer/hooks/useScroll';
 import { type ShopByManufacturerProps } from './shop-by-manufacturer/types';
 
 const ShopByManufacturer: React.FC<ShopByManufacturerProps> = ({
-  title = "Shop by Make",
-  subtitle = "Browse cars by manufacturer",
+  title,
+  subtitle,
   maxItems = 12
 }) => {
+  const { t } = useTranslation();
   const { isDarkMode } = useDarkModeStore();
 
-  // Set up manufacturer query to fetch all manufacturers
   const manufacturerQuery: ManufacturerQuery = {
     name: '',
     is_ev_only: undefined,
@@ -30,13 +30,7 @@ const ShopByManufacturer: React.FC<ShopByManufacturerProps> = ({
   };
 
   const { data: manufacturers, loading: manufacturersLoading, error: manufacturersError } = useManufacturer(manufacturerQuery);
-
-  // Fetch latest car for each manufacturer
-  const { data: allCars, loading: carsLoading } = useEVCars({
-    featured: undefined // Get all cars
-  });
-
-  // Use custom hook for manufacturer car images
+  const { data: allCars, loading: carsLoading } = useEVCars({ featured: undefined });
   const { manufacturerCarImages } = useManufacturerCarImages({
     manufacturers,
     allCars,
@@ -44,18 +38,11 @@ const ShopByManufacturer: React.FC<ShopByManufacturerProps> = ({
     carsLoading,
     maxItems
   });
-
-  // Use custom hook for scrolling
   const { scrollLeft, scrollRight } = useScroll();
 
-  // Filter manufacturers and limit to maxItems
-  const filteredManufacturers = useMemo(() => {
-    return (manufacturers || []).slice(0, maxItems);
-  }, [manufacturers, maxItems]);
-
+  const filteredManufacturers = useMemo(() => (manufacturers || []).slice(0, maxItems), [manufacturers, maxItems]);
   const isLoading = manufacturersLoading || carsLoading;
 
-  // Render error state
   if (manufacturersError) {
     return <ErrorState isDarkMode={isDarkMode} />;
   }
@@ -65,8 +52,8 @@ const ShopByManufacturer: React.FC<ShopByManufacturerProps> = ({
       <div className="container mx-auto px-4">
         {/* Section Title */}
         <SectionTitle
-          title={title}
-          subtitle={subtitle}
+          title={t('shopByMake')}
+          subtitle={t('browseByManufacturer')}
           isDarkMode={isDarkMode}
         />
 
@@ -85,7 +72,6 @@ const ShopByManufacturer: React.FC<ShopByManufacturerProps> = ({
               onScrollRight={scrollRight}
             />
 
-            {/* Manufacturer Count */}
             <ManufacturerCount 
               count={filteredManufacturers.length} 
               isDarkMode={isDarkMode} 

@@ -1,6 +1,6 @@
-// components/featured-cars/CarCard.tsx
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import type { FeaturedCar } from './types';
 import { buildImageUrl } from '../../../utils/imageUrlBuilder';
 import { formatPrice } from '../../../utils/priceFormatter';
@@ -11,6 +11,8 @@ interface CarCardProps {
 }
 
 const CarCard: React.FC<CarCardProps> = ({ car, isDarkMode }) => {
+  const { t } = useTranslation();
+
   const handleImageError = (e: React.SyntheticEvent<HTMLImageElement>) => {
     const target = e.target as HTMLImageElement;
     target.onerror = null;
@@ -58,7 +60,7 @@ const CarCard: React.FC<CarCardProps> = ({ car, isDarkMode }) => {
                 ? 'bg-yellow-900/80 text-yellow-200' 
                 : 'bg-yellow-100 text-yellow-800'
             }`}>
-              Featured
+              {t('featured')}
             </span>
           </div>
         )}
@@ -101,7 +103,7 @@ const CarCard: React.FC<CarCardProps> = ({ car, isDarkMode }) => {
           </span>
         </div>
 
-        {/* Price with Birr symbol */}
+        {/* Price */}
         <div className={`font-bold text-lg mb-3 ${
           isDarkMode ? 'text-white' : 'text-gray-900'
         }`}>
@@ -110,33 +112,27 @@ const CarCard: React.FC<CarCardProps> = ({ car, isDarkMode }) => {
 
         {/* Car Specs */}
         <div className="grid grid-cols-3 gap-2 text-center">
-          <div className={`p-2 rounded-lg ${
-            isDarkMode ? 'bg-gray-700/50' : 'bg-gray-100'
-          }`}>
+          <div className={`p-2 rounded-lg ${isDarkMode ? 'bg-gray-700/50' : 'bg-gray-100'}`}>
             <div className={`text-xs ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
-              Range
+              {t('range')}
             </div>
             <div className={`font-semibold text-sm ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
               {car.range_wltp} km
             </div>
           </div>
           
-          <div className={`p-2 rounded-lg ${
-            isDarkMode ? 'bg-gray-700/50' : 'bg-gray-100'
-          }`}>
+          <div className={`p-2 rounded-lg ${isDarkMode ? 'bg-gray-700/50' : 'bg-gray-100'}`}>
             <div className={`text-xs ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
-              0-100 km/h
+              {t('acceleration')}
             </div>
             <div className={`font-semibold text-sm ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
               {car.acceleration_0_100}s
             </div>
           </div>
           
-          <div className={`p-2 rounded-lg ${
-            isDarkMode ? 'bg-gray-700/50' : 'bg-gray-100'
-          }`}>
+          <div className={`p-2 rounded-lg ${isDarkMode ? 'bg-gray-700/50' : 'bg-gray-100'}`}>
             <div className={`text-xs ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
-              Power
+              {t('power')}
             </div>
             <div className={`font-semibold text-sm ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
               {car.motor_power} HP
@@ -148,7 +144,7 @@ const CarCard: React.FC<CarCardProps> = ({ car, isDarkMode }) => {
         <div className="mt-3 pt-3 border-t border-gray-700/30 dark:border-gray-300/30">
           <div className="flex items-center justify-between">
             <span className={`text-xs ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
-              {car.status_display}
+              {t(car.status === 'available' ? 'available' : 'unavailable')}
             </span>
             <span className={`text-xs px-2 py-1 rounded ${
               car.status === 'available' 
@@ -159,15 +155,14 @@ const CarCard: React.FC<CarCardProps> = ({ car, isDarkMode }) => {
                   ? 'bg-red-900/30 text-red-300' 
                   : 'bg-red-100 text-red-700'
             }`}>
-              {car.status}
+              {t(car.status === 'available' ? 'available' : 'unavailable')}
             </span>
           </div>
         </div>
       </div>
 
-      {/* Hover Gradient Effect */}
-      <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent 
-      -translate-x-full group-hover:translate-x-full transition-transform duration-700"></div>
+      {/* Hover Gradient */}
+      <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700"></div>
     </Link>
   );
 };

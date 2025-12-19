@@ -1,6 +1,6 @@
-// components/hero/SearchBox.tsx
 import React from 'react';
 import FindCarsButton from '../../../utils/FindCarsButton';
+import { useTranslation } from 'react-i18next';
 
 interface SearchBoxProps {
   searchQuery: string;
@@ -23,6 +23,8 @@ const SearchBox: React.FC<SearchBoxProps> = ({
   onSearchSubmit,
   onQuickSearch
 }) => {
+  const { t } = useTranslation();
+
   const quickSearchTerms = ['Mercedes', 'BMW', 'Tesla', 'Toyota', '2023', 'SUV', 'Electric'];
   const mobileQuickSearchTerms = ['Mercedes', 'BMW', 'Tesla'];
 
@@ -34,21 +36,20 @@ const SearchBox: React.FC<SearchBoxProps> = ({
             ? 'bg-gray-800/60 text-white' 
             : 'bg-white/80 text-gray-800'
         }`}>
-          Start Your Journey
+          {t('startYourJourney')}
         </div>
         <h2 className={`text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl 2xl:text-6xl font-bold mb-2 sm:mb-3 md:mb-4 leading-tight ${
           isDarkMode ? 'text-white' : 'text-gray-900'
         } drop-shadow-lg`}>
-          <span className="block">Experience the difference</span>
+          <span className="block">{t('experienceTheDifference')}</span>
         </h2>
         <p className={`text-xs sm:text-sm md:text-base lg:text-lg xl:text-xl max-w-xs sm:max-w-sm md:max-w-md lg:max-w-xl xl:max-w-2xl mx-auto ${
           isDarkMode ? 'text-gray-200' : 'text-gray-800'
         } font-light`}>
-          Search through our premium collection
+          {t('searchPremiumCollection')}
         </p>
       </div>
 
-      {/* Search Box */}
       <div className="max-w-full sm:max-w-md md:max-w-lg lg:max-w-2xl xl:max-w-3xl mx-auto px-2 sm:px-0">
         <form onSubmit={onSearchSubmit} className="relative group">
           <div className={`absolute -inset-0.5 sm:-inset-1 rounded-lg sm:rounded-xl md:rounded-2xl blur transition-all duration-500 ${
@@ -75,43 +76,41 @@ const SearchBox: React.FC<SearchBoxProps> = ({
             </div>
             
             <input
-            type="text"
-            value={searchQuery}
-            onChange={(e) => onSearchChange(e.target.value)}
-            onFocus={onSearchFocus}
-            onBlur={onSearchBlur}
-            placeholder="Search cars by make, model, year, features..."
-            className={`flex-1 py-2 sm:py-3 md:py-4 px-2 sm:px-2 text-sm sm:text-base md:text-lg bg-transparent outline-none w-full ${
-              isDarkMode 
-                ? 'text-white placeholder-gray-400' 
-                : 'text-gray-900 placeholder-gray-500'
-            }`}
-          />            
+              type="text"
+              value={searchQuery}
+              onChange={(e) => onSearchChange(e.target.value)}
+              onFocus={onSearchFocus}
+              onBlur={onSearchBlur}
+              placeholder={t('searchPlaceholder')}
+              className={`flex-1 py-2 sm:py-3 md:py-4 px-2 sm:px-2 text-sm sm:text-base md:text-lg bg-transparent outline-none w-full ${
+                isDarkMode 
+                  ? 'text-white placeholder-gray-400' 
+                  : 'text-gray-900 placeholder-gray-500'
+              }`}
+            />            
             <div className="w-full sm:w-auto px-3 pb-2 sm:pb-0 sm:pr-3 sm:pl-2">
               <FindCarsButton 
                 isDark={isDarkMode}
                 type="submit"
                 className="w-full sm:w-auto px-3 py-1.5 sm:px-4 sm:py-2 md:px-5 md:py-2.5 text-xs sm:text-sm md:text-base"
               >
-                Search
+                {t('search')}
               </FindCarsButton>
             </div>
           </div>
 
-          {/* Quick Search Suggestions - Desktop */}
+          {/* Quick Search Suggestions */}
           <div className={`hidden sm:flex mt-3 sm:mt-4 flex-wrap gap-1.5 sm:gap-2 justify-center ${
             isDarkMode ? 'text-gray-300' : 'text-gray-600'
           }`}>
-            <span className="text-xs sm:text-sm">Try:</span>
-            {quickSearchTerms.map((term) => (
+            <span className="text-xs sm:text-sm">{t('try')}</span>
+            {quickSearchTerms.map(term => (
               <button
                 key={term}
                 type="button"
                 onClick={() => onQuickSearch(term)}
                 className={`px-2 py-1 sm:px-2.5 sm:py-1 md:px-3 md:py-1.5 text-xs sm:text-sm rounded-full transition-all duration-300 hover:scale-105 ${
-                  isDarkMode 
-                    ? 'bg-gray-800/50 hover:bg-gray-800/70' 
-                    : 'bg-white/50 hover:bg-white/70'
+                  isDarkMode ? 'bg-gray-800/50 hover:bg-gray-800/70' : 'bg-white/50 hover:bg-white/70'
                 }`}
               >
                 {term}
@@ -119,20 +118,17 @@ const SearchBox: React.FC<SearchBoxProps> = ({
             ))}
           </div>
 
-          {/* Quick Search Suggestions - Mobile */}
           <div className={`sm:hidden mt-2 flex flex-wrap gap-1 justify-center ${
             isDarkMode ? 'text-gray-300' : 'text-gray-600'
           }`}>
-            <span className="text-xs">Try:</span>
-            {mobileQuickSearchTerms.map((term) => (
+            <span className="text-xs">{t('try')}</span>
+            {mobileQuickSearchTerms.map(term => (
               <button
                 key={term}
                 type="button"
                 onClick={() => onQuickSearch(term)}
                 className={`px-1.5 py-0.5 text-xs rounded-full transition-all duration-300 hover:scale-105 ${
-                  isDarkMode 
-                    ? 'bg-gray-800/50 hover:bg-gray-800/70' 
-                    : 'bg-white/50 hover:bg-white/70'
+                  isDarkMode ? 'bg-gray-800/50 hover:bg-gray-800/70' : 'bg-white/50 hover:bg-white/70'
                 }`}
               >
                 {term}

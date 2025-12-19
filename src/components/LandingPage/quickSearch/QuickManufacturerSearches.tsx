@@ -1,4 +1,3 @@
-// components/QuickManufacturerSearches.tsx
 import React from 'react';
 import useManufacturer, { type Manufacturer, type ManufacturerQuery } from '../../../hooks/manufacturer/useManufacturers';
 import { useDarkModeStore } from '../../../store/useDarkModeStore';
@@ -10,17 +9,19 @@ import EmptyState from './EmptyState';
 import ManufacturerGrid from './ManufaturerGrid';
 import ShowMoreButton from './ShowMoreButton';
 import { useManufacturerData } from '../../../hooks/manufacturer/useManufacturerData';
+import { useTranslation } from 'react-i18next';
 
 const QuickManufacturerSearches: React.FC<QuickManufacturerSearchesProps> = ({
-  title = "Quick Searches",
+  title,
   maxItems = 12,
   onManufacturerClick
 }) => {
   const { isDarkMode } = useDarkModeStore();
+  const { t } = useTranslation();
 
   // Set up manufacturer query to fetch all manufacturers
   const manufacturerQuery: ManufacturerQuery = {
-    name: '', // Empty string to get all manufacturers
+    name: '',
     is_ev_only: undefined,
     country: undefined,
     founded_year: undefined
@@ -28,28 +29,20 @@ const QuickManufacturerSearches: React.FC<QuickManufacturerSearchesProps> = ({
 
   const { data: manufacturers, loading, error } = useManufacturer(manufacturerQuery);
   
-  // Use custom hook for manufacturer data logic
   const { showAll, filteredManufacturers, displayManufacturers, toggleShowAll } = 
     useManufacturerData(manufacturers, maxItems);
 
   const handleManufacturerClick = (manufacturer: Manufacturer) => {
-    // if (onManufacturerClick) {
-    //   // onManufacturerClick(manufacturer);
-    //   getManufacturerSearchUrl(manufacturer.name)
-    // } else {
-      // Default behavior: navigate to manufacturer page
-      window.location.href = `/cars?search=${encodeURIComponent(manufacturer.name)}`;
-    // }
+    window.location.href = `/cars?search=${encodeURIComponent(manufacturer.name)}`;
   };
-
 
   return (
     <section className="py-16">
       <div className="container mx-auto px-4">
         {/* Section Title */}
         <SectionTitle 
-          title={title}
-          subtitle="Browse cars by popular manufacturers"
+          title={title ?? t('quickSearches')}
+          subtitle={t('browseCarsByManufacturer')}
           isDarkMode={isDarkMode}
         />
 
@@ -62,7 +55,6 @@ const QuickManufacturerSearches: React.FC<QuickManufacturerSearchesProps> = ({
         {/* Manufacturer Content */}
         {!loading && !error && (
           <>
-            {/* Manufacturer Grid */}
             {displayManufacturers.length > 0 ? (
               <>
                 <ManufacturerGrid
@@ -71,7 +63,6 @@ const QuickManufacturerSearches: React.FC<QuickManufacturerSearchesProps> = ({
                   onManufacturerClick={handleManufacturerClick}
                 />
 
-                {/* Show More/Less Button */}
                 {filteredManufacturers.length > maxItems && (
                   <ShowMoreButton
                     showAll={showAll}

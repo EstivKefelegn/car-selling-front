@@ -1,16 +1,18 @@
-// components/featured-cars/SectionHeader.tsx
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 interface SectionHeaderProps {
   isDarkMode: boolean;
 }
 
 const SectionHeader: React.FC<SectionHeaderProps> = ({ isDarkMode }) => {
+  const { t } = useTranslation();
+
   return (
     <div className="flex items-center justify-between mb-6">
       <h2 className={`text-2xl font-bold ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
-        Featured Cars
+        {t('featuredCars')}
       </h2>
       <Link
         to="/all-cars"
@@ -20,7 +22,7 @@ const SectionHeader: React.FC<SectionHeaderProps> = ({ isDarkMode }) => {
             : 'text-gray-600 hover:text-gray-900'
         }`}
       >
-        View All →
+        {t('viewAll')}
       </Link>
     </div>
   );

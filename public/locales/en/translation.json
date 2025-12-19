@@ -9,9 +9,44 @@
   "languageSelector": {
     "english": "English",
     "amharic": "Amharic",
-    "selectLanguage": "Select language"
+    "selectLanguage": "Select Language"
   },
-  "findCar": "Find Your Perfect Car",
+  "findCar": "Find the car you want",
   "new": "New",
-  "about": "About"
+  "about": "About",
+   "startYourJourney": "Start Your Journey",
+  "experienceTheDifference": "Experience the difference",
+  "searchPremiumCollection": "Search through our premium collection",
+  "searchPlaceholder": "Search cars by make, model, year, features...",
+  "try": "Try:",
+  "searchCarsBy": "Search cars by make, model, year, features...",
+  "search": "Search",
+  "tryExample": "Try: Mercedes, BMW, Tesla, Toyota, 2023, SUV, Electric",
+  "browseInventory": "Browse Inventory",
+  "ourLocation": "Our Location",
+  "quickSearches": "Quick Searches",
+  "browseCarsByManufacturer": "Browse cars by popular manufacturers",
+  "manufacturers": {
+    "Audi": { "country": "Germany", "founded": 1909 },
+    "Bmw": { "country": "Germany", "founded": 1916 },
+    "Byd": { "country": "China", "founded": 1995 },
+    "Ford": { "country": "USA", "founded": 1903 },
+    "GeneralMotors": { "country": "USA", "founded": 1908 },
+    "Hyundai": { "country": "South Korea", "founded": 1967 },
+    "Kia": { "country": "South Korea", "founded": 1944 },
+    "MercedesBenz": { "country": "Germany", "founded": 1926 },
+    "Nissan": { "country": "Japan", "founded": 1933 },
+    "Toyota": { "country": "Japan", "founded": 1937 },
+    "VolvoCars": { "country": "Sweden", "founded": 1927 }
+  },
+  "featuredCars": "Featured Cars",
+  "viewAll": "View All →",
+  "featured": "Featured",
+  "range": "Range",
+  "acceleration": "0-100 km/h",
+  "power": "Power",
+  "available": "Available",
+  "unavailable": "Unavailable",
+  "shopByMake": "Shop by Make",
+  "browseByManufacturer": "Browse cars by manufacturer"
 }

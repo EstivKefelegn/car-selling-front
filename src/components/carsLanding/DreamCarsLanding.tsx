@@ -9,6 +9,7 @@ import CarCard from './CarCard/CarCard';
 import HeaderSection from './HeaderSection/HeaderSection';
 import { filterCars, formatPrice } from './utils/helpers';
 import { useFilterInfo } from './hooks/useFilterInfo';
+import apiClient from '../../services/api-client';
 
 const API_BASE_URL = 'http://localhost:8000';
 
