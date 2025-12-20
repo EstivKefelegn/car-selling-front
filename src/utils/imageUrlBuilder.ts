@@ -1,16 +1,14 @@
-// components/featured-cars/utils/imageUrlBuilder.ts
 import apiClient from "../services/api-client";
 
 export const buildImageUrl = (imagePath: string): string => {
   if (!imagePath) return '';
-  
+
   // If it's already a full URL, return as is
   if (imagePath.startsWith('http://') || imagePath.startsWith('https://')) {
     return imagePath;
   }
-  
-  // Otherwise, prepend backend URL (adjust as needed)
-  // const backendUrl = 'http://localhost:8000';
-  const backendUrl = 'http://192.168.1.5:8000'
+
+  // Prepend backend baseURL from apiClient
+  const backendUrl = apiClient.defaults.baseURL || '';
   return `${backendUrl}${imagePath}`;
 };
