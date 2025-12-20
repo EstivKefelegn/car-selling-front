@@ -11,7 +11,6 @@ export const buildImageUrl = (imagePath: string): string => {
   
   // If it starts with /, it's probably a relative path from backend
   if (imagePath.startsWith('/')) {
-    // const backendUrl = 'http://localhost:8000';
     return `${apiClient}${imagePath}`;
   }
   

@@ -51,7 +51,7 @@ const LanguageSelector: React.FC<LanguageSelectorProps> = ({
       </button>
 
       {isOpen && (
-        <div className={`absolute right-0 mt-2 w-48 rounded-2xl py-3 shadow-xl ${
+        <div className={`absolute right-0 mt-2 w-48 rounded-2xl py-3 shadow-xl z-20 ${
           isDarkMode ? 'bg-gray-900/70' : 'bg-white/70'
         }`}>
           {LANGUAGES.map(lang => (

@@ -11,7 +11,8 @@ import { filterCars, formatPrice } from './utils/helpers';
 import { useFilterInfo } from './hooks/useFilterInfo';
 import apiClient from '../../services/api-client';
 
-const API_BASE_URL = 'http://localhost:8000';
+// const API_BASE_URL = 'http://localhost:8000';
+const API_BASE_URL = 'http://192.168.1.5:8000'
 
 const AllCarsLanding: React.FC = () => {
   const { filters } = useCarFilterStore();

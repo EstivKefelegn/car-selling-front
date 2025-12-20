@@ -1,5 +1,6 @@
 // components/CarImageWithOverlay.tsx
 import React, { useState } from 'react';
+import apiClient from '../services/api-client';
 
 interface CarImageWithOverlayProps {
   imageUrl: string;
@@ -14,12 +15,11 @@ const CarImageWithOverlay: React.FC<CarImageWithOverlayProps> = ({
   isFeatured = false,
   className = '',
 }) => {
-  const API_BASE_URL = 'http://localhost:8000';
   const [imageError, setImageError] = useState(false);
   
   // Construct full URL
   const fullImageUrl = imageUrl.startsWith('/') 
-    ? `${API_BASE_URL}${imageUrl}`
+    ? `${apiClient}${imageUrl}`
     : imageUrl;
 
   return (

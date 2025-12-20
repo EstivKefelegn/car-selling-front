@@ -1,8 +1,8 @@
 // hooks/useCarSearch.ts
 import { useState, useEffect } from 'react';
 import axios from 'axios';
+import apiClient from '../../services/api-client';
 
-const API_BASE_URL = 'http://localhost:8000';
 
 const useCarSearch = (searchQuery: string = '', filters: any = {}) => {
   const [cars, setCars] = useState<any[]>([]);
@@ -17,7 +17,7 @@ const useCarSearch = (searchQuery: string = '', filters: any = {}) => {
         // If search query exists, use search endpoint
         if (searchQuery.trim()) {
           const searchResponse = await axios.get(
-            `${API_BASE_URL}/cars/search/?q=${encodeURIComponent(searchQuery)}`
+            `${apiClient}/cars/search/?q=${encodeURIComponent(searchQuery)}`
           );
           setCars(searchResponse.data);
         } 
@@ -32,7 +32,7 @@ const useCarSearch = (searchQuery: string = '', filters: any = {}) => {
           // Add other filters as needed
           
           const response = await axios.get(
-            `${API_BASE_URL}/cars/?${params.toString()}`
+            `${apiClient}/cars/?${params.toString()}`
           );
           setCars(response.data);
         }

@@ -44,8 +44,8 @@ const useAvailableCars = (): UseAvailableCarsResult => {
     const fetchCars = async () => {
       try {
         setLoading(true);
-        const response = await fetch('http://localhost:8000/api/cars/available');
-        
+        // const response = await fetch('http://localhost:8000/api/cars/available');
+        const response = await fetch('http://192.168.1.5:8000/cars/available');
         if (!response.ok) {
           throw new Error(`Failed to fetch cars: ${response.status}`);
         }
