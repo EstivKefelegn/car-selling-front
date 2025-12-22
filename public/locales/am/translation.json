@@ -135,6 +135,13 @@
       "retry": "እንደገና ይሞክሩ"
     }
   },
+  "price": {
+    "notAvailable": "ዋጋ አልተገኘም",
+    "currency": "ብር",
+    "thousand": "ሺህ",
+    "million": "ሚሊዮን"
+  },
+
   "allCars": {
     "title": "ተስማሚ ኤሌክትሪክ መኪናዎን ያግኙ",
     

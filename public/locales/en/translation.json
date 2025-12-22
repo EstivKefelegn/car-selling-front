@@ -137,6 +137,13 @@
     }
   },
   
+  "price": {
+    "notAvailable": "Price not available",
+    "currency": "Br",
+     "thousand": "K",
+    "million": "M"
+  },
+
   "allCars": {
     "title": "Find Your Perfect Electric Car",
     
