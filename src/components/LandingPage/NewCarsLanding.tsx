@@ -4,11 +4,13 @@ import StandaloneFilter from '../FilterCard/StandaloneFilter';
 import AllCarsLanding from '../carsLanding/DreamCarsLanding';
 import type { CarFilter } from '../../services/filters';
 import {useDarkModeStore} from "../../store/useDarkModeStore"
+import { useTranslation } from 'react-i18next';
+
 
 const NewCarsLanding: React.FC = () => {
   const [filters, setFilters] = useState<CarFilter>({});
   const isDarkMode = useDarkModeStore((state) => state.isDarkMode)
-  
+  const { t } = useTranslation()
 
 
   const handleFilterChange = (newFilters: CarFilter) => {
@@ -44,8 +46,8 @@ const NewCarsLanding: React.FC = () => {
     <StandaloneFilter 
       onFilterChange={handleFilterChange}
       initialFilters={filters}
-      title="Find Your Perfect Electric Car"
-      description="Filter by manufacturer, model, year, price, color (interior & exterior), and more"
+      title={t('standaloneFilter.title')}
+      description={t('standaloneFilter.description')}
     />
   </div>
         <div className="lg:col-span-3">

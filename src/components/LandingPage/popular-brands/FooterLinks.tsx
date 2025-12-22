@@ -1,5 +1,5 @@
-// components/popular-brands/FooterLinks.tsx
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 
 interface FooterLinksProps {
   brandsCount: number;
@@ -7,12 +7,14 @@ interface FooterLinksProps {
 }
 
 const FooterLinks: React.FC<FooterLinksProps> = ({ brandsCount, isDarkMode }) => {
+  const { t } = useTranslation()
+  
   return (
     <div className="flex flex-col md:flex-row items-center justify-between gap-4 mt-4 pt-4 border-t border-gray-700/30">
       <div className={`text-sm ${
         isDarkMode ? 'text-gray-500' : 'text-gray-500'
       }`}>
-        {brandsCount} popular brands
+        {brandsCount} {t('popular_brands')}
       </div>
       
       <a

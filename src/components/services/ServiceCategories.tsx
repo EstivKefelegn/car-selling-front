@@ -1,5 +1,5 @@
-// pages/services/ServiceCategories.tsx
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 
 interface ServiceCategory {
   id: number;
@@ -15,17 +15,16 @@ interface ServiceCategoriesProps {
   isDarkMode: boolean;
 }
 
-const ServiceCategories: React.FC<ServiceCategoriesProps> = ({ 
-  categories, 
-  isDarkMode 
-}) => {
+const ServiceCategories: React.FC<ServiceCategoriesProps> = ({ categories, isDarkMode }) => {
+  const { t } = useTranslation();
+
   if (!categories || categories.length === 0) return null;
 
   return (
     <div className="text-center">
-      <h2 className="text-3xl font-bold mb-4">Service Categories</h2>
+      <h2 className="text-3xl font-bold mb-4">{t('SERVICE_CATEGORIES')}</h2>
       <p className="text-xl mb-12 max-w-3xl mx-auto opacity-80">
-        Comprehensive services tailored for your electric vehicle
+        {t('SERVICE_CATEGORIES_DESCRIPTION')}
       </p>
       
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -46,12 +45,12 @@ const ServiceCategories: React.FC<ServiceCategoriesProps> = ({
                 <i className={category.icon}></i>
               )}
             </div>
-            <h3 className="text-xl font-bold mb-3">{category.title}</h3>
-            <p className="opacity-80 mb-4 line-clamp-2">{category.description}</p>
+            <h3 className="text-xl font-bold mb-3">{t(category.title)}</h3>
+            <p className="opacity-80 mb-4 line-clamp-2">{t(category.description)}</p>
             <div className={`text-sm px-3 py-1 rounded-full inline-block ${
               isDarkMode ? 'bg-gray-700 text-gray-300' : 'bg-gray-100 text-gray-700'
             }`}>
-              {category.service_count} services
+              {category.service_count} {t('SERVICES')}
             </div>
           </div>
         ))}
@@ -61,3 +60,4 @@ const ServiceCategories: React.FC<ServiceCategoriesProps> = ({
 };
 
 export default ServiceCategories;
+        

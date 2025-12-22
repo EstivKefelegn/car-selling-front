@@ -5,6 +5,8 @@ import type { Car } from '../../hooks/cars/useEVCars';
 import { buildImageUrl } from '../../utils/imageUrlBuilder';
 import { formatPrice } from '../../utils/priceFormatter';
 import { useDarkModeStore } from '../../store/useDarkModeStore';
+import { useTranslation } from 'react-i18next';
+
 
 interface CarCardProps {
   car: Car;
@@ -12,6 +14,8 @@ interface CarCardProps {
 
 const CarCard: React.FC<CarCardProps> = ({ car }) => {
   const { isDarkMode } = useDarkModeStore();
+  const { t } = useTranslation()
+
 
   const handleImageError = (e: React.SyntheticEvent<HTMLImageElement>) => {
     const target = e.target as HTMLImageElement;
@@ -58,7 +62,7 @@ const CarCard: React.FC<CarCardProps> = ({ car }) => {
             ? 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white' 
             : 'bg-gradient-to-r from-blue-500 to-indigo-500 text-white'
         }`}>
-          NEW
+          {t("new")}
         </span>
       </div>
 
@@ -144,7 +148,7 @@ const CarCard: React.FC<CarCardProps> = ({ car }) => {
             isDarkMode ? 'bg-gray-800/50' : 'bg-blue-50'
           }`}>
             <div className={`text-xs font-medium mb-1 ${isDarkMode ? 'text-gray-400' : 'text-blue-600'}`}>
-              Range
+             {t('range')}
             </div>
             <div className={`font-bold ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
               {car.range_wltp}<span className="text-xs font-normal"> km</span>
@@ -155,7 +159,7 @@ const CarCard: React.FC<CarCardProps> = ({ car }) => {
             isDarkMode ? 'bg-gray-800/50' : 'bg-purple-50'
           }`}>
             <div className={`text-xs font-medium mb-1 ${isDarkMode ? 'text-gray-400' : 'text-purple-600'}`}>
-              0-100 km/h
+              {t("acceleration")}
             </div>
             <div className={`font-bold ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
               {car.acceleration_0_100}<span className="text-xs font-normal">s</span>
@@ -166,7 +170,7 @@ const CarCard: React.FC<CarCardProps> = ({ car }) => {
             isDarkMode ? 'bg-gray-800/50' : 'bg-green-50'
           }`}>
             <div className={`text-xs font-medium mb-1 ${isDarkMode ? 'text-gray-400' : 'text-green-600'}`}>
-              Power
+             {t('power')}
             </div>
             <div className={`font-bold ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
               {car.motor_power}<span className="text-xs font-normal"> HP</span>

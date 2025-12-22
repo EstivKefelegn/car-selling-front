@@ -1,5 +1,5 @@
-// components/finance/FinanceHero.tsx
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 
 interface FinanceHeroProps {
   title: string;
@@ -14,13 +14,15 @@ const FinanceHero: React.FC<FinanceHeroProps> = ({
   image, 
   isDarkMode 
 }) => {
+  const { t } = useTranslation();
+
   return (
     <div className="relative overflow-hidden">
       <div className="absolute inset-0">
         {image ? (
           <img 
             src={image} 
-            alt="Finance Hero" 
+            alt={t('FINANCE_HERO_ALT')} 
             className="w-full h-full object-cover opacity-20"
           />
         ) : (
@@ -35,10 +37,10 @@ const FinanceHero: React.FC<FinanceHeroProps> = ({
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 md:py-32">
         <div className="text-center">
           <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6">
-            {title}
+            {t(title)}
           </h1>
           <p className="text-xl md:text-2xl max-w-3xl mx-auto opacity-90">
-            {description}
+            {t(description)}
           </p>
         </div>
         
@@ -48,28 +50,28 @@ const FinanceHero: React.FC<FinanceHeroProps> = ({
                     ? ' text-white border border-gray'
                     : 'bg-gradient-to-r from-gray-800 to-gray-900 text-white '
           }`}>
-            From 2.9% APR
+            {t('FAST_PROFESSIONAL')}
           </div>
           <div className={`px-6 py-3 rounded-full ${
             isDarkMode 
               ? 'bg-gray-800 text-gray-300' 
               : 'bg-gray-100 text-gray-700'
           }`}>
-            No Hidden Fees
+            {t('NO_HIDDEN_FEES')}
           </div>
           <div className={`px-6 py-3 rounded-full ${
             isDarkMode 
               ? 'bg-gray-800 text-gray-300' 
               : 'bg-gray-100 text-gray-700'
           }`}>
-            Fast Approval
+            {t('FAST_APPROVAL')}
           </div>
           <div className={`px-6 py-3 rounded-full ${
             isDarkMode 
               ? 'bg-gray-800 text-gray-300' 
               : 'bg-gray-100 text-gray-700'
           }`}>
-            Flexible Terms
+            {t('FLEXIBLE_TERMS')}
           </div>
         </div>
       </div>

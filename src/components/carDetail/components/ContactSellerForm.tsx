@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import useContactOrder, { type ContactOrderData } from '../../../hooks/contact_order/useContactOrder';
+import { useTranslation } from 'react-i18next';
 
 interface ContactSellerFormProps {
   carId: number;
@@ -9,12 +10,6 @@ interface ContactSellerFormProps {
   onSuccess?: () => void;
 }
 
-const CONTACT_TIME_OPTIONS = [
-  { value: '6h', label: 'Within 6 hours' },
-  { value: '24h', label: 'Within 24 hours' },
-  { value: '48h', label: 'Within 48 hours' },
-];
-
 const ContactSellerForm: React.FC<ContactSellerFormProps> = ({
   carId,
   carDisplayName,
@@ -23,6 +18,7 @@ const ContactSellerForm: React.FC<ContactSellerFormProps> = ({
   onSuccess
 }) => {
   const { submitContactOrder, loading, error, success } = useContactOrder();
+  const { t } = useTranslation();
   const [formData, setFormData] = useState<ContactOrderData>({
     full_name: '',
     phone_number: '',
@@ -32,6 +28,13 @@ const ContactSellerForm: React.FC<ContactSellerFormProps> = ({
   });
 
   const [errors, setErrors] = useState<Partial<ContactOrderData>>({});
+
+  // Contact time options with translations
+  const CONTACT_TIME_OPTIONS = [
+    { value: '6h', label: t('contactSellerForm.contactTimes.6h') },
+    { value: '24h', label: t('contactSellerForm.contactTimes.24h') },
+    { value: '48h', label: t('contactSellerForm.contactTimes.48h') },
+  ];
 
   // Handle success state
   useEffect(() => {
@@ -44,17 +47,17 @@ const ContactSellerForm: React.FC<ContactSellerFormProps> = ({
     const newErrors: Partial<ContactOrderData> = {};
     
     if (!formData.full_name.trim()) {
-      newErrors.full_name = 'Full name is required';
+      newErrors.full_name = t('contactSellerForm.validation.fullNameRequired');
     }
     
     if (!formData.phone_number.trim()) {
-      newErrors.phone_number = 'Phone number is required';
+      newErrors.phone_number = t('contactSellerForm.validation.phoneRequired');
     } else if (!/^[\+]?[1-9][\d]{0,14}$/.test(formData.phone_number.replace(/\s+/g, ''))) {
-      newErrors.phone_number = 'Please enter a valid phone number';
+      newErrors.phone_number = t('contactSellerForm.validation.phoneInvalid');
     }
     
     if (!formData.preferred_contact_time) {
-      newErrors.preferred_contact_time = 'Please select a preferred contact time';
+      newErrors.preferred_contact_time = t('contactSellerForm.validation.contactTimeRequired');
     }
     
     return newErrors;
@@ -133,7 +136,7 @@ const ContactSellerForm: React.FC<ContactSellerFormProps> = ({
             <h2 className={`text-xl font-bold ${
               isDarkMode ? 'text-white' : 'text-gray-900'
             }`}>
-              Contact Seller
+              {t('contactSellerForm.title')}
             </h2>
             <button
               onClick={onClose}
@@ -152,7 +155,7 @@ const ContactSellerForm: React.FC<ContactSellerFormProps> = ({
           <p className={`mt-1 text-sm ${
             isDarkMode ? 'text-gray-400' : 'text-gray-600'
           }`}>
-            About {carDisplayName}
+            {t('contactSellerForm.about', { carName: carDisplayName })}
           </p>
         </div>
 
@@ -161,7 +164,7 @@ const ContactSellerForm: React.FC<ContactSellerFormProps> = ({
           {/* Full Name */}
           <div>
             <label htmlFor="full_name" className={labelClasses}>
-              Full Name *
+              {t('contactSellerForm.fullName')} {t('contactSellerForm.required')}
             </label>
             <input
               type="text"
@@ -172,7 +175,7 @@ const ContactSellerForm: React.FC<ContactSellerFormProps> = ({
               className={`${inputClasses} ${
                 errors.full_name ? 'border-red-500 focus:border-red-500 focus:ring-red-500' : ''
               }`}
-              placeholder="Enter your full name"
+              placeholder={t('contactSellerForm.placeholder.fullName')}
               disabled={loading}
             />
             {errors.full_name && (
@@ -183,7 +186,7 @@ const ContactSellerForm: React.FC<ContactSellerFormProps> = ({
           {/* Phone Number */}
           <div>
             <label htmlFor="phone_number" className={labelClasses}>
-              Phone Number *
+              {t('contactSellerForm.phoneNumber')} {t('contactSellerForm.required')}
             </label>
             <input
               type="tel"
@@ -194,7 +197,7 @@ const ContactSellerForm: React.FC<ContactSellerFormProps> = ({
               className={`${inputClasses} ${
                 errors.phone_number ? 'border-red-500 focus:border-red-500 focus:ring-red-500' : ''
               }`}
-              placeholder="Enter your phone number"
+              placeholder={t('contactSellerForm.placeholder.phoneNumber')}
               disabled={loading}
             />
             {errors.phone_number && (
@@ -205,7 +208,7 @@ const ContactSellerForm: React.FC<ContactSellerFormProps> = ({
           {/* Preferred Contact Time */}
           <div>
             <label className={labelClasses}>
-              When should we contact you? *
+              {t('contactSellerForm.contactTime')} {t('contactSellerForm.required')}
             </label>
             <div className="grid grid-cols-3 gap-2">
               {CONTACT_TIME_OPTIONS.map((option) => (
@@ -236,7 +239,7 @@ const ContactSellerForm: React.FC<ContactSellerFormProps> = ({
           {/* Additional Message (Optional) */}
           <div>
             <label htmlFor="message" className={labelClasses}>
-              Additional Message (Optional)
+              {t('contactSellerForm.additionalMessage')}
             </label>
             <textarea
               id="message"
@@ -245,7 +248,7 @@ const ContactSellerForm: React.FC<ContactSellerFormProps> = ({
               onChange={handleChange}
               rows={3}
               className={`${inputClasses} resize-none`}
-              placeholder="Any specific questions or requests?"
+              placeholder={t('contactSellerForm.placeholder.message')}
               disabled={loading}
             />
           </div>
@@ -271,10 +274,10 @@ const ContactSellerForm: React.FC<ContactSellerFormProps> = ({
                     <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
                     <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
                   </svg>
-                  Submitting...
+                  {t('contactSellerForm.submitting')}
                 </span>
               ) : (
-                'Submit Request'
+                t('contactSellerForm.submit')
               )}
             </button>
             
@@ -288,7 +291,7 @@ const ContactSellerForm: React.FC<ContactSellerFormProps> = ({
             <p className={`mt-3 text-center text-sm ${
               isDarkMode ? 'text-gray-400' : 'text-gray-600'
             }`}>
-              Our sales team will contact you within your selected timeframe.
+              {t('contactSellerForm.successMessage')}
             </p>
           </div>
         </form>

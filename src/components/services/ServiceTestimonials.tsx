@@ -1,5 +1,5 @@
-// pages/services/ServiceTestimonials.tsx
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 
 interface ServiceTestimonial {
   id: number;
@@ -17,10 +17,9 @@ interface ServiceTestimonialsProps {
   isDarkMode: boolean;
 }
 
-const ServiceTestimonials: React.FC<ServiceTestimonialsProps> = ({ 
-  testimonials, 
-  isDarkMode 
-}) => {
+const ServiceTestimonials: React.FC<ServiceTestimonialsProps> = ({ testimonials, isDarkMode }) => {
+  const { t } = useTranslation();
+
   if (!testimonials || testimonials.length === 0) return null;
 
   return (
@@ -29,7 +28,7 @@ const ServiceTestimonials: React.FC<ServiceTestimonialsProps> = ({
         ? 'bg-gradient-to-r from-gray-800 to-gray-900' 
         : 'bg-gradient-to-r from-gray-50 to-gray-100'
     }`}>
-      <h2 className="text-2xl font-bold mb-6 text-center">Customer Testimonials</h2>
+      <h2 className="text-2xl font-bold mb-6 text-center">{t('CUSTOMER_TESTIMONIALS')}</h2>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {testimonials.map((testimonial) => (
           <div 
@@ -55,7 +54,7 @@ const ServiceTestimonials: React.FC<ServiceTestimonialsProps> = ({
               ))}
               {testimonial.is_verified && (
                 <span className="ml-2 text-xs px-2 py-1 bg-green-100 text-green-800 rounded">
-                  ✓ Verified
+                  ✓ {t('VERIFIED')}
                 </span>
               )}
             </div>
@@ -65,7 +64,7 @@ const ServiceTestimonials: React.FC<ServiceTestimonialsProps> = ({
             <div>
               <p className="font-semibold">{testimonial.customer_name}</p>
               <p className="text-sm opacity-70">
-                {testimonial.customer_vehicle} Owner
+                {testimonial.customer_vehicle} {t('OWNER')}
                 {testimonial.customer_location && ` • ${testimonial.customer_location}`}
               </p>
             </div>

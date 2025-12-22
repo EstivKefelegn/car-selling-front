@@ -6,15 +6,17 @@
   "services": "Services",
   "events": "Events",
   "more": "More",
+  "s": "s",
+  "HP": "HP",
   "languageSelector": {
     "english": "English",
-    "amharic": "Amharic",
+    "amharic": "አማርኛ",
     "selectLanguage": "Select Language"
   },
   "findCar": "Find the car you want",
   "new": "New",
   "about": "About",
-   "startYourJourney": "Start Your Journey",
+  "startYourJourney": "Start Your Journey",
   "experienceTheDifference": "Experience the difference",
   "searchPremiumCollection": "Search through our premium collection",
   "searchPlaceholder": "Search cars by make, model, year, features...",
@@ -26,19 +28,7 @@
   "ourLocation": "Our Location",
   "quickSearches": "Quick Searches",
   "browseCarsByManufacturer": "Browse cars by popular manufacturers",
-  "manufacturers": {
-    "Audi": { "country": "Germany", "founded": 1909 },
-    "Bmw": { "country": "Germany", "founded": 1916 },
-    "Byd": { "country": "China", "founded": 1995 },
-    "Ford": { "country": "USA", "founded": 1903 },
-    "GeneralMotors": { "country": "USA", "founded": 1908 },
-    "Hyundai": { "country": "South Korea", "founded": 1967 },
-    "Kia": { "country": "South Korea", "founded": 1944 },
-    "MercedesBenz": { "country": "Germany", "founded": 1926 },
-    "Nissan": { "country": "Japan", "founded": 1933 },
-    "Toyota": { "country": "Japan", "founded": 1937 },
-    "VolvoCars": { "country": "Sweden", "founded": 1927 }
-  },
+ 
   "featuredCars": "Featured Cars",
   "viewAll": "View All →",
   "featured": "Featured",
@@ -48,5 +38,393 @@
   "available": "Available",
   "unavailable": "Unavailable",
   "shopByMake": "Shop by Make",
-  "browseByManufacturer": "Browse cars by manufacturer"
+  "browseByManufacturer": "Browse cars by manufacturer", 
+  "newest": "Newest",
+  "mostExpensive": "Most Expensive",
+  "browseNewestManufacturers": "Browse newest EV manufacturers",
+  "browseMostExpensiveCars": "Browse manufacturers with the most expensive cars",
+  "noNewManufacturers": "No new manufacturers found",
+  "noPriceData": "No price data available",
+  "loadingManufacturers": "Loading manufacturers...",
+  "errorLoadingManufacturers": "Error loading manufacturers",
+  "noManufacturersFound": "No manufacturers found",
+  "showMore": "Show More",
+  "showLess": "Show Less",
+  "popular_brands": "Popular Brands",
+  "view_all_manufacturers": "View all manufacturers →",
+  "new_cars": {
+    "title": "Newly Added Cars",
+    "subtitle": "Latest arrivals in our EV collection",
+    "view_all": "View All New Cars"
+  },
+  
+  "newsletter": {
+    "title": "Be the first to know about new listings",
+    "placeholder": "Your email address",
+    "subscribe": "Subscribe",
+    "disclaimer": "By subscribing, you agree to receive new listing alerts. You can unsubscribe at any time."
+  },
+  "FINANCE_HERO_ALT": "Finance Hero Image",
+  "FAST_PROFESSIONAL": "Fast & Professional",
+  "NO_HIDDEN_FEES": "No Hidden Fees",
+  "FAST_APPROVAL": "Fast Approval",
+  "FLEXIBLE_TERMS": "Flexible Terms",
+  "READY_TO_DRIVE": "Ready to Drive Your Dream EV?",
+  "FINANCING_DESCRIPTION": "Start your financing application today and get approved in as little as 30 minutes",
+  "APPLY_NOW": "Apply Now",
+  "REQUEST_CALLBACK": "Request Callback",
+  "NO_CREDIT_IMPACT": "No impact on credit score • No obligation • 100% online",
+  "EV_SERVICE_BACKGROUND": "EV Service Background",
+  "NETA_CERTIFIED_SERVICES": "NETA Certified Services",
+  "BOOK_SERVICE_NOW": "Book Service Now",
+  "VIEW_SERVICE_PLANS": "View Service Plans",
+   "FAILED_TO_LOAD_SERVICES": "Failed to load services",
+  "TRY_AGAIN": "Try Again",
+  "PREMIUM_EV_SERVICES": "Premium EV Services",
+  "SERVICE_HERO_DESCRIPTION": "Expert maintenance, warranty protection, and comprehensive support for your electric vehicle",
+  "SPECIAL_SERVICE_OFFERS": "Special Service Offers",
+  "LIMITED_TIME": "Limited Time",
+  "NETA_EXCLUSIVE_SERVICES": "NETA Exclusive Services",
+  "NETA_OWNERS_ONLY": "NETA Owners Only",
+  "COMPLIMENTARY_SERVICES": "Complimentary Services",
+  "FREE_FOR_ALL": "Free for All",
+    "SERVICE_CATEGORIES": "Service Categories",
+  "SERVICE_CATEGORIES_DESCRIPTION": "Comprehensive services tailored for your electric vehicle",
+  "SERVICES": "services",
+   "SERVICE_CENTERS": "Our Service Centers",
+  "MAIN_CENTER": "Main Center",
+  "FACILITIES": "Facilities",
+  "EV_CHARGING": "EV Charging",
+  "WAITING_LOUNGE": "Waiting Lounge",
+  "LOANER_CARS": "Loaner Cars",
+  "MOBILE_SERVICE": "Mobile Service",
+  "BOOK_APPOINTMENT": "Book Appointment",
+  "CUSTOMER_TESTIMONIALS": "Customer Testimonials",
+  "SERVICE_FAQ": "Frequently Asked Questions",
+  "ALL": "All",
+  "VERIFIED": "Verified",
+  "OWNER": "Owner",
+   "READY_TO_SERVICE_EV": "Ready to Service Your EV?",
+  "BOOK_SERVICE_ONLINE_OR_VISIT": "Book your service appointment online or visit one of our service centers",
+  "BOOK_ONLINE_NOW": "Book Online Now",
+  "CALL_US": "Call",
+  "ROADSIDE_ASSISTANCE": "Roadside Assistance",
+  "EMERGENCY_RESPONSE": "Emergency Response",
+  "SAME_DAY": "Same-Day",
+  "SERVICE_AVAILABLE": "Service Available",
+  "Battery Maintenance": "Battery Maintenance",
+  "Battery checkup and maintenance": "Battery checkup and maintenance",
+  "Tire Services": "Tire Services",
+  "Wheel alignment and tire replacement": "Wheel alignment and tire replacement",
+
+  "Electrical Repairs": "Electrical Repairs",
+  "Repair of EV electrical systems": "Repair of EV electrical systems",
+
+  "General Maintenance": "General Maintenance",
+  "Routine inspections and upkeep": "Routine inspections and upkeep",
+  "standaloneFilter": {
+    "title": "Find Your Perfect Electric Car",
+    "description": "Use our filters to narrow down your search and find the electric vehicle that matches your needs.",
+    "resultsSummary": "Start filtering to see matching vehicles"
+  },
+  "newelyCommingCars": {
+    "title": "Newly Added Cars",
+    "subtitle": "Latest arrivals in our EV collection",
+    "loading": "Loading new cars...",
+    "error": {
+      "message": "Failed to load new cars",
+      "retry": "Try Again"
+    }
+  },
+  
+  "allCars": {
+    "title": "Find Your Perfect Electric Car",
+    
+    "showing": "Showing cars",
+    "of": "of",
+    "previousSlide": "Previous slide",
+    "nextSlide": "Next slide",
+    "goToSlide": "Go to slide {{index}}",
+    "slideOf": "Slide {{current}} of {{total}}",
+    "vehiclesAvailable": "{{count}} vehicles available",
+    "filteredFrom": "filtered from {{total}} total",
+    "viewAllVehicles": "View All Vehicles",
+    
+    "filtersApplied": "{{count}} filter applied",
+    "filtersApplied_plural": "{{count}} filters applied",
+    
+    "manufacturer": "Manufacturer",
+    "model": "Model",
+    "price": "Price",
+    "colors": "Colors",
+    "exterior": "Exterior",
+    "interior": "Interior",
+
+    "loading": "Loading cars..."
+  },
+  "allCarsGrid": {
+    "title": "All Electric Cars",
+    "loading": "Loading cars...",
+    "error": {
+      "title": "Failed to load cars",
+      "message": "Network error",
+      "tryAgain": "Try Again"
+    },
+    "search": {
+      "resultsFound": "{{count}} result found",
+      "resultsFound_plural": "{{count}} results found",
+      "clear": "Clear Search",
+      "page": "Page {{current}} of {{total}}"
+    },
+    "available": {
+      "cars": "{{count}} car available",
+      "cars_plural": "{{count}} cars available"
+    },
+    "pagination": {
+      "showing": "Showing {{start}} - {{end}} of {{total}}",
+      "previous": "← Previous",
+      "next": "Next →"
+    },
+    "empty": {
+      "title": "No cars available",
+      "titleSearch": "No matching cars found",
+      "message": "Try adjusting your filters or check back later",
+      "messageSearch": "No results found for \"{{query}}\"",
+      "viewAll": "View All Cars"
+    }
+  },
+
+  "shortCarCard": {
+    "new": "NEW",
+    "available": "AVAIL",
+    "sold": "SOLD",
+    "range": "Range",
+    "acceleration": "0-100",
+    "power": "Power",
+    "km": "km",
+    "seconds": "s"
+  },
+
+  "carHeader": {
+    "taxIncentive": "Tax Incentive Eligible"
+  },
+
+  "imageGallery": {
+    "exterior": "Exterior",
+    "interior": "Interior",
+    "colors": "Colors"
+  },
+
+  "colorTabs": {
+    "exteriorColors": "Exterior Colors",
+    "interiorColors": "Interior Colors"
+  },
+
+  "manufacturerCard": {
+    "founded": "Founded",
+    "evOnly": "EV-Only Manufacturer",
+    "visitWebsite": "Visit Manufacturer Website",
+    "contact": "Contact Manufacturer"
+  },
+
+  "specifications": {
+    "title": "Key Specifications",
+    "performance": "Performance",
+    "battery": "Battery",
+    "charging": "Charging",
+    "range": "{{distance}} km range",
+    "acceleration": "{{time}} 0–100",
+    "capacity": "{{capacity}} kWh",
+    "power": "{{power}} HP",
+    "dcCharging": "{{power}} kW DC",
+    "chargingTime": "{{time}} min"
+  },
+
+  "actionButtons": {
+    "contactSeller": "Contact The Seller",
+    "downloadBrochure": "Download Brochure"
+  },
+
+  "backButton": {
+    "text": "Back to Cars"
+  },
+
+
+  "thumbnailGallery": {
+    "exteriorGallery": "Exterior Gallery",
+    "interiorGallery": "Interior Gallery"
+  },
+
+  "contactSellerForm": {
+    "title": "Contact Seller",
+    "about": "About {{carName}}",
+    "fullName": "Full Name",
+    "phoneNumber": "Phone Number",
+    "contactTime": "When should we contact you?",
+    "additionalMessage": "Additional Message (Optional)",
+    "placeholder": {
+      "fullName": "Enter your full name",
+      "phoneNumber": "Enter your phone number",
+      "message": "Any specific questions or requests?"
+    },
+    "submit": "Submit Request",
+    "submitting": "Submitting...",
+    "successMessage": "Our sales team will contact you within your selected timeframe.",
+    "required": "*",
+    "validation": {
+      "fullNameRequired": "Full name is required",
+      "phoneRequired": "Phone number is required",
+      "phoneInvalid": "Please enter a valid phone number",
+      "contactTimeRequired": "Please select a preferred contact time"
+    },
+    "contactTimes": {
+      "6h": "Within 6 hours",
+      "24h": "Within 24 hours",
+      "48h": "Within 48 hours"
+    }
+  },
+
+  "latestEvent": {
+    "loading": "Loading latest event...",
+    "error": {
+      "title": "Unable to load event",
+      "button": "Try Again"
+    },
+    "noEvent": {
+      "title": "No upcoming events",
+      "message": "Check back soon for our next event!",
+      "button": "Return Home"
+    },
+    "hero": {
+      "featured": "⭐ Featured",
+      "virtual": "🎥 Virtual",
+      "viewAll": "View All Events",
+      "scroll": "Scroll to explore"
+    },
+    "details": {
+      "sectionTitle": "Event Details",
+      "about": "About This",
+      "gathering": "Gathering",
+      "overview": "Event Overview",
+      "expect": "What to Expect",
+      "highlights": "Event Highlights",
+      "maxCapacity": "Max Capacity",
+      "admission": "Admission",
+      "registered": "Registered"
+    },
+    "cards": {
+      "dateTime": "Date & Time",
+      "start": "Start",
+      "end": "End",
+      "location": "Location",
+      "virtualEvent": "Virtual Event",
+      "platform": "Platform",
+      "joinVirtual": "Join Virtual Event",
+      "venue": "Venue",
+      "address": "Address",
+      "timezone": "Timezone"
+    }
+  },
+
+  "serviceBookingModal": {
+    "title": "Book Service Appointment",
+    "steps": {
+      "vehicle": "Vehicle",
+      "serviceType": "Service Type",
+      "contactInfo": "Contact Info",
+      "details": "Details"
+    },
+    
+    "step1": {
+      "title": "Select Your Vehicle",
+      "vehicleLabel": "Vehicle *",
+      "loadingVehicles": "Loading vehicles...",
+      "errorLoading": "Error loading vehicles. Please try again.",
+      "noVehicles": "No vehicles available. Please contact support.",
+      "selectVehicle": "Select a vehicle",
+      "vehicleHelp": "Select the vehicle that needs service",
+      "addVehicleTitle": "Need to add a new vehicle?",
+      "addVehicleText": "If your vehicle is not listed, please call our service center at",
+      "servicePhone": "1-800-NETA-SERVICE",
+      "toRegister": "to register it first."
+    },
+    
+    "step2": {
+      "title": "Select Service Type",
+      "regularService": "Regular maintenance service at 10,000 km interval",
+      "warrantyService": "Comprehensive warranty coverage service"
+    },
+    
+    "step3": {
+      "title": "Contact Information",
+      "fullName": "Full Name *",
+      "email": "Email *",
+      "phone": "Phone *"
+    },
+    
+    "step4": {
+      "title": "Additional Information",
+      "additionalInfo": "Please provide additional information for your service",
+      "kmService": "KM Service",
+      "warranty": "Warranty",
+      "odometerReading": "Odometer Reading (KM) *",
+      "odometerPlaceholder": "Enter current odometer reading",
+      "serviceDescription": "Service Description *",
+      "descriptionPlaceholder": "Please describe the warranty service needed...",
+      "symptoms": "Symptoms/Problems (Optional)",
+      "symptomsPlaceholder": "Describe any symptoms or problems you're experiencing...",
+      "preferredDate": "Preferred Date *",
+      "dateHelp": "Please select your preferred service date",
+      "timeSlot": "Time Slot *",
+      "morning": "Morning (9:00 AM)",
+      "afternoon": "Afternoon (1:00 PM)",
+      "evening": "Evening (4:00 PM)",
+      "timeHelp": "Please select your preferred time slot",
+      "customerNotes": "Customer Notes (Optional)",
+      "notesPlaceholder": "Any additional notes or special requests..."
+    },
+    
+    "validation": {
+      "selectVehicle": "Please select a vehicle",
+      "selectServiceType": "Please select a service type",
+      "fillContactInfo": "Please fill in all contact information",
+      "selectDate": "Please select a preferred date",
+      "selectTime": "Please select a time slot",
+      "odometerRequired": "Please enter odometer reading for 10,000 KM Service",
+      "descriptionRequired": "Please enter service description for NETA Warranty Service"
+    },
+    
+    "buttons": {
+      "back": "Back",
+      "cancel": "Cancel",
+      "next": "Next",
+      "bookService": "Book Service",
+      "submitting": "Submitting..."
+    },
+    
+    "success": {
+      "title": "Service booking created successfully!",
+      "message": "Our service team will contact you to confirm your appointment."
+    }
+  },
+
+  "footer": {
+    "brand_name": "Etiopikar",
+    "tagline": "Ethiopia's premier electric vehicle marketplace",
+
+    "company": "Company",
+    "about_us": "About Us",
+    "contact_us": "Contact Us",
+    "careers": "Careers",
+    "blog": "Blog",
+
+    "support": "Support",
+    "help_center": "Help Center",
+    "faq": "FAQ",
+    "privacy": "Privacy",
+    "terms": "Terms",
+
+    "contact": "Contact",
+    "address": "Addis Ababa, Ethiopia"
+  }
 }

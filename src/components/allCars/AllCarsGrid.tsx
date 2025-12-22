@@ -5,6 +5,7 @@ import type { CarFilter } from '../../services/filters';
 import ShortCarCard from './ShortCarCard';
 import { useDarkModeStore } from '../../store/useDarkModeStore';
 import { useLocation } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 interface AllCarsGridProps {
   initialFilters?: CarFilter;
@@ -15,15 +16,19 @@ interface AllCarsGridProps {
 
 const AllCarsGrid: React.FC<AllCarsGridProps> = ({
   initialFilters = {},
-  title = 'All Electric Cars',
+  title,
   itemsPerPage = 20,
   showSearchHeader = false,
 }) => {
   const { isDarkMode } = useDarkModeStore();
   const location = useLocation();
+  const { t } = useTranslation();
   const [currentPage, setCurrentPage] = useState(1);
   const [searchQuery, setSearchQuery] = useState('');
   const [filters, setFilters] = useState<CarFilter>(initialFilters);
+
+  // Use provided title or fallback to translation
+  const sectionTitle = title || t('allCarsGrid.title');
 
   // Extract search query from URL
   useEffect(() => {
@@ -74,7 +79,7 @@ const AllCarsGrid: React.FC<AllCarsGridProps> = ({
           isDarkMode ? 'border-blue-500' : 'border-blue-600'
         }`}></div>
         <span className={`ml-4 ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
-          Loading cars...
+          {t('allCarsGrid.loading')}
         </span>
       </div>
     );
@@ -94,11 +99,10 @@ const AllCarsGrid: React.FC<AllCarsGridProps> = ({
         <h3 className={`text-lg font-semibold mb-2 ${
           isDarkMode ? 'text-red-300' : 'text-red-800'
         }`}>
-          Failed to load cars
+          {t('allCarsGrid.error.title')}
         </h3>
         <p className={`mb-4 ${isDarkMode ? 'text-red-400' : 'text-red-600'}`}>
-          {/* {error.message || 'Network error'} */}
-          Network error
+          {t('allCarsGrid.error.message')}
         </p>
         <button
           onClick={() => window.location.reload()}
@@ -108,7 +112,7 @@ const AllCarsGrid: React.FC<AllCarsGridProps> = ({
               : 'bg-red-600 hover:bg-red-700 text-white'
           }`}
         >
-          Try Again
+          {t('allCarsGrid.error.tryAgain')}
         </button>
       </div>
     );
@@ -122,12 +126,12 @@ const AllCarsGrid: React.FC<AllCarsGridProps> = ({
           <h1 className={`text-2xl md:text-3xl font-bold ${
             isDarkMode ? 'text-white' : 'text-gray-900'
           }`}>
-            {searchQuery ? `Search: "${searchQuery}"` : title}
+            {searchQuery ? `Search: "${searchQuery}"` : sectionTitle}
           </h1>
           <p className={`mt-1 ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
             {searchQuery 
-              ? `${totalCars} result${totalCars !== 1 ? 's' : ''} found`
-              : `${totalCars} car${totalCars !== 1 ? 's' : ''} available`
+              ? t('allCarsGrid.search.resultsFound', { count: totalCars })
+              : t('allCarsGrid.available.cars', { count: totalCars })
             }
           </p>
         </div>
@@ -142,7 +146,7 @@ const AllCarsGrid: React.FC<AllCarsGridProps> = ({
                   : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
               }`}
             >
-              Clear Search
+              {t('allCarsGrid.search.clear')}
             </button>
           )}
           
@@ -152,7 +156,10 @@ const AllCarsGrid: React.FC<AllCarsGridProps> = ({
                 ? 'bg-gray-800 text-gray-300'
                 : 'bg-gray-100 text-gray-700'
             }`}>
-              Page {currentPage} of {totalPages}
+              {t('allCarsGrid.search.page', {
+                current: currentPage,
+                total: totalPages
+              })}
             </div>
           )}
         </div>
@@ -171,7 +178,11 @@ const AllCarsGrid: React.FC<AllCarsGridProps> = ({
           {totalPages > 1 && (
             <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-6 border-t border-gray-200 dark:border-gray-700">
               <div className={`text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
-                Showing {startIndex + 1} - {Math.min(endIndex, totalCars)} of {totalCars}
+                {t('allCarsGrid.pagination.showing', {
+                  start: startIndex + 1,
+                  end: Math.min(endIndex, totalCars),
+                  total: totalCars
+                })}
               </div>
               
               <div className="flex items-center gap-2">
@@ -188,7 +199,7 @@ const AllCarsGrid: React.FC<AllCarsGridProps> = ({
                       : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
                   }`}
                 >
-                  ← Previous
+                  {t('allCarsGrid.pagination.previous')}
                 </button>
                 
                 <div className="flex items-center gap-1">
@@ -237,7 +248,7 @@ const AllCarsGrid: React.FC<AllCarsGridProps> = ({
                       : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
                   }`}
                 >
-                  Next →
+                  {t('allCarsGrid.pagination.next')}
                 </button>
               </div>
             </div>
@@ -255,12 +266,15 @@ const AllCarsGrid: React.FC<AllCarsGridProps> = ({
           <h3 className={`text-xl font-semibold mb-2 ${
             isDarkMode ? 'text-gray-300' : 'text-gray-700'
           }`}>
-            {searchQuery ? 'No matching cars found' : 'No cars available'}
+            {searchQuery 
+              ? t('allCarsGrid.empty.titleSearch')
+              : t('allCarsGrid.empty.title')
+            }
           </h3>
           <p className={isDarkMode ? 'text-gray-500' : 'text-gray-600'}>
             {searchQuery 
-              ? `No results found for "${searchQuery}"`
-              : 'Try adjusting your filters or check back later'
+              ? t('allCarsGrid.empty.messageSearch', { query: searchQuery })
+              : t('allCarsGrid.empty.message')
             }
           </p>
           {searchQuery && (
@@ -272,7 +286,7 @@ const AllCarsGrid: React.FC<AllCarsGridProps> = ({
                   : 'bg-gray-200 hover:bg-gray-300 text-gray-700'
               }`}
             >
-              View All Cars
+              {t('allCarsGrid.empty.viewAll')}
             </button>
           )}
         </div>

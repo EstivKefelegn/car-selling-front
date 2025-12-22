@@ -1,10 +1,11 @@
-// components/Footer/Newsletter.tsx
 import React, { useState } from 'react';
 import { Send } from 'lucide-react';
 import apiClient from '../../services/api-client';
 import { useDarkModeStore } from '../../store/useDarkModeStore';
+import { useTranslation } from 'react-i18next'; 
 
 const Newsletter: React.FC = () => {
+  const { t } = useTranslation();
   const [email, setEmail] = useState<string>('');
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const [message, setMessage] = useState<string>('');
@@ -14,13 +15,13 @@ const Newsletter: React.FC = () => {
     e.preventDefault();
 
     if (!email.trim()) {
-      setMessage('Please enter your email address');
+      setMessage(t('newsletter.enter_email'));
       return;
     }
 
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
-      setMessage('Please enter a valid email address');
+      setMessage(t('newsletter.invalid_email'));
       return;
     }
 
@@ -33,15 +34,15 @@ const Newsletter: React.FC = () => {
       });
 
       if (response.data.success) {
-        setMessage(response.data.message || 'Successfully subscribed! You will receive new listing alerts.');
+        setMessage(response.data.message || t('newsletter.success_message'));
         setEmail('');
         setTimeout(() => setMessage(''), 3000);
       } else {
-        setMessage(response.data.errors?.email?.[0] || 'Subscription failed');
+        setMessage(response.data.errors?.email?.[0] || t('newsletter.error_message'));
       }
     } catch (error: any) {
       console.error('Subscription error:', error);
-      setMessage('Failed to subscribe. Please try again.');
+      setMessage(t('newsletter.failed_try_again'));
     } finally {
       setIsSubmitting(false);
     }
@@ -51,10 +52,9 @@ const Newsletter: React.FC = () => {
     <div className={`py-8 ${isDarkMode ? 'bg-gray-800/30' : 'bg-white'}`}>
       <div className="max-w-4xl mx-auto px-4">
         <h3 className={`text-xl md:text-2xl font-bold text-center mb-6 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
-          Be the first to know about new listings
+          {t('newsletter.title')}
         </h3>
 
-        {/* Responsive form */}
         <form
           onSubmit={handleSubmit}
           className="flex flex-col sm:flex-row gap-3 w-full max-w-lg mx-auto"
@@ -66,7 +66,7 @@ const Newsletter: React.FC = () => {
               setEmail(e.target.value);
               setMessage('');
             }}
-            placeholder="Your email address"
+            placeholder={t('newsletter.placeholder')}
             required
             disabled={isSubmitting}
             className={`w-full sm:flex-1 px-4 py-3 rounded-lg sm:rounded-l-lg focus:outline-none focus:ring-2 focus:ring-blue-500 ${
@@ -83,7 +83,7 @@ const Newsletter: React.FC = () => {
             } text-white ${isSubmitting ? 'opacity-70 cursor-not-allowed' : ''}`}
           >
             <Send size={18} />
-            <span>{isSubmitting ? 'Subscribing...' : 'Subscribe'}</span>
+            <span>{isSubmitting ? t('newsletter.subscribing') : t('newsletter.subscribe')}</span>
           </button>
         </form>
 
@@ -100,7 +100,7 @@ const Newsletter: React.FC = () => {
         )}
 
         <p className={`mt-4 text-xs text-center ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>
-          By subscribing, you agree to receive new listing alerts. You can unsubscribe at any time.
+          {t('newsletter.disclaimer')}
         </p>
       </div>
     </div>

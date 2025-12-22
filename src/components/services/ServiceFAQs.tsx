@@ -1,5 +1,5 @@
-// pages/services/ServiceFAQs.tsx
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 interface ServiceFAQ {
   id: number;
@@ -14,10 +14,8 @@ interface ServiceFAQsProps {
   isDarkMode: boolean;
 }
 
-const ServiceFAQs: React.FC<ServiceFAQsProps> = ({ 
-  faqs, 
-  isDarkMode 
-}) => {
+const ServiceFAQs: React.FC<ServiceFAQsProps> = ({ faqs, isDarkMode }) => {
+  const { t } = useTranslation();
   const [expandedId, setExpandedId] = useState<number | null>(null);
   const [activeCategory, setActiveCategory] = useState<string>('all');
 
@@ -27,10 +25,8 @@ const ServiceFAQs: React.FC<ServiceFAQsProps> = ({
     setExpandedId(expandedId === id ? null : id);
   };
 
-  // Get unique categories
   const categories = ['all', ...Array.from(new Set(faqs.map(faq => faq.category)))];
 
-  // Filter FAQs by category
   const filteredFaqs = activeCategory === 'all' 
     ? faqs 
     : faqs.filter(faq => faq.category === activeCategory);
@@ -41,7 +37,7 @@ const ServiceFAQs: React.FC<ServiceFAQsProps> = ({
         ? 'bg-gradient-to-br from-gray-800 to-gray-900 border border-gray-700' 
         : 'bg-gradient-to-br from-white to-gray-50 border border-gray-200'
     }`}>
-      <h2 className="text-2xl font-bold mb-6">Frequently Asked Questions</h2>
+      <h2 className="text-2xl font-bold mb-6">{t('SERVICE_FAQ')}</h2>
       
       {/* Category Filter */}
       <div className="flex flex-wrap gap-2 mb-6">
@@ -59,7 +55,7 @@ const ServiceFAQs: React.FC<ServiceFAQsProps> = ({
                 : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
             }`}
           >
-            {category === 'all' ? 'All' : category.replace('_', ' ')}
+            {category === 'all' ? t('ALL') : t(category.toUpperCase())}
           </button>
         ))}
       </div>
@@ -104,7 +100,7 @@ const ServiceFAQs: React.FC<ServiceFAQsProps> = ({
                   <span className={`text-xs px-2 py-1 rounded ${
                     isDarkMode ? 'bg-gray-700 text-gray-400' : 'bg-gray-200 text-gray-600'
                   }`}>
-                    {faq.category_display}
+                    {t(faq.category_display.toUpperCase())}
                   </span>
                 </div>
               </div>

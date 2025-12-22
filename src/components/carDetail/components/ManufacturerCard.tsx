@@ -2,6 +2,7 @@
 import { Link } from 'react-router-dom';
 import { buildImageUrl } from '../../../utils/imageUrlBuilder';
 import FindCarsButton from '../../../utils/FindCars';
+import { useTranslation } from 'react-i18next';
 
 /* ---------- Types ---------- */
 
@@ -29,6 +30,7 @@ const ManufacturerCard: React.FC<ManufacturerCardProps> = ({
   isDarkMode,
 }) => {
   const manufacturer = car.manufacturer_details;
+  const { t } = useTranslation();
 
   return (
     <div
@@ -64,7 +66,7 @@ const ManufacturerCard: React.FC<ManufacturerCardProps> = ({
               isDarkMode ? 'text-gray-400' : 'text-gray-600'
             }`}
           >
-            {manufacturer.country} • Founded {manufacturer.founded_year}
+            {manufacturer.country} • {t('manufacturerCard.founded')} {manufacturer.founded_year}
           </p>
 
           {manufacturer.is_ev_only && (
@@ -75,7 +77,7 @@ const ManufacturerCard: React.FC<ManufacturerCardProps> = ({
                   : 'bg-green-100 text-green-800'
               }`}
             >
-              EV-Only Manufacturer
+              {t('manufacturerCard.evOnly')}
             </span>
           )}
         </div>
@@ -101,10 +103,9 @@ const ManufacturerCard: React.FC<ManufacturerCardProps> = ({
         <Link to={manufacturer.website} target="_blank">
           <FindCarsButton
             isDark={isDarkMode}
-            text="Visit Manufacturer Website"
+            text={t('manufacturerCard.visitWebsite')}
             style='bg-gray-500'
           />
-          
         </Link>
 
         <button
@@ -121,7 +122,7 @@ const ManufacturerCard: React.FC<ManufacturerCardProps> = ({
               : 'bg-gray-200 hover:bg-gray-300 text-gray-700'
           }`}
         >
-          Contact Manufacturer
+          {t('manufacturerCard.contact')}
         </button>
       </div>
     </div>

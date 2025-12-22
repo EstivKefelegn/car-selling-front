@@ -4,6 +4,7 @@ import useNewCars from '../../hooks/cars/useNewCars';
 import NewCarsGrid from './NewCarsGrid';
 import LoadingSpinner from '../../utils/LoadingSpinner';
 import ErrorMessage from '../../utils/ErrorMessage';
+import { useTranslation } from 'react-i18next';
 
 interface NewCarsSectionProps {
   limit?: number;
@@ -12,11 +13,16 @@ interface NewCarsSectionProps {
 }
 
 const NewCarsSection: React.FC<NewCarsSectionProps> = ({ 
-  limit = 5,
-  title = "Newly Added Cars",
-  subtitle = "Latest arrivals in our EV collection"
+  limit = 10,
+  title,
+  subtitle
 }) => {
   const { newCars, isLoading, error, totalCount } = useNewCars(limit);
+  const { t } = useTranslation();
+
+  // Use provided title/subtitle or fallback to translations
+  const sectionTitle = title || t('newelyCommingCars.title');
+  const sectionSubtitle = subtitle || t('newelyCommingCars.subtitle');
 
   if (isLoading) {
     return (
@@ -29,9 +35,9 @@ const NewCarsSection: React.FC<NewCarsSectionProps> = ({
   if (error) {
     return (
       <ErrorMessage 
-        message="Failed to load new cars"
+        message={t('newelyCommingCars.error.message')}
         error={error}
-        retryText="Try Again"
+        retryText={t('newelyCommingCars.error.retry')}
         onRetry={() => window.location.reload()}
       />
     );
@@ -40,8 +46,8 @@ const NewCarsSection: React.FC<NewCarsSectionProps> = ({
   return (
     <NewCarsGrid
       cars={newCars}
-      title={title}
-      subtitle={subtitle}
+      title={sectionTitle}
+      subtitle={sectionSubtitle}
       limit={limit}
       showViewAll={totalCount > limit}
     />

@@ -5,6 +5,7 @@ import type { Car } from '../../hooks/cars/useEVCars';
 import { buildImageUrl } from '../../utils/imageUrlBuilder';
 import { formatPrice } from '../../utils/priceFormatter';
 import { useDarkModeStore } from '../../store/useDarkModeStore';
+import { useTranslation } from 'react-i18next';
 
 interface ShortCarCardProps {
   car: Car;
@@ -12,6 +13,7 @@ interface ShortCarCardProps {
 
 const ShortCarCard: React.FC<ShortCarCardProps> = ({ car }) => {
   const { isDarkMode } = useDarkModeStore();
+  const { t } = useTranslation();
 
   const handleImageError = (e: React.SyntheticEvent<HTMLImageElement>) => {
     const target = e.target as HTMLImageElement;
@@ -55,7 +57,7 @@ const ShortCarCard: React.FC<ShortCarCardProps> = ({ car }) => {
                 ? 'bg-blue-600 text-white'
                 : 'bg-blue-500 text-white'
             }`}>
-              NEW
+              {t('shortCarCard.new')}
             </span>
             
             {/* Category Badge */}
@@ -79,7 +81,7 @@ const ShortCarCard: React.FC<ShortCarCardProps> = ({ car }) => {
                 ? 'bg-red-700 text-red-100'
                 : 'bg-red-100 text-red-800'
             }`}>
-              {car.status === 'available' ? 'AVAIL' : 'SOLD'}
+              {car.status === 'available' ? t('shortCarCard.available') : t('shortCarCard.sold')}
             </span>
           </div>
         </div>
@@ -117,21 +119,27 @@ const ShortCarCard: React.FC<ShortCarCardProps> = ({ car }) => {
           {/* Quick Specs */}
           <div className="grid grid-cols-3 gap-1 text-center">
             <div className={`p-1 rounded ${isDarkMode ? 'bg-gray-700/50' : 'bg-blue-50'}`}>
-              <div className={`text-xs ${isDarkMode ? 'text-gray-400' : 'text-blue-600'}`}>Range</div>
+              <div className={`text-xs ${isDarkMode ? 'text-gray-400' : 'text-blue-600'}`}>
+                {t('shortCarCard.range')}
+              </div>
               <div className={`font-semibold text-xs ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
-                {car.range_wltp}km
+                {car.range_wltp}{t('shortCarCard.km')}
               </div>
             </div>
             
             <div className={`p-1 rounded ${isDarkMode ? 'bg-gray-700/50' : 'bg-purple-50'}`}>
-              <div className={`text-xs ${isDarkMode ? 'text-gray-400' : 'text-purple-600'}`}>0-100</div>
+              <div className={`text-xs ${isDarkMode ? 'text-gray-400' : 'text-purple-600'}`}>
+                {t('shortCarCard.acceleration')}
+              </div>
               <div className={`font-semibold text-xs ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
-                {car.acceleration_0_100}s
+                {car.acceleration_0_100}{t('shortCarCard.seconds')}
               </div>
             </div>
             
             <div className={`p-1 rounded ${isDarkMode ? 'bg-gray-700/50' : 'bg-green-50'}`}>
-              <div className={`text-xs ${isDarkMode ? 'text-gray-400' : 'text-green-600'}`}>Power</div>
+              <div className={`text-xs ${isDarkMode ? 'text-gray-400' : 'text-green-600'}`}>
+                {t('shortCarCard.power')}
+              </div>
               <div className={`font-semibold text-xs ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
                 {car.motor_power}HP
               </div>

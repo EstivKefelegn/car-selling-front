@@ -1,6 +1,7 @@
 import React from 'react';
 import { useDarkModeStore } from '../../../store/useDarkModeStore';
 import { formatPrice } from '../../../utils/priceFormatter';
+import { useTranslation } from 'react-i18next';
 
 interface CarHeaderProps {
   car: any;
@@ -8,6 +9,7 @@ interface CarHeaderProps {
 
 const CarHeader: React.FC<CarHeaderProps> = ({ car }) => {
   const { isDarkMode } = useDarkModeStore();
+  const { t } = useTranslation();
 
   return (
     <div className="flex justify-between flex-wrap gap-4">
@@ -26,7 +28,7 @@ const CarHeader: React.FC<CarHeaderProps> = ({ car }) => {
         </div>
         {car.tax_incentive && (
           <span className={`text-sm ${isDarkMode ? 'text-green-400' : 'text-green-600'}`}>
-            Tax Incentive Eligible
+            {t('carHeader.taxIncentive')}
           </span>
         )}
       </div>

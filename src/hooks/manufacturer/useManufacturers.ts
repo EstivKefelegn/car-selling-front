@@ -1,6 +1,8 @@
 import useData from "../data/useData";
 
 export interface Manufacturer {
+    highest_price: any;
+    average_price: any;
     id: number;
     name: string;
     country: string;
@@ -10,6 +12,10 @@ export interface Manufacturer {
     description: string;
     website: string;
     headquarters: string;
+    created_at: string;
+    featured?: boolean; // Add this
+    electric_cars?: number[]; // Add this
+    logo_url?: string; // Add this
 }
 
 export interface ManufacturerQuery {

@@ -4,6 +4,7 @@ import ColorTabs from './ColorTabs';
 import ColorGrid from './ColorGrid';
 import ThumbnailGallery from './ThumbnailGallery';
 import { type ColorImage } from '../../../../hooks/cars/useCarDetails';
+import { useTranslation } from 'react-i18next';
 
 interface Props {
   car: any;
@@ -37,6 +38,8 @@ const ImageGallery: React.FC<Props> = ({
   onInteriorColorChange,
   onTabChange,
 }) => {
+  const { t } = useTranslation();
+
   const getImages = (type: 'exterior' | 'interior'): ColorImage[] => {
     const selectedColor =
       type === 'exterior' ? selectedExteriorColor : selectedInteriorColor;

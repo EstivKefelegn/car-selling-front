@@ -5,6 +5,7 @@ import type { Car } from '../../hooks/cars/useEVCars';
 import { buildImageUrl } from '../../utils/imageUrlBuilder';
 import { formatPrice } from '../../utils/priceFormatter';
 import { useDarkModeStore } from '../../store/useDarkModeStore';
+import { useTranslation } from 'react-i18next';
 
 interface CompactCarCardProps {
   car: Car;
@@ -12,6 +13,9 @@ interface CompactCarCardProps {
 
 const CompactCarCard: React.FC<CompactCarCardProps> = ({ car }) => {
   const { isDarkMode } = useDarkModeStore();
+  const { t } = useTranslation()
+
+
 
   const handleImageError = (e: React.SyntheticEvent<HTMLImageElement>) => {
     const target = e.target as HTMLImageElement;
@@ -55,7 +59,7 @@ const CompactCarCard: React.FC<CompactCarCardProps> = ({ car }) => {
               ? 'bg-blue-600 text-white'
               : 'bg-blue-500 text-white'
           }`}>
-            NEW
+            {t('new')}
           </span>
         </div>
         
@@ -70,7 +74,8 @@ const CompactCarCard: React.FC<CompactCarCardProps> = ({ car }) => {
               ? 'bg-red-700 text-red-100'
               : 'bg-red-100 text-red-800'
           }`}>
-            {car.status === 'available' ? 'AVAILABLE' : 'SOLD'}
+            {car.status === 'available' ? t('available') : t('SOLD')}
+
           </span>
         </div>
       </div>
@@ -108,23 +113,23 @@ const CompactCarCard: React.FC<CompactCarCardProps> = ({ car }) => {
         {/* Quick Specs */}
         <div className="grid grid-cols-3 gap-1 text-center">
           <div className={`p-1 rounded ${isDarkMode ? 'bg-gray-700/50' : 'bg-blue-50'}`}>
-            <div className={`text-xs ${isDarkMode ? 'text-gray-400' : 'text-blue-600'}`}>Range</div>
+            <div className={`text-xs ${isDarkMode ? 'text-gray-400' : 'text-blue-600'}`}>{t('range')}</div>
             <div className={`font-semibold text-xs ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
               {car.range_wltp}km
             </div>
           </div>
           
           <div className={`p-1 rounded ${isDarkMode ? 'bg-gray-700/50' : 'bg-purple-50'}`}>
-            <div className={`text-xs ${isDarkMode ? 'text-gray-400' : 'text-purple-600'}`}>0-100</div>
+            <div className={`text-xs ${isDarkMode ? 'text-gray-400' : 'text-purple-600'}`}>{t('acceleration')}</div>
             <div className={`font-semibold text-xs ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
-              {car.acceleration_0_100}s
+              {car.acceleration_0_100} {t('s')}
             </div>
           </div>
           
           <div className={`p-1 rounded ${isDarkMode ? 'bg-gray-700/50' : 'bg-green-50'}`}>
-            <div className={`text-xs ${isDarkMode ? 'text-gray-400' : 'text-green-600'}`}>Power</div>
+            <div className={`text-xs ${isDarkMode ? 'text-gray-400' : 'text-green-600'}`}>{t('power')}</div>
             <div className={`font-semibold text-xs ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
-              {car.motor_power}HP
+              {car.motor_power} {t('HP')}
             </div>
           </div>
         </div>

@@ -1,5 +1,5 @@
-// pages/services/ServiceCenters.tsx
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 
 interface ServiceCenter {
   id: number;
@@ -19,12 +19,12 @@ interface ServiceCenter {
 interface ServiceCentersProps {
   centers: ServiceCenter[];
   isDarkMode: boolean;
+  onBookService: () => void;
 }
 
-const ServiceCenters: React.FC<ServiceCentersProps> = ({ 
-  centers, 
-  isDarkMode 
-}) => {
+const ServiceCenters: React.FC<ServiceCentersProps> = ({ centers, isDarkMode, onBookService }) => {
+  const { t } = useTranslation();
+
   if (!centers || centers.length === 0) return null;
 
   // Group centers by city
@@ -36,7 +36,7 @@ const ServiceCenters: React.FC<ServiceCentersProps> = ({
 
   return (
     <div>
-      <h2 className="text-3xl font-bold mb-8">Our Service Centers</h2>
+      <h2 className="text-3xl font-bold mb-8">{t('SERVICE_CENTERS')}</h2>
       
       <div className="space-y-8">
         {Object.entries(centersByCity).map(([city, cityCenters]) => (
@@ -60,7 +60,7 @@ const ServiceCenters: React.FC<ServiceCentersProps> = ({
                           ? 'bg-blue-900/30 text-blue-300' 
                           : 'bg-blue-100 text-blue-700'
                       }`}>
-                        Main Center
+                        {t('MAIN_CENTER')}
                       </span>
                     )}
                   </div>
@@ -86,7 +86,7 @@ const ServiceCenters: React.FC<ServiceCentersProps> = ({
 
                   {/* Facilities */}
                   <div className="mb-6">
-                    <h5 className="font-semibold mb-2">Facilities:</h5>
+                    <h5 className="font-semibold mb-2">{t('FACILITIES')}:</h5>
                     <div className="flex flex-wrap gap-2">
                       {center.has_ev_charging && (
                         <span className={`px-3 py-1 rounded-full text-sm ${
@@ -94,7 +94,7 @@ const ServiceCenters: React.FC<ServiceCentersProps> = ({
                             ? 'bg-green-900/30 text-green-300' 
                             : 'bg-green-100 text-green-700'
                         }`}>
-                          EV Charging
+                          {t('EV_CHARGING')}
                         </span>
                       )}
                       {center.has_waiting_lounge && (
@@ -103,7 +103,7 @@ const ServiceCenters: React.FC<ServiceCentersProps> = ({
                             ? 'bg-blue-900/30 text-blue-300' 
                             : 'bg-blue-100 text-blue-700'
                         }`}>
-                          Waiting Lounge
+                          {t('WAITING_LOUNGE')}
                         </span>
                       )}
                       {center.has_loaner_cars && (
@@ -112,7 +112,7 @@ const ServiceCenters: React.FC<ServiceCentersProps> = ({
                             ? 'bg-purple-900/30 text-purple-300' 
                             : 'bg-purple-100 text-purple-700'
                         }`}>
-                          Loaner Cars
+                          {t('LOANER_CARS')}
                         </span>
                       )}
                       {center.has_mobile_service && (
@@ -121,14 +121,14 @@ const ServiceCenters: React.FC<ServiceCentersProps> = ({
                             ? 'bg-orange-900/30 text-orange-300' 
                             : 'bg-orange-100 text-orange-700'
                         }`}>
-                          Mobile Service
+                          {t('MOBILE_SERVICE')}
                         </span>
                       )}
                     </div>
                   </div>
 
                   <button 
-                    onClick={() => console.log('Book appointment at:', center.id)}
+                    onClick={() => onBookService()}
                     className={`group relative w-full px-6 py-3 rounded-xl transition-all duration-300 overflow-hidden shadow-lg hover:shadow-xl ${
                       isDarkMode
                         ? 'bg-gradient-to-r from-gray-800 to-gray-900 text-white'
@@ -136,7 +136,7 @@ const ServiceCenters: React.FC<ServiceCentersProps> = ({
                     } hover:scale-105 font-semibold`}
                   >
                     <div className="relative z-10 flex items-center justify-center space-x-2">
-                      <span>Book Appointment</span>
+                      <span>{t('BOOK_APPOINTMENT')}</span>
                     </div>
 
                     <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent 

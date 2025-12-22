@@ -1,4 +1,3 @@
-// components/ServiceBookingModal.tsx - COMPLETE FIXED VERSION
 import React, { useState, useEffect } from 'react';
 import useServiceBookings, { 
   type ServiceBooking, 
@@ -6,6 +5,7 @@ import useServiceBookings, {
   SERVICE_TYPE_CHOICES 
 } from '../../../hooks/serviceBooking/useServiceBooking';
 import useEVCars, { type Car, type CarQuery } from '../../../hooks/cars/useEVCars'; 
+import { useTranslation } from 'react-i18next';
 
 interface ServiceBookingModalProps {
   isOpen: boolean;
@@ -26,6 +26,8 @@ const ServiceBookingModal: React.FC<ServiceBookingModalProps> = ({
     error, 
     clearError 
   } = useServiceBookings();
+  
+  const { t } = useTranslation();
   
   // Define car query to fetch all available cars
   const carQuery: CarQuery = {};
@@ -134,28 +136,22 @@ const ServiceBookingModal: React.FC<ServiceBookingModalProps> = ({
     setSubmitError('');
     
     // Final validation - CHECK ALL FIELDS
-    console.log('Validating form data:', formData);
-    console.log('selectedVehicleId:', selectedVehicleId);
-    console.log('selectedServiceType:', selectedServiceType);
-    console.log('preferred_date:', formData.preferred_date);
-    console.log('preferred_time_slot:', formData.preferred_time_slot);
-    
     const validationErrors = [];
     
-    if (!selectedVehicleId) validationErrors.push('Please select a vehicle');
-    if (!selectedServiceType) validationErrors.push('Please select a service type');
-    if (!formData.full_name?.trim()) validationErrors.push('Please enter full name');
-    if (!formData.email?.trim()) validationErrors.push('Please enter email');
-    if (!formData.phone?.trim()) validationErrors.push('Please enter phone');
-    if (!formData.preferred_date?.trim()) validationErrors.push('Please select a preferred date');
-    if (!formData.preferred_time_slot?.trim()) validationErrors.push('Please select a time slot');
+    if (!selectedVehicleId) validationErrors.push(t('serviceBookingModal.validation.selectVehicle'));
+    if (!selectedServiceType) validationErrors.push(t('serviceBookingModal.validation.selectServiceType'));
+    if (!formData.full_name?.trim()) validationErrors.push(t('serviceBookingModal.validation.fillContactInfo'));
+    if (!formData.email?.trim()) validationErrors.push(t('serviceBookingModal.validation.fillContactInfo'));
+    if (!formData.phone?.trim()) validationErrors.push(t('serviceBookingModal.validation.fillContactInfo'));
+    if (!formData.preferred_date?.trim()) validationErrors.push(t('serviceBookingModal.validation.selectDate'));
+    if (!formData.preferred_time_slot?.trim()) validationErrors.push(t('serviceBookingModal.validation.selectTime'));
     
     if (selectedServiceType?.value === '10000km_service' && !formData.odometer_reading) {
-      validationErrors.push('Please enter odometer reading for 10,000 KM Service');
+      validationErrors.push(t('serviceBookingModal.validation.odometerRequired'));
     }
     
     if (selectedServiceType?.value === 'neta_warranty' && !formData.service_description?.trim()) {
-      validationErrors.push('Please enter service description for NETA Warranty Service');
+      validationErrors.push(t('serviceBookingModal.validation.descriptionRequired'));
     }
     
     if (validationErrors.length > 0) {
@@ -178,13 +174,9 @@ const ServiceBookingModal: React.FC<ServiceBookingModalProps> = ({
       customer_notes: formData.customer_notes || '',
     };
     
-    console.log('Final booking data to submit:', bookingData);
-    console.log('Type of preferred_date:', typeof bookingData.preferred_date);
-    console.log('Type of preferred_time_slot:', typeof bookingData.preferred_time_slot);
-    
     try {
       await createServiceBooking(bookingData);
-      alert('Service booking created successfully!');
+      alert(t('serviceBookingModal.success.title'));
       onClose();
       resetForm();
     } catch (err: any) {
@@ -231,36 +223,36 @@ const ServiceBookingModal: React.FC<ServiceBookingModalProps> = ({
     setSubmitError('');
     
     if (step === 1 && !selectedVehicleId) {
-      setSubmitError('Please select a vehicle');
+      setSubmitError(t('serviceBookingModal.validation.selectVehicle'));
       return;
     }
     
     if (step === 2 && !selectedServiceType) {
-      setSubmitError('Please select a service type');
+      setSubmitError(t('serviceBookingModal.validation.selectServiceType'));
       return;
     }
     
     if (step === 3 && (!formData.full_name?.trim() || !formData.email?.trim() || !formData.phone?.trim())) {
-      setSubmitError('Please fill in all contact information');
+      setSubmitError(t('serviceBookingModal.validation.fillContactInfo'));
       return;
     }
     
     if (step === 4) {
       // Additional validation for step 4
       if (!formData.preferred_date?.trim()) {
-        setSubmitError('Please select a preferred date');
+        setSubmitError(t('serviceBookingModal.validation.selectDate'));
         return;
       }
       if (!formData.preferred_time_slot?.trim()) {
-        setSubmitError('Please select a time slot');
+        setSubmitError(t('serviceBookingModal.validation.selectTime'));
         return;
       }
       if (selectedServiceType?.value === '10000km_service' && !formData.odometer_reading) {
-        setSubmitError('Please enter odometer reading for 10,000 KM Service');
+        setSubmitError(t('serviceBookingModal.validation.odometerRequired'));
         return;
       }
       if (selectedServiceType?.value === 'neta_warranty' && !formData.service_description?.trim()) {
-        setSubmitError('Please enter service description for NETA Warranty Service');
+        setSubmitError(t('serviceBookingModal.validation.descriptionRequired'));
         return;
       }
     }
@@ -301,7 +293,7 @@ const ServiceBookingModal: React.FC<ServiceBookingModalProps> = ({
             isDarkMode ? 'border-gray-700/50' : 'border-gray-200/50'
           }`}>
             <h3 className="text-2xl font-bold">
-              Book Service Appointment
+              {t('serviceBookingModal.title')}
             </h3>
             <button
               onClick={onClose}
@@ -338,10 +330,7 @@ const ServiceBookingModal: React.FC<ServiceBookingModalProps> = ({
                       ? 'text-gray-400'
                       : 'text-gray-500'
                   }`}>
-                    {stepNumber === 1 && 'Vehicle'}
-                    {stepNumber === 2 && 'Service Type'}
-                    {stepNumber === 3 && 'Contact Info'}
-                    {stepNumber === 4 && 'Details'}
+                    {t(`serviceBookingModal.steps.${stepNumber === 1 ? 'vehicle' : stepNumber === 2 ? 'serviceType' : stepNumber === 3 ? 'contactInfo' : 'details'}`)}
                   </span>
                 </div>
               ))}
@@ -363,22 +352,22 @@ const ServiceBookingModal: React.FC<ServiceBookingModalProps> = ({
               {/* Step 1: Vehicle Selection */}
               {step === 1 && (
                 <div>
-                  <h4 className="text-lg font-medium mb-4">Select Your Vehicle</h4>
+                  <h4 className="text-lg font-medium mb-4">{t('serviceBookingModal.step1.title')}</h4>
                   <div className="space-y-4">
                     <div>
-                      <label className="block text-sm font-medium mb-2">Vehicle *</label>
+                      <label className="block text-sm font-medium mb-2">{t('serviceBookingModal.step1.vehicleLabel')}</label>
                       {loadingCars ? (
                         <div className="text-center py-8">
                           <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
-                          <p className="mt-2 text-gray-500">Loading vehicles...</p>
+                          <p className="mt-2 text-gray-500">{t('serviceBookingModal.step1.loadingVehicles')}</p>
                         </div>
                       ) : carsError ? (
                         <div className="p-4 rounded-xl bg-red-100/80 dark:bg-red-900/30 text-red-700 dark:text-red-300">
-                          <p>Error loading vehicles. Please try again.</p>
+                          <p>{t('serviceBookingModal.step1.errorLoading')}</p>
                         </div>
                       ) : electricCars.length === 0 ? (
                         <div className="p-4 rounded-xl bg-yellow-100/80 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-300">
-                          <p>No vehicles available. Please contact support.</p>
+                          <p>{t('serviceBookingModal.step1.noVehicles')}</p>
                         </div>
                       ) : (
                         <>
@@ -393,7 +382,7 @@ const ServiceBookingModal: React.FC<ServiceBookingModalProps> = ({
                                 : 'bg-white/80 border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20'
                             }`}
                           >
-                            <option value="">Select a vehicle</option>
+                            <option value="">{t('serviceBookingModal.step1.selectVehicle')}</option>
                             {electricCars.map((car) => (
                               <option key={car.id} value={car.id}>
                                 {getCarDisplayName(car)}
@@ -401,7 +390,7 @@ const ServiceBookingModal: React.FC<ServiceBookingModalProps> = ({
                             ))}
                           </select>
                           <p className={`text-sm mt-2 ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
-                            Select the vehicle that needs service
+                            {t('serviceBookingModal.step1.vehicleHelp')}
                           </p>
                         </>
                       )}
@@ -410,10 +399,11 @@ const ServiceBookingModal: React.FC<ServiceBookingModalProps> = ({
                     <div className={`p-4 rounded-xl ${
                       isDarkMode ? 'bg-gray-800/30 border border-gray-700/50' : 'bg-gray-50 border border-gray-300/50'
                     }`}>
-                      <h5 className="font-medium mb-2">Need to add a new vehicle?</h5>
+                      <h5 className="font-medium mb-2">{t('serviceBookingModal.step1.addVehicleTitle')}</h5>
                       <p className={`text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
-                        If your vehicle is not listed, please call our service center at 
-                        <span className="font-semibold ml-1">1-800-NETA-SERVICE</span> to register it first.
+                        {t('serviceBookingModal.step1.addVehicleText')}
+                        <span className="font-semibold ml-1">{t('serviceBookingModal.step1.servicePhone')}</span>
+                        <span className="ml-1">{t('serviceBookingModal.step1.toRegister')}</span>
                       </p>
                     </div>
                   </div>
@@ -423,7 +413,7 @@ const ServiceBookingModal: React.FC<ServiceBookingModalProps> = ({
               {/* Step 2: Service Type Selection */}
               {step === 2 && (
                 <div>
-                  <h4 className="text-lg font-medium mb-4">Select Service Type</h4>
+                  <h4 className="text-lg font-medium mb-4">{t('serviceBookingModal.step2.title')}</h4>
                   <div className="grid grid-cols-1 gap-4">
                     {serviceTypes.map((serviceType) => (
                       <button
@@ -443,12 +433,12 @@ const ServiceBookingModal: React.FC<ServiceBookingModalProps> = ({
                             <div className="font-bold text-lg mb-1">{serviceType.label}</div>
                             {serviceType.value === '10000km_service' && (
                               <p className={`text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
-                                Regular maintenance service at 10,000 km interval
+                                {t('serviceBookingModal.step2.regularService')}
                               </p>
                             )}
                             {serviceType.value === 'neta_warranty' && (
                               <p className={`text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
-                                Comprehensive warranty coverage service
+                                {t('serviceBookingModal.step2.warrantyService')}
                               </p>
                             )}
                           </div>
@@ -475,10 +465,10 @@ const ServiceBookingModal: React.FC<ServiceBookingModalProps> = ({
               {/* Step 3: Contact Information */}
               {step === 3 && (
                 <div>
-                  <h4 className="text-lg font-medium mb-4">Contact Information</h4>
+                  <h4 className="text-lg font-medium mb-4">{t('serviceBookingModal.step3.title')}</h4>
                   <div className="space-y-4">
                     <div>
-                      <label className="block text-sm font-medium mb-2">Full Name *</label>
+                      <label className="block text-sm font-medium mb-2">{t('serviceBookingModal.step3.fullName')}</label>
                       <input
                         type="text"
                         name="full_name"
@@ -494,7 +484,7 @@ const ServiceBookingModal: React.FC<ServiceBookingModalProps> = ({
                     </div>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div>
-                        <label className="block text-sm font-medium mb-2">Email *</label>
+                        <label className="block text-sm font-medium mb-2">{t('serviceBookingModal.step3.email')}</label>
                         <input
                           type="email"
                           name="email"
@@ -509,7 +499,7 @@ const ServiceBookingModal: React.FC<ServiceBookingModalProps> = ({
                         />
                       </div>
                       <div>
-                        <label className="block text-sm font-medium mb-2">Phone *</label>
+                        <label className="block text-sm font-medium mb-2">{t('serviceBookingModal.step3.phone')}</label>
                         <input
                           type="tel"
                           name="phone"
@@ -538,7 +528,7 @@ const ServiceBookingModal: React.FC<ServiceBookingModalProps> = ({
                       <div>
                         <h4 className="font-bold text-lg mb-1">{selectedServiceType.label}</h4>
                         <p className={`text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
-                          Please provide additional information for your service
+                          {t('serviceBookingModal.step4.additionalInfo')}
                         </p>
                       </div>
                       <span className={`px-3 py-1 rounded-full text-sm font-medium ${
@@ -546,17 +536,19 @@ const ServiceBookingModal: React.FC<ServiceBookingModalProps> = ({
                           ? 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300'
                           : 'bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-300'
                       }`}>
-                        {selectedServiceType.value === '10000km_service' ? 'KM Service' : 'Warranty'}
+                        {selectedServiceType.value === '10000km_service' 
+                          ? t('serviceBookingModal.step4.kmService')
+                          : t('serviceBookingModal.step4.warranty')}
                       </span>
                     </div>
                   </div>
                   
-                  <h4 className="text-lg font-medium mb-4">Additional Information</h4>
+                  <h4 className="text-lg font-medium mb-4">{t('serviceBookingModal.step4.title')}</h4>
                   
                   {/* Conditional Fields */}
                   {selectedServiceType.value === '10000km_service' && (
                     <div className="mb-6">
-                      <label className="block text-sm font-medium mb-2">Odometer Reading (KM) *</label>
+                      <label className="block text-sm font-medium mb-2">{t('serviceBookingModal.step4.odometerReading')}</label>
                       <input
                         type="number"
                         name="odometer_reading"
@@ -564,7 +556,7 @@ const ServiceBookingModal: React.FC<ServiceBookingModalProps> = ({
                         onChange={handleInputChange}
                         required
                         min="0"
-                        placeholder="Enter current odometer reading"
+                        placeholder={t('serviceBookingModal.step4.odometerPlaceholder')}
                         className={`w-full px-4 py-3 rounded-xl border backdrop-blur-sm ${
                           isDarkMode
                             ? 'bg-gray-800/50 border-gray-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/30'
@@ -576,14 +568,14 @@ const ServiceBookingModal: React.FC<ServiceBookingModalProps> = ({
 
                   {selectedServiceType.value === 'neta_warranty' && (
                     <div className="mb-6">
-                      <label className="block text-sm font-medium mb-2">Service Description *</label>
+                      <label className="block text-sm font-medium mb-2">{t('serviceBookingModal.step4.serviceDescription')}</label>
                       <textarea
                         name="service_description"
                         value={formData.service_description}
                         onChange={handleInputChange}
                         required
                         rows={3}
-                        placeholder="Please describe the warranty service needed..."
+                        placeholder={t('serviceBookingModal.step4.descriptionPlaceholder')}
                         className={`w-full px-4 py-3 rounded-xl border backdrop-blur-sm ${
                           isDarkMode
                             ? 'bg-gray-800/50 border-gray-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/30'
@@ -596,13 +588,13 @@ const ServiceBookingModal: React.FC<ServiceBookingModalProps> = ({
                   {/* Common Fields - REQUIRED */}
                   <div className="space-y-6">
                     <div>
-                      <label className="block text-sm font-medium mb-2">Symptoms/Problems (Optional)</label>
+                      <label className="block text-sm font-medium mb-2">{t('serviceBookingModal.step4.symptoms')}</label>
                       <textarea
                         name="symptoms_problems"
                         value={formData.symptoms_problems}
                         onChange={handleInputChange}
                         rows={2}
-                        placeholder="Describe any symptoms or problems you're experiencing..."
+                        placeholder={t('serviceBookingModal.step4.symptomsPlaceholder')}
                         className={`w-full px-4 py-3 rounded-xl border backdrop-blur-sm ${
                           isDarkMode
                             ? 'bg-gray-800/50 border-gray-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/30'
@@ -613,7 +605,7 @@ const ServiceBookingModal: React.FC<ServiceBookingModalProps> = ({
                     
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                       <div>
-                        <label className="block text-sm font-medium mb-2">Preferred Date *</label>
+                        <label className="block text-sm font-medium mb-2">{t('serviceBookingModal.step4.preferredDate')}</label>
                         <input
                           type="date"
                           name="preferred_date"
@@ -628,12 +620,12 @@ const ServiceBookingModal: React.FC<ServiceBookingModalProps> = ({
                           }`}
                         />
                         <p className={`text-xs mt-2 ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
-                          Please select your preferred service date
+                          {t('serviceBookingModal.step4.dateHelp')}
                         </p>
                       </div>
                       
                       <div>
-                        <label className="block text-sm font-medium mb-2">Time Slot *</label>
+                        <label className="block text-sm font-medium mb-2">{t('serviceBookingModal.step4.timeSlot')}</label>
                         <select
                           name="preferred_time_slot"
                           value={formData.preferred_time_slot || '09:00'}
@@ -645,24 +637,24 @@ const ServiceBookingModal: React.FC<ServiceBookingModalProps> = ({
                               : 'bg-white/80 border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20'
                           }`}
                         >
-                          <option value="09:00">Morning (9:00 AM)</option>
-                          <option value="13:00">Afternoon (1:00 PM)</option>
-                          <option value="16:00">Evening (4:00 PM)</option>
+                          <option value="09:00">{t('serviceBookingModal.step4.morning')}</option>
+                          <option value="13:00">{t('serviceBookingModal.step4.afternoon')}</option>
+                          <option value="16:00">{t('serviceBookingModal.step4.evening')}</option>
                         </select>
                         <p className={`text-xs mt-2 ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
-                          Please select your preferred time slot
+                          {t('serviceBookingModal.step4.timeHelp')}
                         </p>
                       </div>
                     </div>
 
                     <div>
-                      <label className="block text-sm font-medium mb-2">Customer Notes (Optional)</label>
+                      <label className="block text-sm font-medium mb-2">{t('serviceBookingModal.step4.customerNotes')}</label>
                       <textarea
                         name="customer_notes"
                         value={formData.customer_notes}
                         onChange={handleInputChange}
                         rows={2}
-                        placeholder="Any additional notes or special requests..."
+                        placeholder={t('serviceBookingModal.step4.notesPlaceholder')}
                         className={`w-full px-4 py-3 rounded-xl border backdrop-blur-sm ${
                           isDarkMode
                             ? 'bg-gray-800/50 border-gray-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/30'
@@ -702,7 +694,7 @@ const ServiceBookingModal: React.FC<ServiceBookingModalProps> = ({
                     : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100/80'
                 }`}
               >
-                {step > 1 ? 'Back' : 'Cancel'}
+                {step > 1 ? t('serviceBookingModal.buttons.back') : t('serviceBookingModal.buttons.cancel')}
               </button>
               
               <div className="flex gap-4">
@@ -716,7 +708,7 @@ const ServiceBookingModal: React.FC<ServiceBookingModalProps> = ({
                     }
                     className="px-8 py-3 bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-xl font-medium hover:from-blue-700 hover:to-blue-800 transition-all duration-300 hover:scale-105 shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
                   >
-                    Next
+                    {t('serviceBookingModal.buttons.next')}
                   </button>
                 ) : (
                   <button
@@ -730,9 +722,9 @@ const ServiceBookingModal: React.FC<ServiceBookingModalProps> = ({
                           <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                           <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                         </svg>
-                        Submitting...
+                        {t('serviceBookingModal.buttons.submitting')}
                       </span>
-                    ) : 'Book Service'}
+                    ) : t('serviceBookingModal.buttons.bookService')}
                   </button>
                 )}
               </div>

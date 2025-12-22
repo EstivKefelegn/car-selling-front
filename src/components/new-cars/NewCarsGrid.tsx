@@ -1,10 +1,10 @@
-// components/new-cars/NewCarsGrid.tsx
 import React from 'react';
 import type { Car } from '../../hooks/cars/useEVCars';
 import CompactCarCard from './CompactCarCard';
 import { useDarkModeStore } from '../../store/useDarkModeStore';
 import { Link } from 'react-router-dom';
 import FindCarsButton from '../../utils/FindCars';
+import { useTranslation } from 'react-i18next';
 
 interface NewCarsGridProps {
   cars: Car[];
@@ -16,13 +16,14 @@ interface NewCarsGridProps {
 
 const NewCarsGrid: React.FC<NewCarsGridProps> = ({
   cars,
-  title = "Newly Added Cars",
-  subtitle = "Latest arrivals in our EV collection",
+  title: titleKey = 'new_cars.title',
+  subtitle: subtitleKey = 'new_cars.subtitle',
   limit,
   showViewAll = true,
 }) => {
   const { isDarkMode } = useDarkModeStore();
-  
+  const { t } = useTranslation();
+
   // Apply limit if specified
   const displayCars = limit ? cars.slice(0, limit) : cars;
 
@@ -34,10 +35,10 @@ const NewCarsGrid: React.FC<NewCarsGridProps> = ({
         <h3 className={`text-xl font-semibold mb-2 ${
           isDarkMode ? 'text-gray-300' : 'text-gray-700'
         }`}>
-          No new cars available
+          {t('new_cars.no_new_cars')}
         </h3>
         <p className={isDarkMode ? 'text-gray-500' : 'text-gray-600'}>
-          Check back soon for new arrivals!
+          {t('new_cars.check_back_soon')}
         </p>
       </div>
     );
@@ -51,29 +52,18 @@ const NewCarsGrid: React.FC<NewCarsGridProps> = ({
           <h2 className={`text-2xl font-bold ${
             isDarkMode ? 'text-white' : 'text-gray-900'
           }`}>
-            {title}
+            {t(titleKey)}
           </h2>
-          {subtitle && (
+          {subtitleKey && (
             <p className={isDarkMode ? 'text-gray-400' : 'text-gray-600'}>
-              {subtitle}
+              {t(subtitleKey)}
             </p>
           )}
         </div>
-        
+
         {showViewAll && (
-          <Link
-            to="/cars"
-            // className={`inline-flex items-center gap-2 px-4 py-2.5 rounded-lg font-medium transition-colors ${
-            //   isDarkMode
-            //     ? 'bg-blue-600 hover:bg-blue-700 text-white'
-            //     : 'bg-blue-500 hover:bg-blue-600 text-white'
-            // }`}
-          >
-            <FindCarsButton isDark={isDarkMode} text='View All New Cars' style='mx-6'/>
-            {/* View All New Cars */}
-            {/* <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
-            </svg> */}
+          <Link to="/cars">
+            <FindCarsButton isDark={isDarkMode} text={t('new_cars.view_all')} style='mx-6'/>
           </Link>
         )}
       </div>
@@ -90,7 +80,7 @@ const NewCarsGrid: React.FC<NewCarsGridProps> = ({
         isDarkMode ? 'border-gray-700' : 'border-gray-200'
       }`}>
         <p className={`text-sm ${isDarkMode ? 'text-gray-500' : 'text-gray-600'}`}>
-          Showing {displayCars.length} of {cars.length} new cars
+          {t('new_cars.showing_count', { displayed: displayCars.length, total: cars.length })}
         </p>
       </div>
     </div>
