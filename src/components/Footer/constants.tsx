@@ -23,18 +23,18 @@ export const LINK_SECTIONS = [
     title: 'Company',
     links: [
       { label: 'About Us', href: '/about' },
-      { label: 'Contact Us', href: '/contact' },
-      { label: 'Careers', href: '/careers' },
-      { label: 'Blog', href: '/blog' },
+      { label: 'Contact Us', href: '/about' },
+      // { label: 'Careers', href: '/careers' },
+      { label: 'Blog', href: '/events' },
     ]
   },
   {
     title: 'Support',
     links: [
       { label: 'Help Center', href: '/help' },
-      { label: 'FAQ', href: '/faq' },
-      { label: 'Privacy', href: '/privacy' },
-      { label: 'Terms', href: '/terms' },
+      { label: 'FAQ', href: '/services' },
+      // { label: 'Privacy', href: '/privacy' },
+      { label: 'Terms', href: '/about' },
     ]
   }
 ];

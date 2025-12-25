@@ -1,7 +1,7 @@
-import axios from "axios"
+import axios from "axios";
+
+const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
 export default axios.create({
-    // baseURL: "http://localhost:8000"
-    // baseURL: "http://10.220.234.55:8000"
-    baseURL: "https://cars-etiopikar.onrender.com"
-})
+  baseURL: backendUrl
+});
