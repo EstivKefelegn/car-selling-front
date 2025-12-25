@@ -12,7 +12,6 @@ import { useFilterInfo } from './hooks/useFilterInfo';
 import apiClient from '../../services/api-client';
 import { useTranslation } from 'react-i18next';
 
-// const API_BASE_URL = 'http://localhost:8000';
 const API_BASE_URL = apiClient.defaults.baseURL || '';
 const CARS_PER_PAGE = 6;
 

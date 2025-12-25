@@ -34,8 +34,18 @@ const FinancePage: React.FC = () => {
   }
 
   // Error state
-  if (error || !page) {
-    return <ErrorState error={error || 'Finance page not found'} onRetry={refresh} />;
+  if (error) {
+    return <ErrorState error={error} onRetry={refresh} />;
+  }
+
+  if (!page) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <p className="text-gray-500 text-lg">
+          Finance information is coming soon.
+        </p>
+      </div>
+    );
   }
 
   return (
