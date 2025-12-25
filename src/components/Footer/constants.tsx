@@ -24,8 +24,8 @@ export const LINK_SECTIONS = [
     links: [
       { label: 'About Us', href: '/about' },
       { label: 'Contact Us', href: '/about' },
-      // { label: 'Careers', href: '/careers' },
       { label: 'Blog', href: '/events' },
+      // { label: 'Careers', href: '/careers' },
     ]
   },
   {
