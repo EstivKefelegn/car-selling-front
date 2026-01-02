@@ -31,8 +31,8 @@ export const LINK_SECTIONS = [
   {
     title: 'Support',
     links: [
-      { label: 'Help Center', href: '/help' },
-      { label: 'FAQ', href: '/services' },
+      { label: 'Help Center', href: '/about' },
+      { label: 'FAQ', href: '/service' },
       // { label: 'Privacy', href: '/privacy' },
       { label: 'Terms', href: '/about' },
     ]
@@ -40,7 +40,7 @@ export const LINK_SECTIONS = [
 ];
 
 export const CONTACT_INFO = [
-  { icon: <Phone size={16} />, text: '+251 911 234 567' },
-  { icon: <Mail size={16} />, text: 'info@etiopikar.com' },
+  { icon: <Phone size={16} />, text: '+251 913 22 85 75' },
+  { icon: <Mail size={16} />, text: 'Etiopikar@gmail.com' },
   { icon: <MapPin size={16} />, text: 'Addis Ababa, Ethiopia' },
 ];
