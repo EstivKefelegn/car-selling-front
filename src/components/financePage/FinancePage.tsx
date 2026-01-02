@@ -1,5 +1,5 @@
 // pages/FinancePage.tsx
-import React, { useState } from 'react';
+import React from 'react';
 import useFinance from '../../hooks/finance/useFinance';
 import { useDarkModeStore } from '../../store/useDarkModeStore';
 import LoadingState from './Sections/LoadingState';
@@ -10,23 +10,23 @@ import MainContentLayout from './Sections/MainContentLayout';
 import AdditionalCalculators from './Sections/AdditionalCalculators';
 import TestimonialSection from './Sections/TestimonialSection';
 import CallToActionSection from './Sections/CallToActionSection';
-import { calculateMonthlyPayment } from '../../utils/Calculations';
+// import { calculateMonthlyPayment } from '../../utils/Calculations';
 
 const FinancePage: React.FC = () => {
   const { isDarkMode } = useDarkModeStore();
-  const [loanAmount, setLoanAmount] = useState<number>(30000);
-  const [downPayment, setDownPayment] = useState<number>(5000);
-  const [interestRate, setInterestRate] = useState<number>(5.99);
-  const [termMonths, setTermMonths] = useState<number>(60);
+  // const [loanAmount, setLoanAmount] = useState<number>(30000);
+  // const [downPayment, setDownPayment] = useState<number>(5000);
+  // const [interestRate, setInterestRate] = useState<number>(5.99);
+  // const [termMonths, setTermMonths] = useState<number>(60);
 
   // Use the custom finance hook
   const { financeData, loading, error, refresh } = useFinance();
 
-  const { page, offers, faqs, partners, documents, calculators } = financeData;
+  const { page, faqs, partners, documents, calculators } = financeData;
 
-  const monthlyPayment = calculateMonthlyPayment(loanAmount, downPayment, interestRate, termMonths);
-  const totalInterest = (monthlyPayment * termMonths) - (loanAmount - downPayment);
-  const totalCost = monthlyPayment * termMonths + downPayment;
+  // const monthlyPayment = calculateMonthlyPayment(loanAmount, downPayment, interestRate, termMonths);
+  // const totalInterest = (monthlyPayment * termMonths) - (loanAmount - downPayment);
+  // const totalCost = monthlyPayment * termMonths + downPayment;
 
   // Loading state
   if (loading) {

@@ -1,6 +1,6 @@
 // components/finance/FinanceCalculator.tsx - Update the apply button
 import React from 'react';
-import Slider from 'rc-slider';
+// import Slider from 'rc-slider';
 import 'rc-slider/assets/index.css';
 
 interface FinanceCalculatorProps {
@@ -21,17 +21,6 @@ interface FinanceCalculatorProps {
 
 const FinanceCalculator: React.FC<FinanceCalculatorProps> = ({
   isDarkMode,
-  loanAmount,
-  setLoanAmount,
-  downPayment,
-  setDownPayment,
-  interestRate,
-  setInterestRate,
-  termMonths,
-  setTermMonths,
-  monthlyPayment,
-  totalInterest,
-  totalCost,
   onApplyClick
 }) => {
   // ... rest of the component code

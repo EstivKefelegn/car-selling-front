@@ -1,5 +1,5 @@
 import React from 'react';
-import { formatPrice } from '../utils/helpers';
+// import { formatPrice } from '../utils/helpers';
 
 interface EmptyStateProps {
   activeFilterCount: number;
@@ -14,7 +14,7 @@ const EmptyState: React.FC<EmptyStateProps> = ({
   filters,
   isDarkMode,
   priceFilterText,
-  featuredCars
+  // featuredCars
 }) => {
   const isPriceFilterActive = filters.minPrice !== undefined || filters.maxPrice !== undefined;
 

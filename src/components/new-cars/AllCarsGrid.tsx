@@ -15,7 +15,7 @@ interface AllCarsGridProps {
 
 const AllCarsGrid: React.FC<AllCarsGridProps> = ({
   initialFilters = {},
-  showFilters = false,
+  // showFilters = false,
   title = 'All Electric Cars',
   itemsPerPage = 20,
 }) => {

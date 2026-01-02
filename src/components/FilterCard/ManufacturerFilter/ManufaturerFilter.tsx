@@ -13,7 +13,8 @@ const ManufacturerFilter: React.FC<ManufacturerFilterProps> = ({
   onFilterChange,
   isDarkMode
 }) => {
-  const [searchTerm, setSearchTerm] = useState('');
+  // const [searchTerm, setSearchTerm] = useState('');
+  const [searchTerm] = useState('');
   const { data: manufacturers, loading: manufacturersLoading } = useManufacturer({
     name: searchTerm,
   });

@@ -23,6 +23,7 @@ endpoint: string, requestConfig?: AxiosRequestConfig, deps?: any[], p0?: { onErr
       .catch((err) => {
         if (err instanceof CanceledError) return;
         setError(err?.message ?? 'Something went wrong');
+        p0?.onError?.(err);
         setLoading(false);
       });
 

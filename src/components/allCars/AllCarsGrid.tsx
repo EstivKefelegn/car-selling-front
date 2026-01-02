@@ -18,7 +18,7 @@ const AllCarsGrid: React.FC<AllCarsGridProps> = ({
   initialFilters = {},
   title,
   itemsPerPage = 20,
-  showSearchHeader = false,
+  // showSearchHeader = false,
 }) => {
   const { isDarkMode } = useDarkModeStore();
   const location = useLocation();

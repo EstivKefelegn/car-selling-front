@@ -9,8 +9,6 @@ import NewCarsSection from "./components/new-cars/NewCarsSection";
 import AllCarsPage from "./components/allCars/AllCarsPage";
 import CarDetailPage from "./components/carDetail/CarDetailPage";
 import LatestEventPage from "./components/events/LatestEventPage";
-import NewsPage from "./components/news/NewsPage";
-import NewsDetailPage from "./components/news/NewsDetailPage";
 import FinancePage from "./components/financePage/FinancePage";
 import ServicesPage from "./components/services/ServicePage";
 

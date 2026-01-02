@@ -1,6 +1,6 @@
 // hooks/useCarDetails.ts
 import { useMemo } from "react";
-import useData from "../data/useData";
+// import useData from "../data/useData";
 import useSingleData from "../data/useSingleData";
 
 export interface CarDetail {

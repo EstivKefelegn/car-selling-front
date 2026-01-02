@@ -1,7 +1,7 @@
 // pages/AllCarsPage.tsx
 import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
-import StandaloneFilter from '../FilterCard/StandaloneFilter';
+// import StandaloneFilter from '../FilterCard/StandaloneFilter';
 import AllCarsGrid from './AllCarsGrid'; // Make sure this imports your AllCarsGrid component
 import type { CarFilter } from '../../services/filters';
 import { useDarkModeStore } from '../../store/useDarkModeStore';
@@ -26,9 +26,9 @@ const AllCarsPage: React.FC = () => {
     }
   }, [location.search]);
 
-  const handleFilterChange = (newFilters: CarFilter) => {
-    setFilters(newFilters);
-  };
+  // const handleFilterChange = (newFilters: CarFilter) => {
+  //   setFilters(newFilters);
+  // };
 
   return (
     <div className="min-h-screen">

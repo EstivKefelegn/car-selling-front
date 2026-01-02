@@ -1,6 +1,5 @@
 
 import FeaturedCarsRow from './featured-car/FeaturedCarRow';
-import Footer from '../Footer/Footer';
 import MainBg from './mainBg/MainBg';
 import PopularBrands from './PopularBrands';
 import QuickManufacturerSearches from './quickSearch/QuickManufacturerSearches';

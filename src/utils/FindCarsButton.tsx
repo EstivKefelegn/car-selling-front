@@ -12,7 +12,7 @@ interface FindCarsButtonProps {
 }
 
 const FindCarsButton: React.FC<FindCarsButtonProps> = ({ 
-  isDark = false,
+  // isDark = false,
   onClick, 
   className = '',
   children,

@@ -1,5 +1,4 @@
 // components/hero/Carousel.tsx
-import React, { useCallback } from 'react';
 
 interface CarouselProps {
   images: string[];
@@ -18,7 +17,6 @@ const Carousel: React.FC<CarouselProps> = ({
   currentSlide,
   isPlaying,
   bgLoaded,
-  isDarkMode,
   onPrevSlide,
   onNextSlide,
   onGoToSlide,

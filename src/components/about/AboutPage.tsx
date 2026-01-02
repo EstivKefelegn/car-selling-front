@@ -12,7 +12,7 @@ import CallToAction from './AboutPageSections/CallToAction';
 
 const AboutPage: React.FC = () => {
   const { isDarkMode } = useDarkModeStore();
-  const { about, team, gallery, loading, error, refetch } = useAllAboutData();
+  const { about, loading, error, refetch } = useAllAboutData();
   const [activeTab, setActiveTab] = useState<'about' | 'contact'>('contact');
   const [scrolled, setScrolled] = useState(false);
 

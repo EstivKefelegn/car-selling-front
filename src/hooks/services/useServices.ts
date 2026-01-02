@@ -1,5 +1,5 @@
 // hooks/useServices.ts
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import apiClient from '../../services/api-client';
 
 // Types
@@ -138,55 +138,55 @@ const useServices = (): UseServicesReturn => {
     }
   };
 
-  // Get services for specific car
-  const getServicesForCar = async (carId: number) => {
-    try {
-      const response = await apiClient.get(`/company/services/for-electric-car/?car_id=${carId}`);
-      return { success: true, data: response.data };
-    } catch (err: any) {
-      return { 
-        success: false, 
-        error: err?.response?.data || err?.message 
-      };
-    }
+    // Get services for specific car
+    // const getServicesForCar = async (carId: number) => {
+    //   try {
+    //     const response = await apiClient.get(`/company/services/for-electric-car/?car_id=${carId}`);
+    //     return { success: true, data: response.data };
+    //   } catch (err: any) {
+    //     return { 
+    //       success: false, 
+    //       error: err?.response?.data || err?.message 
+    //     };
+    //   }
+    // };
+
+    // // Get NETA services
+    // const getNETAServices = async () => {
+    //   try {
+    //     const response = await apiClient.get('/company/services/neta-services/');
+    //     return { success: true, data: response.data };
+    //   } catch (err: any) {
+    //     return { 
+    //       success: false, 
+    //       error: err?.response?.data || err?.message 
+    //     };
+    //   }
+    // };
+
+    // // Get first round services
+    // const getFirstRoundServices = async () => {
+    //   try {
+    //     const response = await apiClient.get('/company/services/first-round-services/');
+    //     return { success: true, data: response.data };
+    //   } catch (err: any) {
+    //     return { 
+    //       success: false, 
+    //       error: err?.response?.data || err?.message 
+    //     };
+    //   }
+    // };
+
+    // useEffect(() => {
+    //   fetchServicesData();
+    // }, []);
+
+    return {
+      servicesData,
+      loading,
+      error,
+      refresh: fetchServicesData
+    };
   };
 
-  // Get NETA services
-  const getNETAServices = async () => {
-    try {
-      const response = await apiClient.get('/company/services/neta-services/');
-      return { success: true, data: response.data };
-    } catch (err: any) {
-      return { 
-        success: false, 
-        error: err?.response?.data || err?.message 
-      };
-    }
-  };
-
-  // Get first round services
-  const getFirstRoundServices = async () => {
-    try {
-      const response = await apiClient.get('/company/services/first-round-services/');
-      return { success: true, data: response.data };
-    } catch (err: any) {
-      return { 
-        success: false, 
-        error: err?.response?.data || err?.message 
-      };
-    }
-  };
-
-  useEffect(() => {
-    fetchServicesData();
-  }, []);
-
-  return {
-    servicesData,
-    loading,
-    error,
-    refresh: fetchServicesData
-  };
-};
-
-export default useServices;
+  export default useServices;

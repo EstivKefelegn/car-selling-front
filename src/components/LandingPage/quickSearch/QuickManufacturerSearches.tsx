@@ -14,7 +14,6 @@ import { useTranslation } from 'react-i18next';
 const QuickManufacturerSearches: React.FC<QuickManufacturerSearchesProps> = ({
   title,
   maxItems = 12,
-  onManufacturerClick
 }) => {
   const { isDarkMode } = useDarkModeStore();
   const { t } = useTranslation();

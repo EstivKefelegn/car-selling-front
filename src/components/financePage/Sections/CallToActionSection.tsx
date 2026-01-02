@@ -1,6 +1,6 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import FinanceButton from './FinanceButton';
+// import FinanceButton from './FinanceButton';
 import FinanceButtonSecondary from './FinanceButtonSecondary';
 
 interface CallToActionSectionProps {
@@ -10,9 +10,9 @@ interface CallToActionSectionProps {
 const CallToActionSection: React.FC<CallToActionSectionProps> = ({ isDarkMode }) => {
   const { t } = useTranslation();
 
-  const handleApplyNow = () => {
-    console.log('Apply now clicked');
-  };
+  // const handleApplyNow = () => {
+  //   console.log('Apply now clicked');
+  // };
 
   const handleRequestCallback = () => {
     console.log('Request callback clicked');

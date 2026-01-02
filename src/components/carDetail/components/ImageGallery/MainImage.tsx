@@ -2,7 +2,7 @@
 import { buildImageUrl } from '../../../../utils/imageUrlBuilder';
 
 const MainImage = ({
-  car,
+  // car,
   isDarkMode,
   selectedImage,
   selectedImageType,

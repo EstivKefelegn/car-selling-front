@@ -15,8 +15,6 @@ import { useScroll } from './shop-by-manufacturer/hooks/useScroll';
 import { type ShopByManufacturerProps } from './shop-by-manufacturer/types';
 
 const ShopByManufacturer: React.FC<ShopByManufacturerProps> = ({
-  title,
-  subtitle,
   maxItems = 12
 }) => {
   const { t } = useTranslation();

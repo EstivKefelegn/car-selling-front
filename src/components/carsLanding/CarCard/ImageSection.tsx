@@ -11,7 +11,7 @@ const ImageSection: React.FC<ImageSectionProps> = ({
   car, 
   apiBaseUrl, 
   isDarkMode,
-  formattedPrice 
+  // formattedPrice 
 }) => {
   return (
     <div className="relative h-72 overflow-hidden">

@@ -1,7 +1,7 @@
 // hooks/serviceBooking/useServiceBooking.ts
 import { useState } from 'react';
 import apiClient from '../../services/api-client';
-import { type Car } from '../cars/useEVCars'; // Import your Car type
+// import { type Car } from '../cars/useEVCars'; // Import your Car type
 
 export interface ServiceBooking {
   id?: number;

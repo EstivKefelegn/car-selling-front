@@ -30,7 +30,6 @@ const MobileNav: React.FC<MobileNavProps> = ({
   activeDropdown,
   dropdownData,
   isMobileMenuOpen,
-  onToggleDropdown,
   onCloseMobileMenu,
   onCloseAllDropdowns,
   onMobileItemClick

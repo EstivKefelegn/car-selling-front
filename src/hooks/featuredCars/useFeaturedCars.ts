@@ -1,11 +1,11 @@
 // hooks/useFeaturedCars.ts
 import useEVCars from '../cars/useEVCars';
 
-interface FeaturedCar {
-  id: number;
-  featured: boolean;
-  // Add other properties as needed
-}
+// interface FeaturedCar {
+//   id: number;
+//   featured: boolean;
+//   // Add other properties as needed
+// }
 
 const useFeaturedCars = (limit: number = 4) => {
   const { data: cars, loading, error } = useEVCars({
