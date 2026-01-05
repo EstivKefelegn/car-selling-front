@@ -5,7 +5,7 @@ import apiClient from '../../services/api-client';
 
 export interface ServiceBooking {
   id?: number;
-  vehicle: number | null; // Required - must be a Car ID
+  vehicle: string | null; 
   service_type: string | null;
   service_type_custom?: string;
   preferred_date?: string | null;

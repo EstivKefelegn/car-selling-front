@@ -14,7 +14,7 @@ export const SOCIAL_LINKS = [
   { icon: <Facebook size={18} />, url: 'https://facebook.com/etiopikar', name: 'Facebook' },
   { icon: <Twitter size={18} />, url: 'https://twitter.com/etiopikar', name: 'Twitter' },
   { icon: <Instagram size={18} />, url: 'https://instagram.com/etiopikar', name: 'Instagram' },
-  { icon: <Youtube size={18} />, url: 'https://youtube.com/etiopikar', name: 'YouTube' },
+  { icon: <Youtube size={18} />, url: 'https://youtube.com/@Etiopikar', name: 'YouTube' },
   { icon: <Linkedin size={18} />, url: 'https://linkedin.com/company/etiopikar', name: 'LinkedIn' },
 ];
 

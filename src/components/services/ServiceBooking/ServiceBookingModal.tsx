@@ -10,7 +10,7 @@ import { useTranslation } from 'react-i18next';
 interface ServiceBookingModalProps {
   isOpen: boolean;
   onClose: () => void;
-  vehicleId?: number;
+  vehicleId?: string;
   isDarkMode: boolean;
 }
 
@@ -39,8 +39,12 @@ const ServiceBookingModal: React.FC<ServiceBookingModalProps> = ({
   const [selectedServiceType, setSelectedServiceType] = useState<ServiceType | null>(null);
   const [serviceTypes] = useState<ServiceType[]>(SERVICE_TYPE_CHOICES);
   const [submitError, setSubmitError] = useState<string>('');
-  const [selectedVehicleId, setSelectedVehicleId] = useState<number | null>(vehicleId || null);
-  
+  // const [selectedVehicleId, setSelectedVehicleId] = useState<number | null>(vehicleId || null);
+  const [selectedVehicleId, setSelectedVehicleId] = useState<string | null>(
+    vehicleId ? String(vehicleId) : null
+  );
+
+
   // Helper function to get today's date in YYYY-MM-DD format
   const getTodayDate = () => {
     const today = new Date();
@@ -109,15 +113,26 @@ const ServiceBookingModal: React.FC<ServiceBookingModalProps> = ({
     }
   };
 
+  // const handleVehicleSelect = (e: React.ChangeEvent<HTMLSelectElement>) => {
+  //   const value = e.target.value;
+  //   const vehicleId = value ? Number(value) : null;
+  //   setSelectedVehicleId(vehicleId);
+  //   setFormData(prev => ({
+  //     ...prev,
+  //     vehicle: vehicleId
+  //   }));
+  // };
   const handleVehicleSelect = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const value = e.target.value;
-    const vehicleId = value ? Number(value) : null;
-    setSelectedVehicleId(vehicleId);
+    const value = e.target.value || null;
+
+    setSelectedVehicleId(value);
+
     setFormData(prev => ({
       ...prev,
-      vehicle: vehicleId
+      vehicle: value
     }));
   };
+
 
   const handleServiceTypeSelect = (serviceType: ServiceType) => {
     setSelectedServiceType(serviceType);
@@ -277,12 +292,12 @@ const ServiceBookingModal: React.FC<ServiceBookingModalProps> = ({
     <div className="fixed inset-0 z-50 overflow-y-auto">
       {/* Backdrop */}
       <div 
-        className="fixed inset-0 bg-black/50 backdrop-blur-sm transition-opacity"
+        className="fixed inset-0 bg-black/50 backdrop-blur-sm z-40"
         onClick={onClose}
       />
       
       {/* Modal */}
-      <div className="flex min-h-full items-center justify-center p-4">
+      <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
         <div className={`relative w-full max-w-2xl rounded-2xl shadow-2xl transition-all backdrop-blur-lg ${
           isDarkMode 
             ? 'bg-gray-900/80 text-white border border-gray-700/50' 
